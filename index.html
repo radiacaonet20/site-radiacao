@@ -23,31 +23,86 @@
         background-size: cover;
         background-attachment: fixed;
         background-position: center;
-        /* --- Início das modificações para centralizar --- */
-        min-height: 100vh; /* Garante altura total do navegador para alinhar verticalmente */
-        display: flex;      /* Inicia o Flexbox */
-        justify-content: center; /* Centraliza horizontalmente */
-        align-items: center;     /* Centraliza verticalmente */
-        /* --- Fim das modificações para centralizar --- */
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
       }
       /* Container do Player */
       .player-container {
-        width: 100%;       /* Garante que ocupe a largura até o max-width */
-        max-width: 600px; /* Largura máxima desejada */
+        width: 100%;
+        max-width: 600px;
         background-color: #1e1e1e;
         border-radius: 10px;
         padding: 20px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         position: relative;
         z-index: 10;
-        /* margin: auto;  <-- Esta linha não é mais necessária com Flexbox */
+      }
+      /* --- Estilos dos Cards de Aplicativos --- */
+      .apps-container {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+        width: 100%;
+      }
+      .app-card {
+        flex: 1;
+        background-color: #2a2a2a;
+        text-decoration: none;
+        padding: 10px; /* Ajustado para dar espaço à imagem */
+        border-radius: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: transform 0.2s ease, background-color 0.2s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .app-card:hover {
+        transform: translateY(-3px);
+        background-color: #333333;
+      }
+
+      /* Estilização da imagem genérica dentro do card */
+      .app-card img {
+        height: 50px; /* Tamanho controlado da imagem genérica */
+        width: auto;
+        display: block;
+        border-radius: 50%; /* Mantém a imagem redonda */
+      }
+
+      .app-card.android {
+        border-bottom: 3px solid #3DDC84;
+      }
+
+      .app-card.ios {
+        border-bottom: 3px solid #007AFF;
+      }
+
+      /* Responsividade */
+      @media (max-width: 400px) {
+        .apps-container {
+          flex-direction: column;
+        }
       }
     </style>
   </head>
   <body>
     <div class="player-container">
-			<h2 style="margin-top:-5px;">Radiação.Net</h2>
+      <h2 style="margin-top:-5px; margin-bottom: 15px; text-align: center;">Radiação.Net</h2>
+      
       <iframe src="https://painel.radiacao.net.br/public/radiacaonet/embed?theme=dark&volume=100&rounded=1&continuous=1" frameborder="0" allowtransparency="true" style="width: 100%; min-height:100px; height: 100px; border: 0;"></iframe>
+      
+      <div class="apps-container">
+        <a href="https://play.google.com/store/apps/details?id=br.com.radios.radiosmobile.radiosnet" target="_blank" rel="noopener noreferrer" class="app-card android" style="padding: 0; background: transparent; box-shadow: none;">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Disponível no Google Play" style="height: 60px; width: auto; border-radius: 0;">
+        </a>
+        <a href="https://play.google.com/store/apps/details?id=br.com.radios.radiosmobile.radiosnet" target="_blank" rel="noopener noreferrer" class="app-card ios" style="padding: 0; background: transparent; box-shadow: none;">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Baixar na App Store" style="height: 60px; width: auto; border-radius: 0;">
+        </a>
+      </div>
     </div>
   </body>
 </html>
