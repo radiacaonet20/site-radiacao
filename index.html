@@ -6,10 +6,8 @@
     <title>Radiação.Net - A web rádio de todas as tribos!</title>
     <link rel="icon" type="image/png" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
     <style>
-      /* Importando uma fonte moderna do Google */
       @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
       
-      /* Reset básico para garantir consistência */
       * {
         margin: 0;
         padding: 0;
@@ -32,21 +30,20 @@
         justify-content: center;
         align-items: center;
         padding: 20px;
-        gap: 20px; /* Reduzi sutilmente para os elementos não ficarem muito distantes */
+        gap: 20px; 
       }
       
-      /* --- Estilos do Título Flutuante --- */
+      /* --- Título Principal --- */
       .floating-title {
         font-size: 2.2rem;
-        font-weight: 900; /* Peso máximo da fonte Montserrat para dar destaque */
+        font-weight: 900;
         text-align: center;
-        /* A mágica da flutuação no texto acontece aqui com as sombras */
         text-shadow: 0 8px 20px rgba(0, 0, 0, 0.8), 0 2px 5px rgba(0, 0, 0, 0.5);
         z-index: 10;
-        margin-bottom: -5px; /* Puxa o player levemente para perto do título */
+        margin-bottom: -5px;
       }
 
-      /* Container do Player */
+      /* --- Container do Player --- */
       .player-container {
         width: 100%;
         max-width: 600px;
@@ -58,7 +55,7 @@
         z-index: 10;
       }
 
-      /* --- Estilos dos Botões Flutuantes --- */
+      /* --- Botões de Apps (Lojas) --- */
       .apps-container {
         display: flex;
         gap: 20px;
@@ -74,7 +71,6 @@
         transition: transform 0.3s ease, filter 0.3s ease;
       }
 
-      /* Efeito de flutuação ao passar o mouse */
       .app-card:hover {
         transform: translateY(-6px); 
         filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.6)); 
@@ -86,14 +82,149 @@
         display: block;
       }
 
-      /* Responsividade */
+      /* --- Botões do Menu (Grade e Locutores) --- */
+      .menu-container {
+        display: flex;
+        gap: 15px;
+        z-index: 10;
+        margin-top: 10px;
+      }
+
+      .btn-menu {
+        background-color: rgba(30, 30, 30, 0.7);
+        backdrop-filter: blur(5px);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 10px 20px;
+        border-radius: 30px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      }
+
+      .btn-menu:hover {
+        background-color: #ffffff;
+        color: #121212;
+        transform: translateY(-3px);
+      }
+
+      /* --- ESTILOS DAS JANELAS MODAIS --- */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(8px);
+        z-index: 999;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .modal-overlay.active {
+        display: flex;
+        opacity: 1;
+      }
+
+      .modal-content {
+        background-color: #1e1e1e;
+        width: 90%;
+        max-width: 500px;
+        max-height: 80vh;
+        overflow-y: auto;
+        border-radius: 12px;
+        padding: 30px;
+        position: relative;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+        transform: translateY(20px);
+        transition: transform 0.3s ease;
+      }
+
+      .modal-overlay.active .modal-content {
+        transform: translateY(0);
+      }
+
+      .close-btn {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #888;
+        cursor: pointer;
+        transition: color 0.2s;
+      }
+
+      .close-btn:hover {
+        color: #fff;
+      }
+
+      /* --- Estilização das Listas com Imagens --- */
+      .modal-title {
+        font-weight: 900;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #333;
+        padding-bottom: 10px;
+      }
+
+      .info-list {
+        list-style: none;
+      }
+
+      .info-list li {
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center; /* Mantém tudo alinhado verticalmente ao centro */
+      }
+      
+      .info-list li:last-child {
+        border-bottom: none;
+      }
+
+      /* Agrupa a miniatura e o nome do programa/locutor à esquerda */
+      .item-left {
+        display: flex;
+        align-items: center;
+        gap: 15px; /* Espaço entre a miniatura e o texto */
+      }
+
+      /* Regras gerais para todas as miniaturas (48x48) */
+      .thumb-img {
+        width: 48px;
+        height: 48px;
+        object-fit: cover; /* Evita que a foto achate ou estique */
+        background-color: #2a2a2a; /* Fundo caso a imagem demore a carregar */
+      }
+
+      /* Específico para logos de programas (bordas arredondadas) */
+      .thumb-logo {
+        border-radius: 8px;
+      }
+
+      /* Específico para fotos de pessoas (totalmente redondo) */
+      .thumb-avatar {
+        border-radius: 50%;
+      }
+
+      .destaque {
+        color: #3DDC84;
+        font-weight: bold;
+        text-align: right;
+      }
+
       @media (max-width: 400px) {
-        .apps-container {
-          flex-direction: column;
-        }
-        .floating-title {
-          font-size: 1.8rem; /* Reduz o tamanho da fonte em celulares muito pequenos */
-        }
+        .apps-container { flex-direction: column; }
+        .menu-container { flex-direction: column; width: 100%; }
+        .btn-menu { width: 100%; text-align: center; }
       }
     </style>
   </head>
@@ -102,18 +233,138 @@
     <h1 class="floating-title">Radiação.Net</h1>
 
     <div class="player-container">
-      <iframe src="https://painel.radiacao.net.br/public/radiacaonet/embed?theme=dark&volume=100&rounded=1&continuous=1" frameborder="0" allowtransparency="true" style="width: 100%; min-height:100px; height: 110px; border: 0;"></iframe>
+      <iframe src="https://painel.radiacao.net.br/public/radiacaonet/embed?theme=dark&volume=100&rounded=1&continuous=1" frameborder="0" allowtransparency="true" style="width: 100%; min-height:100px; height: 100px; border: 0;"></iframe>
+    </div>
+
+    <!-- Botões para abrir as Modais -->
+    <div class="menu-container">
+      <button class="btn-menu" onclick="abrirModal('modal-grade')">📅 Grade de Programação</button>
+      <button class="btn-menu" onclick="abrirModal('modal-locutores')">🎙️ Nossos Locutores</button>
     </div>
 
     <div class="apps-container">
-      <a href="https://play.google.com/store/apps/details?id=br.com.radios.radiosmobile.radiosnet" target="_blank" rel="noopener noreferrer" class="app-card" title="Baixar RadiosNet no Google Play">
+      <a href="https://play.google.com/store/apps/details?id=br.com.radios.radiosmobile.radiosnet" target="_blank" rel="noopener noreferrer" class="app-card" title="Baixar no Google Play">
         <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Disponível no Google Play">
       </a>
-      
-      <a href="https://apps.apple.com/br/app/radiosnet/id1089302078" target="_blank" rel="noopener noreferrer" class="app-card" title="Baixar RadiosNet na App Store">
+      <a href="https://apps.apple.com/br/app/radiosnet/id1089302078" target="_blank" rel="noopener noreferrer" class="app-card" title="Baixar na App Store">
         <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Baixar na App Store">
       </a>
     </div>
 
+    <!-- ========================================== -->
+    <!-- JANELAS MODAIS                             -->
+    <!-- ========================================== -->
+
+    <!-- Modal: Grade de Programação -->
+    <div id="modal-grade" class="modal-overlay" onclick="fecharModalFora(event, 'modal-grade')">
+      <div class="modal-content">
+        <span class="close-btn" onclick="fecharModal('modal-grade')">&times;</span>
+        <h2 class="modal-title">Grade de Programação</h2>
+        <ul class="info-list">
+          <li>
+            <div class="item-left">
+              <img src="https://i.postimg.cc/ydPkR3QW/Sem-Clubismo300-png.jpg" alt="Logo Sem Clubismo" class="thumb-img thumb-logo">
+              <span>Sem Clubismo</span>
+            </div>
+            <span class="destaque">Segunda, 21:00</span>
+          </li>
+          <li>
+            <div class="item-left">
+              <img src="https://i.postimg.cc/FRZ7SkW9/Rasta-Flow.jpg" alt="Logo Rasta Flow" class="thumb-img thumb-logo">
+              <span>Rasta Flow</span>
+            </div>
+            <span class="destaque">Terça, 21:00</span>
+          </li>
+          <li>
+            <div class="item-left">
+              <img src="https://i.postimg.cc/gJDnhLSz/Loot-Cast.jpg" alt="Logo Loot Cast" class="thumb-img thumb-logo">
+              <span>Loot Cast</span>
+            </div>
+            <span class="destaque">Quarta, 21:00</span>
+          </li>
+          <li>
+            <div class="item-left">
+              <img src="https://i.postimg.cc/KzNRT3qv/Casa-Dos-Classicos.jpg" alt="Logo Casa dos Clássicos" class="thumb-img thumb-logo">
+              <span>Casa dos Clássicos</span>
+            </div>
+            <span class="destaque">Quinta, 21:00</span>
+          </li>
+          <li>
+            <div class="item-left">
+              <img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" alt="Logo Dance Time" class="thumb-img thumb-logo">
+              <span>Dance Time</span>
+            </div>
+            <span class="destaque">Sexta, 21:00</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Modal: Locutores -->
+    <div id="modal-locutores" class="modal-overlay" onclick="fecharModalFora(event, 'modal-locutores')">
+      <div class="modal-content">
+        <span class="close-btn" onclick="fecharModal('modal-locutores')">&times;</span>
+        <h2 class="modal-title">Nossa Equipe</h2>
+        <ul class="info-list">
+          <li>
+            <div class="item-left">
+              <img src="https://i.postimg.cc/qRXpYfy5/Alessandro.jpg" alt="Foto Alessandro Neves" class="thumb-img thumb-avatar">
+              <span>Alessandro Neves</span>
+            </div>
+            <span class="destaque">Presidente, Locutor</span>
+          </li>
+          <li>
+            <div class="item-left">
+              <!-- Substitua o link pelo URL real da foto -->
+              <img src="https://i.postimg.cc/76T2TLv3/Fred-Macedo.jpg" alt="Foto Fred Macêdo" class="thumb-img thumb-avatar">
+              <span>Fred Macêdo</span>
+            </div>
+            <span class="destaque">Locutor</span>
+          </li>
+          <li>
+            <div class="item-left">
+              <img src="https://i.postimg.cc/zGgZ6Z1V/Rafa-Barros.jpg" alt="Foto Rafa Barros" class="thumb-img thumb-avatar">
+              <span>Rafa Barros</span>
+            </div>
+            <span class="destaque">Redator, Locutor</span>
+          </li>
+          <li>
+            <div class="item-left">
+              <img src="https://i.postimg.cc/0ywRFRqz/Josiel-Pereira.jpg" alt="Foto Josiel Pereira" class="thumb-img thumb-avatar">
+              <span>Josiel Pereira</span>
+            </div>
+            <span class="destaque">Comentarista</span>
+          </li>
+          <li>
+            <div class="item-left">
+              <img src="https://i.postimg.cc/50FCFtcw/Big-T.jpg" alt="Foto BigT" class="thumb-img thumb-avatar">
+              <span>BigT</span>
+            </div>
+            <span class="destaque">Locutor</span>
+          </li>
+        </ul>
+        <p style="margin-top: 15px; font-size: 0.8rem; color: #aaa; text-align: center;">
+          A melhor equipe trazendo música, esporte e cultura para você!
+        </p>
+      </div>
+    </div>
+    <!-- ========================================== -->
+    <!-- SCRIPT                                     -->
+    <!-- ========================================== -->
+    <script>
+      function abrirModal(idModal) {
+        document.getElementById(idModal).classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+      function fecharModal(idModal) {
+        document.getElementById(idModal).classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+      function fecharModalFora(event, idModal) {
+        if (event.target.id === idModal) {
+          fecharModal(idModal);
+        }
+      }
+    </script>
   </body>
 </html>
