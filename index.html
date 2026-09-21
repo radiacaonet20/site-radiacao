@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Radiação.Net - A web rádio de todas as tribos!</title>
     <link rel="icon" type="image/png" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
+    
+    <!-- Importando fontes e ícones -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
-      
       * {
         margin: 0;
         padding: 0;
@@ -29,7 +32,7 @@
         flex-direction: column; 
         justify-content: center;
         align-items: center;
-        padding: 20px;
+        padding: 20px 20px 90px 20px; 
         gap: 20px; 
       }
       
@@ -77,17 +80,19 @@
       }
 
       .app-card img {
-        height: 60px;
+        height: 45px; 
         width: auto;
         display: block;
       }
 
-      /* --- Botões do Menu (Grade e Locutores) --- */
+      /* --- Botões do Menu --- */
       .menu-container {
         display: flex;
         gap: 15px;
         z-index: 10;
         margin-top: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
       }
 
       .btn-menu {
@@ -109,6 +114,62 @@
         background-color: #ffffff;
         color: #121212;
         transform: translateY(-3px);
+      }
+
+      /* --- ESTILOS DO RODAPÉ COM ÍCONES --- */
+      .footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: rgba(18, 18, 18, 0.85);
+        backdrop-filter: blur(10px);
+        padding: 12px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.85rem;
+        color: #aaaaaa;
+        z-index: 100;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .social-icons {
+        display: flex;
+        gap: 25px;
+        align-items: center; /* Garante que imagem e ícones fiquem alinhados na mesma linha */
+      }
+
+      .social-icons a {
+        color: #ffffff;
+        font-size: 1.4rem;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        transition: transform 0.3s ease, color 0.3s ease;
+      }
+
+      .social-icons a:hover {
+        transform: translateY(-4px); 
+      }
+
+      /* Cores e efeitos no hover */
+      .social-icons a.icon-insta:hover { color: #E1306C; }
+      .social-icons a.icon-face:hover { color: #1877F2; }
+      
+      /* Estilização específica da logo da RadiosNet */
+      .radiosnet-icon {
+        height: 22px; /* Tamanho proporcional ao font-size de 1.4rem dos outros ícones */
+        width: auto;
+        transition: filter 0.3s ease;
+        /* Transforma a imagem original em totalmente branca */
+        filter: grayscale(100%) brightness(1000%);
+      }
+
+      /* Quando passar o mouse no link, remove o filtro branco da imagem */
+      .social-icons a:hover .radiosnet-icon {
+        filter: none;
       }
 
       /* --- ESTILOS DAS JANELAS MODAIS --- */
@@ -166,7 +227,6 @@
         color: #fff;
       }
 
-      /* --- Estilização das Listas com Imagens --- */
       .modal-title {
         font-weight: 900;
         margin-bottom: 20px;
@@ -183,34 +243,30 @@
         border-bottom: 1px solid rgba(255,255,255,0.1);
         display: flex;
         justify-content: space-between;
-        align-items: center; /* Mantém tudo alinhado verticalmente ao centro */
+        align-items: center; 
       }
       
       .info-list li:last-child {
         border-bottom: none;
       }
 
-      /* Agrupa a miniatura e o nome do programa/locutor à esquerda */
       .item-left {
         display: flex;
         align-items: center;
-        gap: 15px; /* Espaço entre a miniatura e o texto */
+        gap: 15px; 
       }
 
-      /* Regras gerais para todas as miniaturas (48x48) */
       .thumb-img {
         width: 48px;
         height: 48px;
-        object-fit: cover; /* Evita que a foto achate ou estique */
-        background-color: #2a2a2a; /* Fundo caso a imagem demore a carregar */
+        object-fit: cover; 
+        background-color: #2a2a2a; 
       }
 
-      /* Específico para logos de programas (bordas arredondadas) */
       .thumb-logo {
         border-radius: 8px;
       }
 
-      /* Específico para fotos de pessoas (totalmente redondo) */
       .thumb-avatar {
         border-radius: 50%;
       }
@@ -225,6 +281,7 @@
         .apps-container { flex-direction: column; }
         .menu-container { flex-direction: column; width: 100%; }
         .btn-menu { width: 100%; text-align: center; }
+        .footer { font-size: 0.75rem; padding: 10px; gap: 8px; }
       }
     </style>
   </head>
@@ -239,7 +296,7 @@
     <!-- Botões para abrir as Modais -->
     <div class="menu-container">
       <button class="btn-menu" onclick="abrirModal('modal-grade')">📅 Grade de Programação</button>
-      <button class="btn-menu" onclick="abrirModal('modal-locutores')">🎙️ Nossos Locutores</button>
+      <button class="btn-menu" onclick="abrirModal('modal-locutores')">🎙️ Nossa Equipe</button>
     </div>
 
     <div class="apps-container">
@@ -251,11 +308,7 @@
       </a>
     </div>
 
-    <!-- ========================================== -->
-    <!-- JANELAS MODAIS                             -->
-    <!-- ========================================== -->
-
-    <!-- Modal: Grade de Programação -->
+    <!-- Modais -->
     <div id="modal-grade" class="modal-overlay" onclick="fecharModalFora(event, 'modal-grade')">
       <div class="modal-content">
         <span class="close-btn" onclick="fecharModal('modal-grade')">&times;</span>
@@ -263,28 +316,28 @@
         <ul class="info-list">
           <li>
             <div class="item-left">
-              <img src="https://i.postimg.cc/ydPkR3QW/Sem-Clubismo300-png.jpg" alt="Logo Sem Clubismo" class="thumb-img thumb-logo">
+              <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/SemClubismo300.jpg?raw=true" alt="Logo Sem Clubismo" class="thumb-img thumb-logo">
               <span>Sem Clubismo</span>
             </div>
             <span class="destaque">Segunda, 21:00</span>
           </li>
           <li>
             <div class="item-left">
-              <img src="https://i.postimg.cc/FRZ7SkW9/Rasta-Flow.jpg" alt="Logo Rasta Flow" class="thumb-img thumb-logo">
+              <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/RastaFlow.jpg?raw=true" alt="Logo Rasta Flow" class="thumb-img thumb-logo">
               <span>Rasta Flow</span>
             </div>
             <span class="destaque">Terça, 21:00</span>
           </li>
           <li>
             <div class="item-left">
-              <img src="https://i.postimg.cc/gJDnhLSz/Loot-Cast.jpg" alt="Logo Loot Cast" class="thumb-img thumb-logo">
+              <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/LootCast.jpg?raw=true" alt="Logo Loot Cast" class="thumb-img thumb-logo">
               <span>Loot Cast</span>
             </div>
             <span class="destaque">Quarta, 21:00</span>
           </li>
           <li>
             <div class="item-left">
-              <img src="https://i.postimg.cc/KzNRT3qv/Casa-Dos-Classicos.jpg" alt="Logo Casa dos Clássicos" class="thumb-img thumb-logo">
+              <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/CasaDosClassicos.jpg?raw=true" alt="Logo Casa dos Clássicos" class="thumb-img thumb-logo">
               <span>Casa dos Clássicos</span>
             </div>
             <span class="destaque">Quinta, 21:00</span>
@@ -300,7 +353,6 @@
       </div>
     </div>
 
-    <!-- Modal: Locutores -->
     <div id="modal-locutores" class="modal-overlay" onclick="fecharModalFora(event, 'modal-locutores')">
       <div class="modal-content">
         <span class="close-btn" onclick="fecharModal('modal-locutores')">&times;</span>
@@ -308,36 +360,35 @@
         <ul class="info-list">
           <li>
             <div class="item-left">
-              <img src="https://i.postimg.cc/qRXpYfy5/Alessandro.jpg" alt="Foto Alessandro Neves" class="thumb-img thumb-avatar">
+              <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/Alessandro.jpg?raw=true" alt="Foto Alessandro Neves" class="thumb-img thumb-avatar">
               <span>Alessandro Neves</span>
             </div>
             <span class="destaque">Presidente, Locutor</span>
           </li>
           <li>
             <div class="item-left">
-              <!-- Substitua o link pelo URL real da foto -->
-              <img src="https://i.postimg.cc/76T2TLv3/Fred-Macedo.jpg" alt="Foto Fred Macêdo" class="thumb-img thumb-avatar">
+              <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/FredMacedo.jpg?raw=true" alt="Foto Fred Macêdo" class="thumb-img thumb-avatar">
               <span>Fred Macêdo</span>
             </div>
             <span class="destaque">Locutor</span>
           </li>
           <li>
             <div class="item-left">
-              <img src="https://i.postimg.cc/zGgZ6Z1V/Rafa-Barros.jpg" alt="Foto Rafa Barros" class="thumb-img thumb-avatar">
+              <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/RafaBarros.jpg?raw=true" alt="Foto Rafa Barros" class="thumb-img thumb-avatar">
               <span>Rafa Barros</span>
             </div>
             <span class="destaque">Redator, Locutor</span>
           </li>
           <li>
             <div class="item-left">
-              <img src="https://i.postimg.cc/0ywRFRqz/Josiel-Pereira.jpg" alt="Foto Josiel Pereira" class="thumb-img thumb-avatar">
+              <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/JosielPereira.jpg?raw=true" alt="Foto Josiel Pereira" class="thumb-img thumb-avatar">
               <span>Josiel Pereira</span>
             </div>
             <span class="destaque">Comentarista</span>
           </li>
           <li>
             <div class="item-left">
-              <img src="https://i.postimg.cc/50FCFtcw/Big-T.jpg" alt="Foto BigT" class="thumb-img thumb-avatar">
+              <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/BigT.jpg?raw=true" alt="Foto BigT" class="thumb-img thumb-avatar">
               <span>BigT</span>
             </div>
             <span class="destaque">Locutor</span>
@@ -348,18 +399,35 @@
         </p>
       </div>
     </div>
-    <!-- ========================================== -->
-    <!-- SCRIPT                                     -->
-    <!-- ========================================== -->
+
+    <!-- RODAPÉ COM ÍCONES -->
+    <footer class="footer">
+      <div class="social-icons">
+        <a href="https://instagram.com/radiacaonet" target="_blank" rel="noopener noreferrer" class="icon-insta" title="Siga no Instagram">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://facebook.com/radiacaonet" target="_blank" rel="noopener noreferrer" class="icon-face" title="Curta no Facebook">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="https://www.radios.com.br/aovivo/radio-radiacaonet/135970" target="_blank" rel="noopener noreferrer" class="icon-radio" title="Ouça no RadiosNet">
+          <img src="https://static.radios.com.br/img/logo-radiosnet-512-transparent.png" alt="RadiosNet" class="radiosnet-icon">
+        </a>
+      </div>
+      <div>&copy; 2026 Radiação.Net - A web rádio de todas as tribos!</div>
+    </footer>
+
+    <!-- Script das Modais -->
     <script>
       function abrirModal(idModal) {
         document.getElementById(idModal).classList.add('active');
         document.body.style.overflow = 'hidden';
       }
+
       function fecharModal(idModal) {
         document.getElementById(idModal).classList.remove('active');
         document.body.style.overflow = 'auto';
       }
+
       function fecharModalFora(event, idModal) {
         if (event.target.id === idModal) {
           fecharModal(idModal);
