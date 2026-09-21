@@ -36,14 +36,49 @@
         gap: 20px; 
       }
       
-      /* --- Título Principal --- */
+      /* --- Container do Título e Equalizador --- */
+      .title-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        z-index: 10;
+        margin-bottom: -5px;
+      }
+
       .floating-title {
-        font-size: 2.2rem;
+        font-size: 2.5rem;
         font-weight: 900;
         text-align: center;
         text-shadow: 0 8px 20px rgba(0, 0, 0, 0.8), 0 2px 5px rgba(0, 0, 0, 0.5);
-        z-index: 10;
-        margin-bottom: -5px;
+      }
+
+      /* --- Equalizador Animado CSS --- */
+      .equalizer {
+        display: flex;
+        align-items: flex-end;
+        gap: 4px;
+        height: 28px;
+      }
+
+      .equalizer .bar {
+        width: 6px;
+        height: 100%;
+        background-color: #3DDC84; 
+        border-radius: 3px;
+        transform-origin: bottom; 
+        animation: eq-bounce 0.8s ease-in-out infinite alternate;
+        box-shadow: 0 0 8px rgba(61, 220, 132, 0.6); 
+      }
+
+      .equalizer .bar:nth-child(1) { animation-delay: -0.2s; }
+      .equalizer .bar:nth-child(2) { animation-delay: -0.5s; }
+      .equalizer .bar:nth-child(3) { animation-delay: -0.1s; }
+      .equalizer .bar:nth-child(4) { animation-delay: -0.4s; }
+
+      @keyframes eq-bounce {
+        0% { transform: scaleY(0.2); }
+        100% { transform: scaleY(1); }
       }
 
       /* --- Container do Player --- */
@@ -56,6 +91,28 @@
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         position: relative;
         z-index: 10;
+      }
+
+      /* --- Barra de Música Atual (Now Playing) --- */
+      .now-playing {
+        background-color: rgba(30, 30, 30, 0.7);
+        backdrop-filter: blur(5px);
+        padding: 10px 20px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #3DDC84;
+        display: none; /* Modificado: Inicia escondido por padrão */
+        align-items: center;
+        gap: 10px;
+        margin-top: -10px;
+        z-index: 10;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        max-width: 600px;
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+        border: 1px solid rgba(61, 220, 132, 0.2);
       }
 
       /* --- Botões de Apps (Lojas) --- */
@@ -138,7 +195,7 @@
       .social-icons {
         display: flex;
         gap: 25px;
-        align-items: center; /* Garante que imagem e ícones fiquem alinhados na mesma linha */
+        align-items: center;
       }
 
       .social-icons a {
@@ -154,20 +211,16 @@
         transform: translateY(-4px); 
       }
 
-      /* Cores e efeitos no hover */
       .social-icons a.icon-insta:hover { color: #E1306C; }
       .social-icons a.icon-face:hover { color: #1877F2; }
       
-      /* Estilização específica da logo da RadiosNet */
       .radiosnet-icon {
-        height: 22px; /* Tamanho proporcional ao font-size de 1.4rem dos outros ícones */
+        height: 22px; 
         width: auto;
         transition: filter 0.3s ease;
-        /* Transforma a imagem original em totalmente branca */
         filter: grayscale(100%) brightness(1000%);
       }
 
-      /* Quando passar o mouse no link, remove o filtro branco da imagem */
       .social-icons a:hover .radiosnet-icon {
         filter: none;
       }
@@ -282,23 +335,46 @@
         .menu-container { flex-direction: column; width: 100%; }
         .btn-menu { width: 100%; text-align: center; }
         .footer { font-size: 0.75rem; padding: 10px; gap: 8px; }
+        .title-wrapper { gap: 10px; }
+        .floating-title { font-size: 1.8rem; }
       }
     </style>
   </head>
   <body>
     
-    <h1 class="floating-title">Radiação.Net</h1>
-
-    <div class="player-container">
-      <iframe src="https://painel.radiacao.net.br/public/radiacaonet/embed?theme=dark&volume=100&rounded=1&continuous=1" frameborder="0" allowtransparency="true" style="width: 100%; min-height:100px; height: 100px; border: 0;"></iframe>
+    <!-- Título + Equalizador -->
+    <div class="title-wrapper">
+      <h1 class="floating-title">
+        <img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" style="width:48px;height:48px;vertical-align:middle;" alt="Logo Radiação.Net">
+        Radiação.Net
+      </h1>
+      <div class="equalizer" title="Transmissão ao vivo">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
     </div>
 
-    <!-- Botões para abrir as Modais -->
+    <!-- Player Principal -->
+    <div class="player-container">
+      <!-- <iframe src="https://painel.radiacao.net.br/public/radiacaonet/embed?theme=dark&volume=100&rounded=1&continuous=1" frameborder="0" allowtransparency="true" style="width: 100%; min-height:100px; height: 100px; border: 0;"></iframe> -->
+      <iframe src="https://painel.radiacao.net.br/public/radiacaonet/embed?primary_color=f4741f&hide_streams=1&volume=100&layout=compact&rounded=1&continuous=1" frameborder="0" allowtransparency="true" style="width: 100%; min-height: 120px; height: 120px; border: 0;"></iframe>
+    </div>
+
+    <!-- Barra Dinâmica "Tocando Agora" (Adicionado o ID nowPlayingBar) -->
+    <div class="now-playing" id="nowPlayingBar">
+      <i class="fas fa-microphone-alt"></i>
+      <span id="currentSong">Verificando estúdio...</span>
+    </div>
+
+    <!-- Botões Menu -->
     <div class="menu-container">
       <button class="btn-menu" onclick="abrirModal('modal-grade')">📅 Grade de Programação</button>
       <button class="btn-menu" onclick="abrirModal('modal-locutores')">🎙️ Nossa Equipe</button>
     </div>
 
+    <!-- Apps -->
     <div class="apps-container">
       <a href="https://play.google.com/store/apps/details?id=br.com.radios.radiosmobile.radiosnet" target="_blank" rel="noopener noreferrer" class="app-card" title="Baixar no Google Play">
         <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Disponível no Google Play">
@@ -400,7 +476,7 @@
       </div>
     </div>
 
-    <!-- RODAPÉ COM ÍCONES -->
+    <!-- RODAPÉ -->
     <footer class="footer">
       <div class="social-icons">
         <a href="https://instagram.com/radiacaonet" target="_blank" rel="noopener noreferrer" class="icon-insta" title="Siga no Instagram">
@@ -416,8 +492,9 @@
       <div>&copy; 2026 Radiação.Net - A web rádio de todas as tribos!</div>
     </footer>
 
-    <!-- Script das Modais -->
+    <!-- SCRIPT GERAL -->
     <script>
+      // Funções das Modais
       function abrirModal(idModal) {
         document.getElementById(idModal).classList.add('active');
         document.body.style.overflow = 'hidden';
@@ -433,6 +510,46 @@
           fecharModal(idModal);
         }
       }
+
+      // Função para buscar dados em tempo real da API do AzuraCast
+      async function atualizarNowPlaying() {
+        try {
+          const response = await fetch('https://painel.radiacao.net.br/api/nowplaying_static/radiacaonet.json');
+          const data = await response.json();
+
+          const songText = data.now_playing.song.text; // "Artista - Título"
+          const isLive = data.live.is_live; // Verifica se algum DJ está ao vivo
+          const streamer = data.live.streamer_name; // Nome do locutor no painel
+          const nowPlayingBar = document.getElementById('nowPlayingBar');
+
+          // Se for verdadeiro (is_live = true), mostra a div
+          if (isLive) {
+            let displayText = '🔴 Ao Vivo';
+            if (streamer) {
+              displayText += `: ${streamer}`;
+            }
+            if (songText) {
+              displayText += ` | ${songText}`;
+            }
+            
+            document.getElementById('currentSong').innerText = displayText;
+            nowPlayingBar.style.display = 'flex'; // Exibe a barra
+          } else {
+            // Se for falso (AutoDJ), esconde a div
+            nowPlayingBar.style.display = 'none';
+          }
+        } catch (error) {
+          console.error("Erro ao buscar dados da rádio:", error);
+          // Em caso de falha de conexão, esconde a barra por segurança
+          document.getElementById('nowPlayingBar').style.display = 'none';
+        }
+      }
+
+      // Chama a função assim que a página carrega
+      atualizarNowPlaying();
+
+      // Atualiza a barra a cada 10 segundos (10000 milissegundos)
+      setInterval(atualizarNowPlaying, 10000);
     </script>
   </body>
 </html>
