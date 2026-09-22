@@ -93,26 +93,43 @@
         z-index: 10;
       }
 
+      .player-container iframe{
+        width: 100%;
+        min-height: 120px;
+        height: 120px;
+        border: 0;
+      }
+
       /* --- Barra de Música Atual (Now Playing) --- */
       .now-playing {
-        background-color: rgba(30, 30, 30, 0.7);
         backdrop-filter: blur(5px);
         padding: 10px 20px;
         border-radius: 20px;
         font-size: 0.9rem;
         font-weight: 700;
-        color: #3DDC84;
-        display: none; /* Modificado: Inicia escondido por padrão */
+        color: #FF4C4C;
+        display: none; 
         align-items: center;
         gap: 10px;
         margin-top: -10px;
         z-index: 10;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         max-width: 600px;
         width: 100%;
         justify-content: center;
         text-align: center;
-        border: 1px solid rgba(61, 220, 132, 0.2);
+        border: 1px solid rgba(255, 76, 76, 0.3);
+        animation: live-pulse 1.2s infinite alternate ease-in-out;
+      }
+
+      @keyframes live-pulse {
+        0% {
+          background-color: rgba(40, 10, 10, 0.6);
+          box-shadow: 0 4px 10px rgba(255, 76, 76, 0.1);
+        }
+        100% {
+          background-color: rgba(80, 15, 15, 0.95);
+          box-shadow: 0 4px 25px rgba(255, 76, 76, 0.6);
+        }
       }
 
       /* --- Botões de Apps (Lojas) --- */
@@ -282,11 +299,62 @@
 
       .modal-title {
         font-weight: 900;
-        margin-bottom: 20px;
-        border-bottom: 2px solid #333;
-        padding-bottom: 10px;
+        margin-bottom: 15px;
+        text-align: center;
       }
 
+      /* --- NOVOS ESTILOS DAS ABAS (TABS) --- */
+      .tabs-header {
+        display: flex;
+        gap: 5px;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #333;
+        overflow-x: auto; 
+        padding-bottom: 5px;
+        scrollbar-width: none; 
+      }
+      .tabs-header::-webkit-scrollbar {
+        display: none; 
+      }
+
+      .tab-btn {
+        background: none;
+        border: none;
+        color: #888;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 0.9rem;
+        cursor: pointer;
+        padding: 8px 12px;
+        transition: all 0.3s ease;
+        white-space: nowrap; 
+      }
+
+      .tab-btn:hover {
+        color: #fff;
+      }
+
+      .tab-btn.active {
+        color: #3DDC84;
+        border-bottom: 2px solid #3DDC84;
+        margin-bottom: -7px; 
+      }
+
+      .tab-pane {
+        display: none;
+        animation: fadeIn 0.4s ease; 
+      }
+
+      .tab-pane.active {
+        display: block;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* --- Listas dentro das modais --- */
       .info-list {
         list-style: none;
       }
@@ -358,11 +426,10 @@
 
     <!-- Player Principal -->
     <div class="player-container">
-      <!-- <iframe src="https://painel.radiacao.net.br/public/radiacaonet/embed?theme=dark&volume=100&rounded=1&continuous=1" frameborder="0" allowtransparency="true" style="width: 100%; min-height:100px; height: 100px; border: 0;"></iframe> -->
-      <iframe src="https://painel.radiacao.net.br/public/radiacaonet/embed?primary_color=f4741f&hide_streams=1&volume=100&layout=compact&rounded=1&continuous=1" frameborder="0" allowtransparency="true" style="width: 100%; min-height: 120px; height: 120px; border: 0;"></iframe>
+      <iframe src="https://painel.radiacao.net.br/public/radiacaonet/embed?primary_color=f4741f&hide_streams=1&volume=84&layout=compact&rounded=1&continuous=1" frameborder="0" allowtransparency="true"></iframe>
     </div>
 
-    <!-- Barra Dinâmica "Tocando Agora" (Adicionado o ID nowPlayingBar) -->
+    <!-- Barra Dinâmica "Tocando Agora" -->
     <div class="now-playing" id="nowPlayingBar">
       <i class="fas fa-microphone-alt"></i>
       <span id="currentSong">Verificando estúdio...</span>
@@ -385,54 +452,127 @@
     </div>
 
     <!-- Modais -->
+    
+    <!-- Modal: Grade de Programação (NOVO FORMATO EM ABAS) -->
     <div id="modal-grade" class="modal-overlay" onclick="fecharModalFora(event, 'modal-grade')">
       <div class="modal-content">
         <span class="close-btn" onclick="fecharModal('modal-grade')">&times;</span>
         <h2 class="modal-title">Grade de Programação</h2>
-        <ul class="info-list">
-          <li>
-            <div class="item-left">
-              <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/SemClubismo300.jpg?raw=true" alt="Logo Sem Clubismo" class="thumb-img thumb-logo">
-              <span>Sem Clubismo</span>
-            </div>
-            <span class="destaque">Segunda, 21:00</span>
-          </li>
-          <li>
-            <div class="item-left">
-              <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/RastaFlow.jpg?raw=true" alt="Logo Rasta Flow" class="thumb-img thumb-logo">
-              <span>Rasta Flow</span>
-            </div>
-            <span class="destaque">Terça, 21:00</span>
-          </li>
-          <li>
-            <div class="item-left">
-              <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/LootCast.jpg?raw=true" alt="Logo Loot Cast" class="thumb-img thumb-logo">
-              <span>Loot Cast</span>
-            </div>
-            <span class="destaque">Quarta, 21:00</span>
-          </li>
-          <li>
-            <div class="item-left">
-              <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/CasaDosClassicos.jpg?raw=true" alt="Logo Casa dos Clássicos" class="thumb-img thumb-logo">
-              <span>Casa dos Clássicos</span>
-            </div>
-            <span class="destaque">Quinta, 21:00</span>
-          </li>
-          <li>
-            <div class="item-left">
-              <img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" alt="Logo Dance Time" class="thumb-img thumb-logo">
-              <span>Dance Time</span>
-            </div>
-            <span class="destaque">Sexta, 21:00</span>
-          </li>
-        </ul>
+        
+        <!-- Cabeçalho das Abas -->
+        <div class="tabs-header">
+          <button class="tab-btn active" onclick="abrirAba(event, 'tab-seg')">SEG</button>
+          <button class="tab-btn" onclick="abrirAba(event, 'tab-ter')">TER</button>
+          <button class="tab-btn" onclick="abrirAba(event, 'tab-qua')">QUA</button>
+          <button class="tab-btn" onclick="abrirAba(event, 'tab-qui')">QUI</button>
+          <button class="tab-btn" onclick="abrirAba(event, 'tab-sex')">SEX</button>
+          <button class="tab-btn" onclick="abrirAba(event, 'tab-sab')">SÁB</button>
+          <button class="tab-btn" onclick="abrirAba(event, 'tab-dom')">DOM</button>
+        </div>
+
+        <!-- Conteúdo das Abas -->
+        <div class="tabs-content">
+          
+          <!-- Segunda-feira -->
+          <div id="tab-seg" class="tab-pane active">
+            <ul class="info-list">
+              <li>
+                <div class="item-left">
+                  <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/SemClubismo300.jpg?raw=true" alt="Logo Sem Clubismo" class="thumb-img thumb-logo">
+                  <span>Sem Clubismo</span>
+                </div>
+                <span class="destaque">21:00</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Terça-feira -->
+          <div id="tab-ter" class="tab-pane">
+            <ul class="info-list">
+              <li>
+                <div class="item-left">
+                  <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/RastaFlow.jpg?raw=true" alt="Logo Rasta Flow" class="thumb-img thumb-logo">
+                  <span>Rasta Flow</span>
+                </div>
+                <span class="destaque">21:00</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Quarta-feira -->
+          <div id="tab-qua" class="tab-pane">
+            <ul class="info-list">
+              <li>
+                <div class="item-left">
+                  <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/LootCast.jpg?raw=true" alt="Logo Loot Cast" class="thumb-img thumb-logo">
+                  <span>Loot Cast</span>
+                </div>
+                <span class="destaque">21:00</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Quinta-feira -->
+          <div id="tab-qui" class="tab-pane">
+            <ul class="info-list">
+              <li>
+                <div class="item-left">
+                  <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/CasaDosClassicos.jpg?raw=true" alt="Logo Casa dos Clássicos" class="thumb-img thumb-logo">
+                  <span>Casa dos Clássicos</span>
+                </div>
+                <span class="destaque">21:00</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Sexta-feira -->
+          <div id="tab-sex" class="tab-pane">
+            <ul class="info-list">
+              <li>
+                <div class="item-left">
+                  <img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" alt="Logo Dance Time" class="thumb-img thumb-logo">
+                  <span>Dance Time</span>
+                </div>
+                <span class="destaque">21:00</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Sábado -->
+          <div id="tab-sab" class="tab-pane">
+            <ul class="info-list">
+              <li>
+                <div class="item-left">
+                  <img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" alt="Logo AutoDJ" class="thumb-img thumb-logo">
+                  <span>AutoDJ</span>
+                </div>
+                <span class="destaque">24h</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Domingo -->
+          <div id="tab-dom" class="tab-pane">
+            <ul class="info-list">
+              <li>
+                <div class="item-left">
+                  <img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" alt="Logo AutoDJ" class="thumb-img thumb-logo">
+                  <span>AutoDJ</span>
+                </div>
+                <span class="destaque">24h</span>
+              </li>
+            </ul>
+          </div>
+
+        </div> <!-- Fim tabs-content -->
       </div>
     </div>
 
+    <!-- Modal: Locutores -->
     <div id="modal-locutores" class="modal-overlay" onclick="fecharModalFora(event, 'modal-locutores')">
       <div class="modal-content">
         <span class="close-btn" onclick="fecharModal('modal-locutores')">&times;</span>
-        <h2 class="modal-title">Nossa Equipe</h2>
+        <h2 class="modal-title" style="border-bottom: 2px solid #333; padding-bottom: 10px;">Nossa Equipe</h2>
         <ul class="info-list">
           <li>
             <div class="item-left">
@@ -494,7 +634,26 @@
 
     <!-- SCRIPT GERAL -->
     <script>
-      // Funções das Modais
+      // Função para alternar entre as abas da grade de programação
+      function abrirAba(evento, idAba) {
+        // Esconde todos os conteúdos de abas
+        let conteudos = document.getElementsByClassName("tab-pane");
+        for (let i = 0; i < conteudos.length; i++) {
+          conteudos[i].classList.remove("active");
+        }
+        
+        // Remove a classe "active" de todos os botões de abas
+        let botoes = document.getElementsByClassName("tab-btn");
+        for (let i = 0; i < botoes.length; i++) {
+          botoes[i].classList.remove("active");
+        }
+        
+        // Mostra o conteúdo da aba clicada e adiciona destaque ao botão
+        document.getElementById(idAba).classList.add("active");
+        evento.currentTarget.classList.add("active");
+      }
+
+      // Funções das Modais Principais
       function abrirModal(idModal) {
         document.getElementById(idModal).classList.add('active');
         document.body.style.overflow = 'hidden';
@@ -517,12 +676,11 @@
           const response = await fetch('https://painel.radiacao.net.br/api/nowplaying_static/radiacaonet.json');
           const data = await response.json();
 
-          const songText = data.now_playing.song.text; // "Artista - Título"
-          const isLive = data.live.is_live; // Verifica se algum DJ está ao vivo
-          const streamer = data.live.streamer_name; // Nome do locutor no painel
+          const songText = data.now_playing.song.text; 
+          const isLive = data.live.is_live; 
+          const streamer = data.live.streamer_name; 
           const nowPlayingBar = document.getElementById('nowPlayingBar');
 
-          // Se for verdadeiro (is_live = true), mostra a div
           if (isLive) {
             let displayText = '🔴 Ao Vivo';
             if (streamer) {
@@ -533,22 +691,17 @@
             }
             
             document.getElementById('currentSong').innerText = displayText;
-            nowPlayingBar.style.display = 'flex'; // Exibe a barra
+            nowPlayingBar.style.display = 'flex'; 
           } else {
-            // Se for falso (AutoDJ), esconde a div
             nowPlayingBar.style.display = 'none';
           }
         } catch (error) {
           console.error("Erro ao buscar dados da rádio:", error);
-          // Em caso de falha de conexão, esconde a barra por segurança
           document.getElementById('nowPlayingBar').style.display = 'none';
         }
       }
 
-      // Chama a função assim que a página carrega
       atualizarNowPlaying();
-
-      // Atualiza a barra a cada 10 segundos (10000 milissegundos)
       setInterval(atualizarNowPlaying, 10000);
     </script>
   </body>
