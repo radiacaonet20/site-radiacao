@@ -212,10 +212,9 @@
         overflow: hidden;
         width: 100%;
         position: relative;
-        padding: 15px 0; /* Previne corte do glow superior/inferior */
+        padding: 15px 0; 
       }
 
-      /* Só aplica a máscara de degradê se tiver a classe animada (>4 itens) */
       .partners-slider.is-animated {
         mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
         -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
@@ -224,12 +223,11 @@
       .partners-track {
         display: flex;
         gap: 15px;
-        justify-content: center; /* Centraliza quando estático (<= 4 itens) */
+        justify-content: center; 
         align-items: center;
         width: 100%; 
       }
 
-      /* Estilos quando o JS detecta mais de 4 itens e ativa a rolagem */
       .partners-track.is-animated {
         width: max-content;
         justify-content: flex-start;
@@ -258,13 +256,12 @@
       }
 
       .partner-card:hover img {
-        border-color: #f4741f; /* Borda laranja */
-        box-shadow: 0 0 15px rgba(244, 116, 31, 0.8); /* Efeito Glow centralizado sem deslocar */
+        border-color: #f4741f; 
+        box-shadow: 0 0 15px rgba(244, 116, 31, 0.8); 
       }
 
       @keyframes scroll-partners {
         0% { transform: translateX(0); }
-        /* Move 50% mais a compensação do gap para loop perfeito */
         100% { transform: translateX(calc(-50% - 7.5px)); } 
       }
 
@@ -474,21 +471,34 @@
       .member-info {
         display: flex;
         flex-direction: column;
-        gap: 3px;
+        gap: 4px;
       }
 
       .member-name {
         font-weight: 700;
       }
+      
+      /* Linha contendo o cargo e as redes sociais lado a lado */
+      .member-details-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .member-role {
+        color: #f4741f;
+        font-size: 0.85rem;
+        font-weight: bold;
+      }
 
       .member-socials {
         display: flex;
-        gap: 12px;
+        gap: 10px;
       }
 
       .member-socials a {
         color: #888;
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         text-decoration: none;
         transition: color 0.2s ease, transform 0.2s ease;
       }
@@ -680,7 +690,7 @@
       </div>
     </div>
 
-    <!-- Modal: Locutores (LISTA COM ÍCONES SOCIAIS) -->
+    <!-- Modal: Locutores (REDES SOCIAIS AO LADO DO CARGO) -->
     <div id="modal-locutores" class="modal-overlay" onclick="fecharModalFora(event, 'modal-locutores')">
       <div class="modal-content">
         <span class="close-btn" onclick="fecharModal('modal-locutores')">&times;</span>
@@ -693,13 +703,15 @@
               <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/Alessandro.jpg?raw=true" alt="Foto Alessandro Neves" class="thumb-img thumb-avatar">
               <div class="member-info">
                 <span class="member-name">Alessandro Neves</span>
-                <div class="member-socials">
-                  <a href="#" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
-                  <a href="#" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <div class="member-details-row">
+                  <span class="member-role">Presidente, Locutor</span>
+                  <div class="member-socials">
+                    <a href="#" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                  </div>
                 </div>
               </div>
             </div>
-            <span class="destaque">Presidente, Locutor</span>
           </li>
 
           <!-- Fred -->
@@ -708,13 +720,15 @@
               <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/FredMacedo.jpg?raw=true" alt="Foto Fred Macêdo" class="thumb-img thumb-avatar">
               <div class="member-info">
                 <span class="member-name">Fred Macêdo</span>
-                <div class="member-socials">
-                  <a href="#" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
-                  <a href="#" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <div class="member-details-row">
+                  <span class="member-role">Locutor</span>
+                  <div class="member-socials">
+                    <a href="#" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                  </div>
                 </div>
               </div>
             </div>
-            <span class="destaque">Locutor</span>
           </li>
 
           <!-- Rafa -->
@@ -723,13 +737,15 @@
               <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/RafaBarros.jpg?raw=true" alt="Foto Rafa Barros" class="thumb-img thumb-avatar">
               <div class="member-info">
                 <span class="member-name">Rafa Barros</span>
-                <div class="member-socials">
-                  <a href="#" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
-                  <a href="#" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
+                <div class="member-details-row">
+                  <span class="member-role">Redator, Locutor</span>
+                  <div class="member-socials">
+                    <a href="#" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
+                  </div>
                 </div>
               </div>
             </div>
-            <span class="destaque">Redator, Locutor</span>
           </li>
 
           <!-- Josiel -->
@@ -738,12 +754,14 @@
               <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/JosielPereira.jpg?raw=true" alt="Foto Josiel Pereira" class="thumb-img thumb-avatar">
               <div class="member-info">
                 <span class="member-name">Josiel Pereira</span>
-                <div class="member-socials">
-                  <a href="#" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <div class="member-details-row">
+                  <span class="member-role">Comentarista</span>
+                  <div class="member-socials">
+                    <a href="#" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                  </div>
                 </div>
               </div>
             </div>
-            <span class="destaque">Comentarista</span>
           </li>
 
           <!-- BigT -->
@@ -752,13 +770,15 @@
               <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/BigT.jpg?raw=true" alt="Foto BigT" class="thumb-img thumb-avatar">
               <div class="member-info">
                 <span class="member-name">BigT</span>
-                <div class="member-socials">
-                  <a href="#" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
-                  <a href="#" target="_blank" title="Spotify"><i class="fab fa-spotify"></i></a>
+                <div class="member-details-row">
+                  <span class="member-role">Locutor</span>
+                  <div class="member-socials">
+                    <a href="#" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" target="_blank" title="Spotify"><i class="fab fa-spotify"></i></a>
+                  </div>
                 </div>
               </div>
             </div>
-            <span class="destaque">Locutor</span>
           </li>
 
         </ul>
@@ -786,27 +806,23 @@
 
     <!-- SCRIPT GERAL -->
     <script>
-      // Lógica do Carrossel de Parceiros
       function inicializarParceiros() {
         const track = document.getElementById('partnersTrack');
         const slider = document.getElementById('partnersSlider');
         const cards = track.querySelectorAll('.partner-card');
 
-        // Só anima se tiver mais de 4 parceiros
         if (cards.length > 4) {
           slider.classList.add('is-animated');
           track.classList.add('is-animated');
 
-          // Clona os parceiros e joga no final da fila para o loop infinito funcionar com HTML limpo
           cards.forEach(card => {
             const clone = card.cloneNode(true);
-            clone.setAttribute('aria-hidden', 'true'); // Oculta o clone de leitores de tela
+            clone.setAttribute('aria-hidden', 'true');
             track.appendChild(clone);
           });
         }
       }
 
-      // Função de Abas
       function abrirAba(evento, idAba) {
         let conteudos = document.getElementsByClassName("tab-pane");
         for (let i = 0; i < conteudos.length; i++) {
@@ -822,7 +838,6 @@
         evento.currentTarget.classList.add("active");
       }
 
-      // Funções de Modal
       function abrirModal(idModal) {
         document.getElementById(idModal).classList.add('active');
         document.body.style.overflow = 'hidden';
@@ -839,7 +854,6 @@
         }
       }
 
-      // Consulta ao painel do AzuraCast
       async function atualizarNowPlaying() {
         try {
           const response = await fetch('https://painel.radiacao.net.br/api/nowplaying_static/radiacaonet.json');
@@ -870,7 +884,6 @@
         }
       }
 
-      // Executa scripts no carregamento
       document.addEventListener('DOMContentLoaded', () => {
         inicializarParceiros();
         atualizarNowPlaying();
