@@ -41,17 +41,29 @@
       <iframe src="https://painel.radiacao.net.br/public/radiacaonet/embed?primary_color=f4741f&hide_streams=1&volume=84&layout=compact&rounded=1&continuous=1" frameborder="0" allowtransparency="true"></iframe>
     </div>
 
-    <!-- Barra Dinâmica "Tocando Agora" -->
-    <div class="now-playing" id="nowPlayingBar">
-      <i class="fas fa-microphone-alt"></i>
-      <span id="currentSong">Verificando estúdio...</span>
+    <!-- Card Inteligente de Estúdio (Aparece apenas Ao Vivo) -->
+    <div class="live-studio-card" id="liveStudioCard">
+      <div class="live-card-left">
+        <img id="liveProgramImg" src="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png" alt="Programa Ao Vivo" class="live-program-img">
+        <span class="live-badge">AO VIVO</span>
+      </div>
+      <div class="live-card-center">
+        <span id="liveProgramName" class="live-program-title">Radiação.Net</span>
+        <span id="liveStreamerName" class="live-host">Locutor: --</span>
+        <span id="liveSongName" class="live-song">Tocando: --</span>
+      </div>
+      <div class="live-card-right">
+        <button class="btn-live-request" onclick="abrirModal('modal-pedido')" title="Pedir Música">
+          <i class="fas fa-music"></i>
+          <span>Pedir</span>
+        </button>
+      </div>
     </div>
 
-    <!-- Botões Menu (Lado a lado e na nova ordem) -->
+    <!-- Botões Menu (Na ordem desejada e otimizados) -->
     <div class="menu-container">
       <button class="btn-menu" onclick="abrirModal('modal-grade')">📅 Programação</button>
-      <button class="btn-menu" onclick="abrirModal('modal-locutores')">🎙️️ Nossa Equipe</button>
-      <button class="btn-menu" onclick="abrirModal('modal-pedido')">🎵 Pedir Música</button>
+      <button class="btn-menu" onclick="abrirModal('modal-locutores')">🎙️ Nossa Equipe</button>
       <button class="btn-menu" onclick="compartilharSite()">📲 Compartilhar</button>
       <button class="btn-menu" id="btnInstall">⬇️ Instalar App</button>
     </div>

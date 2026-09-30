@@ -99,35 +99,120 @@ body {
   border: 0;
 }
 
-.now-playing {
-  backdrop-filter: blur(5px);
-  padding: 10px 20px;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #FF4C4C;
-  display: none; 
-  align-items: center;
-  gap: 10px;
-  margin-top: -10px;
-  z-index: 10;
-  max-width: 600px;
+/* --- CARD INTELIGENTE DE ESTÚDIO AO VIVO --- */
+.live-studio-card {
+  display: none; /* Oculto por padrão, aparece via JS quando está ao vivo */
   width: 100%;
-  justify-content: center;
-  text-align: center;
-  border: 1px solid rgba(255, 76, 76, 0.3);
-  animation: live-pulse 1.2s infinite alternate ease-in-out;
+  max-width: 600px;
+  background: rgba(25, 10, 10, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 76, 76, 0.4);
+  border-radius: 12px;
+  padding: 12px 15px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 8px 25px rgba(255, 76, 76, 0.3);
+  z-index: 10;
+  animation: live-card-pulse 1.5s infinite alternate ease-in-out;
 }
 
-@keyframes live-pulse {
-  0% {
-    background-color: rgba(40, 10, 10, 0.6);
-    box-shadow: 0 4px 10px rgba(255, 76, 76, 0.1);
-  }
-  100% {
-    background-color: rgba(80, 15, 15, 0.95);
-    box-shadow: 0 4px 25px rgba(255, 76, 76, 0.6);
-  }
+@keyframes live-card-pulse {
+  0% { border-color: rgba(255, 76, 76, 0.4); box-shadow: 0 4px 15px rgba(255, 76, 76, 0.2); }
+  100% { border-color: rgba(255, 76, 76, 0.9); box-shadow: 0 6px 30px rgba(255, 76, 76, 0.5); }
+}
+
+.live-card-left {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.live-program-img {
+  width: 55px;
+  height: 55px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.live-badge {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #FF4C4C;
+  color: #fff;
+  font-size: 0.55rem;
+  font-weight: 900;
+  padding: 1px 5px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.live-card-center {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.live-program-title {
+  font-weight: 900;
+  font-size: 0.95rem;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.live-host {
+  font-size: 0.8rem;
+  color: #f4741f;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.live-song {
+  font-size: 0.75rem;
+  color: #cccccc;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.live-card-right {
+  flex-shrink: 0;
+}
+
+.btn-live-request {
+  background-color: #f4741f;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(244, 116, 31, 0.4);
+}
+
+.btn-live-request:hover {
+  background-color: #ff8c42;
+  transform: translateY(-2px);
+}
+
+.btn-live-request i {
+  font-size: 0.9rem;
 }
 
 .apps-container {
@@ -508,21 +593,6 @@ body {
 @keyframes avatar-pulse {
   from { box-shadow: 0 0 5px rgba(255, 76, 76, 0.5); }
   to { box-shadow: 0 0 25px rgba(255, 76, 76, 1); }
-}
-
-.badge-live {
-  background-color: #FF4C4C;
-  color: #fff;
-  font-size: 0.65rem;
-  padding: 2px 6px;
-  border-radius: 4px;
-  margin-left: 5px;
-  animation: text-pulse 1.2s infinite alternate;
-}
-
-@keyframes text-pulse {
-  from { opacity: 0.7; }
-  to { opacity: 1; }
 }
 
 .member-info {

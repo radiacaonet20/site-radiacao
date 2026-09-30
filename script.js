@@ -73,7 +73,7 @@ function compartilharSite() {
   }
 }
 
-// 5. ATUALIZAR MÚSICA E DESTACAR LOCUTOR AO VIVO
+// 5. ATUALIZAR ESTÚDIO AO VIVO E PREENCHER O CARD INTELIGENTE
 async function atualizarNowPlaying() {
   try {
     const response = await fetch('https://painel.radiacao.net.br/api/nowplaying_static/radiacaonet.json');
@@ -82,30 +82,29 @@ async function atualizarNowPlaying() {
     const songText = data.now_playing.song.text; 
     const isLive = data.live.is_live; 
     const streamer = data.live.streamer_name; 
-    const nowPlayingBar = document.getElementById('nowPlayingBar');
+    const liveStudioCard = document.getElementById('liveStudioCard');
 
     // Limpa efeitos antigos dos membros da equipe
     document.querySelectorAll('.member-info').forEach(info => {
        const avatar = info.parentElement.querySelector('.thumb-avatar');
        if(avatar) avatar.classList.remove('live-avatar-pulse');
-       
-       const roleSpan = info.querySelector('.member-role');
-       if(roleSpan && roleSpan.dataset.originalText) {
-          roleSpan.innerHTML = roleSpan.dataset.originalText;
-       } else if (roleSpan) {
-          roleSpan.dataset.originalText = roleSpan.innerHTML;
-       }
     });
 
     if (isLive) {
-      let displayText = '🔴 Ao Vivo';
-      if (streamer) displayText += `: ${streamer}`;
-      if (songText) displayText += ` | ${songText}`;
+      // Preenche as informações no card inteligente
+      document.getElementById('liveProgramName').innerText = data.live.show_name || "Programa ao Vivo";
+      document.getElementById('liveStreamerName').innerText = `Locutor: ${streamer || 'Ao Vivo'}`;
+      document.getElementById('liveSongName').innerText = `Tocando: ${songText || 'Música ao vivo'}`;
       
-      document.getElementById('currentSong').innerText = displayText;
-      nowPlayingBar.style.display = 'flex'; 
+      // Se houver arte do artista ou capa do programa na API, atualiza a foto esquerda
+      if (data.now_playing.song.art) {
+        document.getElementById('liveProgramImg').src = data.now_playing.song.art;
+      }
+
+      // Exibe o card animado do estúdio
+      liveStudioCard.style.display = 'flex'; 
       
-      // Procura quem é o locutor na lista e acende a foto dele
+      // Procura quem é o locutor na lista e acende a foto dele no modal de equipe
       if (streamer) {
          const streamerNameLower = streamer.toLowerCase();
          document.querySelectorAll('.member-info').forEach(info => {
@@ -114,17 +113,16 @@ async function atualizarNowPlaying() {
             
             if (streamerNameLower.includes(firstName)) {
                info.parentElement.querySelector('.thumb-avatar').classList.add('live-avatar-pulse');
-               const roleSpan = info.querySelector('.member-role');
-               roleSpan.innerHTML = `${roleSpan.dataset.originalText} <span class="badge-live">🔴 NO AR</span>`;
             }
          });
       }
     } else {
-      nowPlayingBar.style.display = 'none';
+      // Se estiver no AutoDJ, esconde o card de estúdio com botão de pedido
+      liveStudioCard.style.display = 'none';
     }
   } catch (error) {
     console.error("Erro ao buscar dados da rádio:", error);
-    document.getElementById('nowPlayingBar').style.display = 'none';
+    document.getElementById('liveStudioCard').style.display = 'none';
   }
 }
 
@@ -133,7 +131,6 @@ let eventoInstalacao;
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   eventoInstalacao = e;
-  // Adiciona a classe que exibe o botão em grade span 2
   document.getElementById('btnInstall').classList.add('visible-install');
 });
 
