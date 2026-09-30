@@ -128,12 +128,13 @@ async function atualizarNowPlaying() {
   }
 }
 
-// 6. LÓGICA DO BOTÃO "INSTALAR APP"
+// 6. LÓGICA DO BOTÃO "INSTALAR APP" (CONDICIONAL)
 let eventoInstalacao;
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   eventoInstalacao = e;
-  document.getElementById('btnInstall').style.display = 'inline-block';
+  // Adiciona a classe que exibe o botão em grade span 2
+  document.getElementById('btnInstall').classList.add('visible-install');
 });
 
 document.getElementById('btnInstall').addEventListener('click', async () => {
@@ -141,7 +142,7 @@ document.getElementById('btnInstall').addEventListener('click', async () => {
     eventoInstalacao.prompt();
     const { outcome } = await eventoInstalacao.userChoice;
     if (outcome === 'accepted') {
-      document.getElementById('btnInstall').style.display = 'none';
+      document.getElementById('btnInstall').classList.remove('visible-install');
     }
     eventoInstalacao = null;
   }
@@ -149,7 +150,6 @@ document.getElementById('btnInstall').addEventListener('click', async () => {
 
 // 7. FUNÇÃO DE ENVIO DE PEDIDO PARA O TELEGRAM
 async function enviarPedido(event) {
-  // Impede a página de recarregar
   event.preventDefault();
   
   const btn = document.getElementById('btn-enviar-pedido');
@@ -157,15 +157,12 @@ async function enviarPedido(event) {
   const musica = document.getElementById('pedido-musica').value;
   const recado = document.getElementById('pedido-recado').value;
   
-  // Desativa o botão e muda o texto para dar feedback ao usuário
   btn.disabled = true;
   btn.innerText = 'Enviando... ⏳';
 
-  // Suas credenciais da API
   const token = '8813122083:AAGkUT3zqsV44pvv2gd3S83xPhIEHgHVlzQ';
   const chatId = '-1004448651469';
   
-  // Monta a mensagem formatada
   let textoMsg = `🎵 *NOVO PEDIDO MUSICAL!* 🎵\n\n👤 *Ouvinte:* ${nome}\n🎧 *Música:* ${musica}`;
   if (recado.trim() !== '') {
      textoMsg += `\n💬 *Recado:* ${recado}`;
@@ -187,7 +184,6 @@ async function enviarPedido(event) {
     if (response.ok) {
       btn.innerText = 'Pedido Enviado! ✅';
       
-      // Espera 2 segundos, fecha a janela e limpa o formulário para o próximo uso
       setTimeout(() => {
         fecharModal('modal-pedido');
         document.getElementById('form-pedido').reset();
@@ -201,7 +197,6 @@ async function enviarPedido(event) {
     console.error('Erro ao enviar pedido:', error);
     btn.innerText = 'Erro ao enviar ❌';
     
-    // Volta o botão ao normal após 3 segundos em caso de erro
     setTimeout(() => {
       btn.disabled = false;
       btn.innerText = 'Enviar Pedido 🚀';

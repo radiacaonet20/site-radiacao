@@ -47,12 +47,12 @@
       <span id="currentSong">Verificando estúdio...</span>
     </div>
 
-    <!-- Botões Menu -->
+    <!-- Botões Menu (Lado a lado e na nova ordem) -->
     <div class="menu-container">
-      <button class="btn-menu" onclick="abrirModal('modal-pedido')" style="background-color: #f4741f; color: #fff; border-color: #f4741f;">🎵 Pedir Música</button>
-      <button class="btn-menu" onclick="abrirModal('modal-grade')">📅 Grade de Programação</button>
-      <button class="btn-menu" onclick="abrirModal('modal-locutores')">🎙️ Nossa Equipe</button>
-      <button class="btn-menu" onclick="compartilharSite()">📲 Compartilhar Rádio</button>
+      <button class="btn-menu" onclick="abrirModal('modal-grade')">📅 Programação</button>
+      <button class="btn-menu" onclick="abrirModal('modal-locutores')">🎙️️ Nossa Equipe</button>
+      <button class="btn-menu" onclick="abrirModal('modal-pedido')">🎵 Pedir Música</button>
+      <button class="btn-menu" onclick="compartilharSite()">📲 Compartilhar</button>
       <button class="btn-menu" id="btnInstall">⬇️ Instalar App</button>
     </div>
 
@@ -114,7 +114,7 @@
     <div id="modal-grade" class="modal-overlay" onclick="fecharModalFora(event, 'modal-grade')">
       <div class="modal-content">
         <span class="close-btn" onclick="fecharModal('modal-grade')">&times;</span>
-        <h2 class="modal-title">Grade de Programação</h2>
+        <h2 class="modal-title">Programação</h2>
         
         <div class="tabs-header">
           <button class="tab-btn active" onclick="abrirAba(event, 'tab-seg')">SEG</button>
