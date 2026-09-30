@@ -190,14 +190,16 @@ body {
   transform: translateY(-3px);
 }
 
+/* Botão de instalar mantendo o padrão visual e oculto nativamente */
 #btnInstall {
   display: none; 
-  background-color: #f4741f;
-  color: #fff;
-  border: none;
 }
-#btnInstall:hover {
-  background-color: #ff8c42;
+
+/* Regra de segurança: Bloqueia a exibição do botão em computadores/telas grandes */
+@media (min-width: 481px) {
+  #btnInstall {
+    display: none !important;
+  }
 }
 
 .partners-section {
