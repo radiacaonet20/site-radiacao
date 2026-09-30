@@ -190,12 +190,10 @@ body {
   transform: translateY(-3px);
 }
 
-/* Botão de instalar mantendo o padrão visual e oculto nativamente */
 #btnInstall {
   display: none; 
 }
 
-/* Regra de segurança: Bloqueia a exibição do botão em computadores/telas grandes */
 @media (min-width: 481px) {
   #btnInstall {
     display: none !important;
@@ -557,6 +555,74 @@ body {
   color: #f4741f;
   font-weight: bold;
   text-align: right;
+}
+
+/* --- ESTILOS DO FORMULÁRIO DE PEDIDOS --- */
+.form-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  color: #aaaaaa;
+  font-weight: 700;
+}
+
+.form-group input, 
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(30, 30, 30, 0.8);
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus, 
+.form-group textarea:focus {
+  border-color: #f4741f;
+  box-shadow: 0 0 8px rgba(244, 116, 31, 0.3);
+}
+
+.form-group input::placeholder, 
+.form-group textarea::placeholder {
+  color: #666;
+}
+
+.btn-enviar {
+  width: 100%;
+  background-color: #f4741f;
+  color: #fff;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  margin-top: 10px;
+  box-shadow: 0 4px 15px rgba(244, 116, 31, 0.4);
+}
+
+.btn-enviar:hover {
+  background-color: #ff8c42;
+  transform: translateY(-2px);
+}
+
+.btn-enviar:disabled {
+  background-color: #555;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
 }
 
 @media (max-width: 480px) {

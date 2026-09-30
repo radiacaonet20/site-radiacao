@@ -49,6 +49,7 @@
 
     <!-- Botões Menu -->
     <div class="menu-container">
+      <button class="btn-menu" onclick="abrirModal('modal-pedido')" style="background-color: #f4741f; color: #fff; border-color: #f4741f;">🎵 Pedir Música</button>
       <button class="btn-menu" onclick="abrirModal('modal-grade')">📅 Grade de Programação</button>
       <button class="btn-menu" onclick="abrirModal('modal-locutores')">🎙️ Nossa Equipe</button>
       <button class="btn-menu" onclick="compartilharSite()">📲 Compartilhar Rádio</button>
@@ -84,6 +85,30 @@
     </div>
 
     <!-- Modais -->
+
+    <!-- Modal: Pedir Música -->
+    <div id="modal-pedido" class="modal-overlay" onclick="fecharModalFora(event, 'modal-pedido')">
+      <div class="modal-content">
+        <span class="close-btn" onclick="fecharModal('modal-pedido')">&times;</span>
+        <h2 class="modal-title" style="border-bottom: 2px solid #333; padding-bottom: 10px;">Pedir Música</h2>
+        
+        <form id="form-pedido" onsubmit="enviarPedido(event)">
+          <div class="form-group">
+            <label for="pedido-nome">Seu Nome</label>
+            <input type="text" id="pedido-nome" required placeholder="Ex: João Silva">
+          </div>
+          <div class="form-group">
+            <label for="pedido-musica">Música e Artista</label>
+            <input type="text" id="pedido-musica" required placeholder="Ex: Linkin Park - Numb">
+          </div>
+          <div class="form-group">
+            <label for="pedido-recado">Recado (Opcional)</label>
+            <textarea id="pedido-recado" rows="3" placeholder="Quer mandar um abraço para alguém?"></textarea>
+          </div>
+          <button type="submit" class="btn-enviar" id="btn-enviar-pedido">Enviar Pedido 🚀</button>
+        </form>
+      </div>
+    </div>
     
     <!-- Modal: Grade de Programação (ABAS) -->
     <div id="modal-grade" class="modal-overlay" onclick="fecharModalFora(event, 'modal-grade')">
