@@ -278,16 +278,25 @@ body {
   transform: translateY(-3px);
 }
 
+/* Centraliza o botão Compartilhar ocupando 2 colunas */
+#btnCompartilhar {
+  grid-column: span 2;
+  width: 70%;
+  max-width: 250px;
+  margin: 0 auto;
+}
+
 /* Oculto por padrão */
 #btnInstall {
   display: none; 
 }
 
-/* Se estiver visível no mobile, ocupa a linha inteira embaixo centralizado */
+/* Se estiver visível no mobile, ocupa a linha inteira centralizado igual ao Compartilhar */
 #btnInstall.visible-install {
   display: block;
   grid-column: span 2;
-  max-width: 65%;
+  width: 70%;
+  max-width: 250px;
   margin: 0 auto;
 }
 
