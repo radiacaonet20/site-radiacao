@@ -278,14 +278,6 @@ body {
   transform: translateY(-3px);
 }
 
-/* Centraliza o botão Compartilhar ocupando 2 colunas */
-#btnCompartilhar {
-  grid-column: span 2;
-  width: 70%;
-  max-width: 250px;
-  margin: 0 auto;
-}
-
 /* Oculto por padrão */
 #btnInstall {
   display: none; 
