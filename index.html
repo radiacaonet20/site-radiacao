@@ -2,9 +2,18 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Viewport travado: impede o usuário de dar zoom como numa página web comum -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- Meta Tags para sensação de App (PWA) -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#121212">
+    
     <title>Radiação.Net - A web rádio de todas as tribos!</title>
     <link rel="icon" type="image/png" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
+    <link rel="apple-touch-icon" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
     
     <!-- Importando fontes e ícones -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
@@ -15,6 +24,8 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+        /* Remove o piscar azul ao tocar em botões no mobile */
+        -webkit-tap-highlight-color: transparent; 
       }
       
       body {
@@ -26,7 +37,9 @@
         background-size: cover;
         background-attachment: fixed;
         background-position: center;
-        min-height: 100vh;
+        
+        /* 100dvh resolve o bug da barra de endereços do mobile */
+        min-height: 100dvh; 
         
         display: flex;
         flex-direction: column; 
@@ -34,6 +47,11 @@
         align-items: center;
         padding: 20px 20px 110px 20px; 
         gap: 20px; 
+        
+        /* Sensação de App: Remove seleção de texto e efeito elástico (pull-to-refresh) */
+        -webkit-user-select: none;
+        user-select: none;
+        overscroll-behavior-y: none;
       }
       
       /* --- Container do Título e Equalizador --- */
@@ -44,6 +62,15 @@
         gap: 15px;
         z-index: 10;
         margin-bottom: -5px;
+        width: 100%;
+        flex-wrap: nowrap; 
+      }
+
+      .logo-img {
+        width: 48px;
+        height: 48px;
+        object-fit: contain;
+        flex-shrink: 0; 
       }
 
       .floating-title {
@@ -51,6 +78,7 @@
         font-weight: 900;
         text-align: center;
         text-shadow: 0 8px 20px rgba(0, 0, 0, 0.8), 0 2px 5px rgba(0, 0, 0, 0.5);
+        white-space: nowrap; 
       }
 
       /* --- Equalizador Animado CSS --- */
@@ -59,6 +87,7 @@
         align-items: flex-end;
         gap: 4px;
         height: 28px;
+        flex-shrink: 0; 
       }
 
       .equalizer .bar {
@@ -226,12 +255,14 @@
         gap: 15px;
         justify-content: center; 
         align-items: center;
-        width: 100%; 
+        width: 100%;
+        flex-wrap: wrap; 
       }
 
       .partners-track.is-animated {
         width: max-content;
         justify-content: flex-start;
+        flex-wrap: nowrap; 
         animation: scroll-partners 20s linear infinite;
       }
 
@@ -245,8 +276,9 @@
       }
 
       .partner-card img {
-        width: 150px;  /* Tamanho maior (150x75) */
-        height: 75px;  /* Tamanho maior (150x75) */
+        width: 150px; 
+        height: 75px; 
+        max-width: 100%; 
         object-fit: contain;
         background-color: rgba(30, 30, 30, 0.8);
         backdrop-filter: blur(5px);
@@ -254,6 +286,7 @@
         border-radius: 8px;
         padding: 6px;
         transition: all 0.3s ease;
+        pointer-events: none; /* Previne menu de contexto na imagem no mobile */
       }
 
       .partner-card:hover img {
@@ -283,6 +316,9 @@
         color: #aaaaaa;
         z-index: 100;
         border-top: 1px solid rgba(255, 255, 255, 0.1);
+        
+        /* Para o rodapé ficar isolado dos efeitos touch da página */
+        touch-action: none; 
       }
 
       .social-icons {
@@ -352,6 +388,10 @@
         box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
         transform: translateY(20px);
         transition: transform 0.3s ease;
+        
+        /* Permite rolar nativamente apenas dentro do modal */
+        overscroll-behavior-y: contain;
+        -webkit-overflow-scrolling: touch; 
       }
 
       .modal-overlay.active .modal-content {
@@ -367,6 +407,7 @@
         color: #888;
         cursor: pointer;
         transition: color 0.2s;
+        padding: 5px; /* Aumenta a área de toque no celular */
       }
 
       .close-btn:hover {
@@ -388,6 +429,7 @@
         overflow-x: auto; 
         padding-bottom: 5px;
         scrollbar-width: none; 
+        -webkit-overflow-scrolling: touch;
       }
       .tabs-header::-webkit-scrollbar {
         display: none; 
@@ -501,6 +543,7 @@
         font-size: 0.9rem;
         text-decoration: none;
         transition: color 0.2s ease, transform 0.2s ease;
+        padding: 4px; /* Facilita o clique no celular */
       }
 
       .member-socials a:hover {
@@ -514,13 +557,43 @@
         text-align: right;
       }
 
-      @media (max-width: 400px) {
+      /* --- MEDIA QUERIES PARA CELULAR --- */
+      @media (max-width: 480px) {
         .apps-container { flex-direction: column; }
         .menu-container { flex-direction: column; width: 100%; }
         .btn-menu { width: 100%; text-align: center; }
         .footer { font-size: 0.75rem; padding: 10px; gap: 8px; }
-        .title-wrapper { gap: 10px; }
-        .floating-title { font-size: 1.8rem; }
+        
+        /* Ajustes precisos do cabeçalho */
+        .title-wrapper { gap: 8px; }
+        .logo-img { width: 36px; height: 36px; }
+        .floating-title { font-size: 1.6rem; }
+        .equalizer { height: 22px; gap: 3px; }
+        .equalizer .bar { width: 4px; }
+        
+        /* Reduz um pouco os parceiros para caber 2 por linha no celular */
+        .partner-card img { width: 130px; height: 65px; }
+
+        /* --- COMPORTAMENTO DE APP PARA OS MODAIS (TELA CHEIA) --- */
+        .modal-overlay {
+          align-items: flex-end; /* Prepara para a janela surgir colada na base */
+        }
+        
+        .modal-content {
+          width: 100%;
+          max-width: 100%;
+          height: 100dvh; /* Ocupa a tela 100% de ponta a ponta */
+          max-height: 100dvh;
+          border-radius: 0; /* Remove os cantos arredondados na base e no topo */
+          padding: 60px 20px 20px 20px; /* Dá bastante espaço pro botão "X" não esbarrar no texto */
+          transform: translateY(100%); /* Esconde a janela toda para baixo da tela inicialmente */
+        }
+        
+        .close-btn {
+          top: 15px;
+          right: 20px;
+          font-size: 2rem; /* Aumenta o "X" para ficar fácil de clicar correndo */
+        }
       }
     </style>
   </head>
@@ -528,10 +601,8 @@
     
     <!-- Título + Equalizador -->
     <div class="title-wrapper">
-      <h1 class="floating-title">
-        <img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" style="width:48px;height:48px;vertical-align:middle;" alt="Logo Radiação.Net">
-        Radiação.Net
-      </h1>
+      <img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" class="logo-img" alt="Logo Radiação.Net">
+      <h1 class="floating-title">Radiação.Net</h1>
       <div class="equalizer" title="Transmissão ao vivo">
         <span class="bar"></span>
         <span class="bar"></span>
