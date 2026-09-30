@@ -45,8 +45,11 @@
         flex-direction: column; 
         justify-content: center;
         align-items: center;
-        padding: 20px 20px 110px 20px; 
+        padding: 30px 20px 90px 20px; 
         gap: 20px; 
+        
+        /* Evita rolagem horizontal acidental */
+        overflow-x: hidden;
         
         /* Sensação de App: Remove seleção de texto e efeito elástico (pull-to-refresh) */
         -webkit-user-select: none;
@@ -559,7 +562,38 @@
 
       /* --- MEDIA QUERIES PARA CELULAR --- */
       @media (max-width: 480px) {
-        .apps-container { flex-direction: column; }
+        
+        /* Correção do espaço morto: Alinha os itens a partir do topo em telas menores */
+        body {
+          justify-content: flex-start;
+          padding-top: 35px;
+          padding-bottom: 75px; 
+        }
+
+        /* FORÇA botões das lojas a ficarem na mesma linha incondicionalmente */
+        .apps-container { 
+          flex-direction: row !important; 
+          flex-wrap: nowrap !important;
+          gap: 10px !important;
+          justify-content: center;
+          width: 100%;
+        }
+
+        /* Permite que os botões se adaptem e não quebrem linha */
+        .app-card {
+          flex: 0 1 auto;
+          display: flex;
+          justify-content: center;
+        }
+
+        /* Adapta a imagem para que encolha proporcionalmente em celulares estreitos */
+        .app-card img { 
+          height: auto !important; 
+          max-height: 40px !important; 
+          max-width: 100% !important;
+          object-fit: contain;
+        }
+
         .menu-container { flex-direction: column; width: 100%; }
         .btn-menu { width: 100%; text-align: center; }
         .footer { font-size: 0.75rem; padding: 10px; gap: 8px; }
@@ -571,7 +605,7 @@
         .equalizer { height: 22px; gap: 3px; }
         .equalizer .bar { width: 4px; }
         
-        /* Reduz um pouco os parceiros para caber 2 por linha no celular */
+        /* Reduz um pouco os parceiros para caberem bem no móvel */
         .partner-card img { width: 130px; height: 65px; }
 
         /* --- COMPORTAMENTO DE APP PARA OS MODAIS (TELA CHEIA) --- */
@@ -896,7 +930,12 @@
         const slider = document.getElementById('partnersSlider');
         const cards = track.querySelectorAll('.partner-card');
 
-        if (cards.length > 4) {
+        // MÁGICA AQUI: Identifica se é celular ou PC para ativar o carrossel
+        // Celular (<= 480px): Roda a partir de 3 parceiros
+        // PC (> 480px): Roda a partir de 5 parceiros
+        const limiteAnimacao = window.innerWidth <= 480 ? 3 : 5;
+
+        if (cards.length >= limiteAnimacao) {
           slider.classList.add('is-animated');
           track.classList.add('is-animated');
 
