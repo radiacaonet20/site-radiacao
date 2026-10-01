@@ -42,15 +42,24 @@ function abrirAba(evento, idAba) {
   evento.currentTarget.classList.add("active");
 }
 
-// 3. CONTROLE DE MODAIS
+// 3. CONTROLE DE MODAIS (Atualizado com Animação de Fechamento)
 function abrirModal(idModal) {
   document.getElementById(idModal).classList.add('active');
   document.body.style.overflow = 'hidden';
 }
 
 function fecharModal(idModal) {
-  document.getElementById(idModal).classList.remove('active');
-  document.body.style.overflow = 'auto';
+  const modal = document.getElementById(idModal);
+  
+  // Adiciona a classe que engatilha a animação no CSS
+  modal.classList.add('closing');
+  
+  // Aguarda 350ms (tempo exato do CSS) para remover as classes
+  setTimeout(() => {
+    modal.classList.remove('active');
+    modal.classList.remove('closing');
+    document.body.style.overflow = 'auto';
+  }, 350);
 }
 
 function fecharModalFora(event, idModal) {

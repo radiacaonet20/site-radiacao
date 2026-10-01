@@ -101,7 +101,7 @@ body {
 
 /* --- CARD INTELIGENTE DE ESTÚDIO AO VIVO --- */
 .live-studio-card {
-  display: none; /* Oculto por padrão, aparece via JS quando está ao vivo */
+  display: none; 
   width: 100%;
   max-width: 600px;
   background: rgba(25, 10, 10, 0.9);
@@ -283,7 +283,7 @@ body {
   display: none; 
 }
 
-/* Se estiver visível no mobile, ocupa a linha inteira centralizado igual ao Compartilhar */
+/* Se estiver visível no mobile, ocupa a linha inteira centralizado */
 #btnInstall.visible-install {
   display: block;
   grid-column: span 2;
@@ -451,6 +451,16 @@ body {
   opacity: 1;
 }
 
+/* Animações de saída do Overlay em geral */
+.modal-overlay.closing {
+  animation: overlayFadeOut 0.35s ease forwards;
+}
+
+@keyframes overlayFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
 .modal-content {
   background-color: #1e1e1e;
   width: 90%;
@@ -466,12 +476,22 @@ body {
 }
 
 .modal-overlay.active .modal-content {
-  animation: modalFadeUp 0.3s ease forwards;
+  animation: modalFadeUp 0.35s ease forwards;
+}
+
+/* Animação de saída do modal Desktop */
+.modal-overlay.closing .modal-content {
+  animation: modalFadeDown 0.35s ease forwards;
 }
 
 @keyframes modalFadeUp {
   from { transform: translateY(30px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes modalFadeDown {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(30px); opacity: 0; }
 }
 
 .close-btn {
@@ -714,8 +734,8 @@ body {
 
 @media (max-width: 480px) {
   body {
-    justify-content: flex-start;
-    padding-top: 35px;
+    /* REMOVIDO: justify-content: flex-start; (para herdar o center do desktop) */
+    /* REMOVIDO: padding-top: 35px; */
     padding-bottom: 75px; 
   }
 
@@ -765,9 +785,19 @@ body {
     animation: slideUpMobile 0.35s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
   }
 
+  /* Animação de saída para fechar o Modal no Mobile perfeitamente */
+  .modal-overlay.closing .modal-content {
+    animation: slideDownMobile 0.35s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+  }
+
   @keyframes slideUpMobile {
     from { transform: translateY(100%); }
     to { transform: translateY(0); }
+  }
+
+  @keyframes slideDownMobile {
+    from { transform: translateY(0); }
+    to { transform: translateY(100%); }
   }
   
   .close-btn {
