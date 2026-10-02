@@ -3,27 +3,28 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
+
     <!-- Meta Tags para sensação de App (PWA) -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#121212">
-    
+
     <title>Radiação.Net - A web rádio de todas as tribos!</title>
     <link rel="icon" type="image/png" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
     <link rel="apple-touch-icon" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
-    
+
     <!-- Arquivo Manifest PWA -->
     <link rel="manifest" href="./manifest.json">
-    
+
     <!-- Importando fontes, ícones e nosso CSS -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="./style.css">
   </head>
+
   <body>
-    
+
     <!-- Título + Equalizador -->
     <div class="title-wrapper">
       <img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" class="logo-img" alt="Logo Radiação.Net">
@@ -36,46 +37,67 @@
       </div>
     </div>
 
-    <!-- Player Principal -->
-    <div class="player-container">
-      <iframe src="https://painel.radiacao.net.br/public/radiacaonet/embed?primary_color=f4741f&hide_streams=1&volume=100&layout=compact&rounded=1&continuous=1" frameborder="0" allowtransparency="true"></iframe>
-    </div>
+    <!-- PLAYER CUSTOMIZADO INTEGRADO (Layout Horizontal) -->
+    <div class="custom-player-wrapper" id="customPlayerWrapper">
+      <!-- Elemento de áudio oculto conectado direto ao AzuraCast -->
+      <audio id="audioElement" src="https://painel.radiacao.net.br/listen/radiacaonet/radio.mp3" preload="none"></audio>
 
-    <!-- Card Inteligente de Estúdio (Aparece apenas Ao Vivo) -->
-    <div class="live-studio-card" id="liveStudioCard">
-      <div class="live-card-left">
-        <img id="liveProgramImg" src="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png" alt="Programa Ao Vivo" class="live-program-img">
-        <span class="live-badge">AO VIVO</span>
+      <!-- Lado Esquerdo: Capa -->
+      <div class="player-cover-container">
+        <img id="playerCover" src="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png" alt="Capa" class="player-cover">
+        <div class="live-indicator" id="playerLiveBadge" style="display: none;">
+          <span class="pulse-dot"></span> AO VIVO
+        </div>
       </div>
-      <div class="live-card-center">
-        <span id="liveProgramName" class="live-program-title">Radiação.Net</span>
-        <span id="liveStreamerName" class="live-host">Locutor: --</span>
-        <span id="liveSongName" class="live-song">Tocando: --</span>
+
+      <!-- Centro: Informações da Faixa -->
+      <div class="player-track-info">
+        <div class="song-title" id="playerLine1">Carregando...</div>
+        <div class="song-artist" id="playerLine2">Radiação.Net</div>
+        <div class="song-album" id="playerLine3"></div>
+
+        <!-- Extras: Botão Pedir e Volume (Oculto no AutoDJ e Mobile) -->
+        <div class="player-extras">
+          <button class="btn-request-mini" id="btnRequestLive" onclick="abrirModal('modal-pedido')" style="display: none;"
+            title="Pedir Música">
+            <i class="fas fa-comment-dots"></i> Pedir
+          </button>
+          <div class="volume-wrapper-mini" id="desktopVolume">
+            <i class="fas fa-volume-up volume-icon" id="muteIcon" onclick="toggleMute()"></i>
+            <input type="range" id="volumeControl" class="volume-slider" min="0" max="100" value="84">
+          </div>
+        </div>
       </div>
-      <div class="live-card-right">
-        <button class="btn-live-request" onclick="abrirModal('modal-pedido')" title="Pedir Música">
-          <i class="fas fa-music"></i>
-          <span>Pedir</span>
+
+      <!-- Lado Direito: Botão Play -->
+      <div class="player-controls-right">
+        <button class="btn-play-pause" id="playPauseBtn" onclick="togglePlay()">
+          <i class="fas fa-play" id="playPauseIcon"></i>
         </button>
       </div>
     </div>
 
-    <!-- Botões Menu (Agora com 4 fixos, formando um quadrado perfeito 2x2) -->
+    <!-- Botões Menu (Quadrado 2x2 Simétrico) -->
     <div class="menu-container">
       <button class="btn-menu" onclick="abrirModal('modal-grade')">📅 Programação</button>
-      <button class="btn-menu" onclick="abrirModal('modal-locutores')">🎙️ Nossa Equipe</button>
-      <button class="btn-menu" onclick="window.open('https://chat.whatsapp.com/FKr00cdRZME68ppTR3gilZ', '_blank')">💬 Grupo WhatsApp</button>
+      <button class="btn-menu" onclick="abrirModal('modal-locutores')">🎙️️ Nossa Equipe</button>
+      <button class="btn-menu" onclick="window.open('https://chat.whatsapp.com/FKr00cdRZME68ppTR3gilZ', '_blank')">💬
+        Grupo WhatsApp</button>
       <button class="btn-menu" onclick="compartilharSite()">📲 Compartilhar</button>
       <button class="btn-menu" id="btnInstall">⬇️ Instalar App</button>
     </div>
 
     <!-- Apps -->
     <div class="apps-container">
-      <a href="https://play.google.com/store/apps/details?id=br.com.radios.radiosmobile.radiosnet" target="_blank" rel="noopener noreferrer" class="app-card" title="Baixar no Google Play">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Disponível no Google Play">
+      <a href="https://play.google.com/store/apps/details?id=br.com.radios.radiosmobile.radiosnet" target="_blank"
+        rel="noopener noreferrer" class="app-card" title="Baixar no Google Play">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+          alt="Disponível no Google Play">
       </a>
-      <a href="https://apps.apple.com/br/app/radiosnet/id1089302078" target="_blank" rel="noopener noreferrer" class="app-card" title="Baixar na App Store">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Baixar na App Store">
+      <a href="https://apps.apple.com/br/app/radiosnet/id1089302078" target="_blank" rel="noopener noreferrer"
+        class="app-card" title="Baixar na App Store">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg"
+          alt="Baixar na App Store">
       </a>
     </div>
 
@@ -85,13 +107,17 @@
       <div class="partners-slider" id="partnersSlider">
         <div class="partners-track" id="partnersTrack">
           <a href="https://www.instagram.com/ironcont/" target="_blank" class="partner-card">
-            <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/parceiro_ironcont.jpg?raw=true" alt="Iron Cont">
+            <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/parceiro_ironcont.jpg?raw=true"
+              alt="Iron Cont">
           </a>
           <a href="https://www.instagram.com/petmaisvidaslz/" target="_blank" class="partner-card">
-            <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/parceiro_petmaisvida.jpg?raw=true" alt="PetMaisVida">
+            <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/parceiro_petmaisvida.jpg?raw=true"
+              alt="PetMaisVida">
           </a>
           <a href="https://www.instagram.com/tspowersuplementos/" target="_blank" class="partner-card">
-            <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/parceiro_tspowersuplementos.jpg?raw=true" alt="TS Power Suplementos">
+            <img
+              src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/parceiro_tspowersuplementos.jpg?raw=true"
+              alt="TS Power Suplementos">
           </a>
         </div>
       </div>
@@ -104,7 +130,7 @@
       <div class="modal-content">
         <span class="close-btn" onclick="fecharModal('modal-pedido')">&times;</span>
         <h2 class="modal-title" style="border-bottom: 2px solid #333; padding-bottom: 10px;">Pedir Música</h2>
-        
+
         <form id="form-pedido" onsubmit="enviarPedido(event)">
           <div class="form-group">
             <label for="pedido-nome">Seu Nome</label>
@@ -122,13 +148,13 @@
         </form>
       </div>
     </div>
-    
+
     <!-- Modal: Grade de Programação (ABAS) -->
     <div id="modal-grade" class="modal-overlay" onclick="fecharModalFora(event, 'modal-grade')">
       <div class="modal-content">
         <span class="close-btn" onclick="fecharModal('modal-grade')">&times;</span>
         <h2 class="modal-title">Programação</h2>
-        
+
         <div class="tabs-header">
           <button class="tab-btn active" onclick="abrirAba(event, 'tab-seg')">SEG</button>
           <button class="tab-btn" onclick="abrirAba(event, 'tab-ter')">TER</button>
@@ -144,7 +170,8 @@
             <ul class="info-list">
               <li>
                 <div class="item-left">
-                  <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/SemClubismo300.jpg?raw=true" alt="Logo Sem Clubismo" class="thumb-img thumb-logo">
+                  <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/SemClubismo300.jpg?raw=true"
+                    alt="Logo Sem Clubismo" class="thumb-img thumb-logo">
                   <span>Sem Clubismo</span>
                 </div>
                 <span class="destaque">21:00</span>
@@ -155,7 +182,8 @@
             <ul class="info-list">
               <li>
                 <div class="item-left">
-                  <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/RastaFlow.jpg?raw=true" alt="Logo Rasta Flow" class="thumb-img thumb-logo">
+                  <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/RastaFlow.jpg?raw=true"
+                    alt="Logo Rasta Flow" class="thumb-img thumb-logo">
                   <span>Rasta Flow</span>
                 </div>
                 <span class="destaque">21:00</span>
@@ -166,7 +194,8 @@
             <ul class="info-list">
               <li>
                 <div class="item-left">
-                  <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/LootCast.jpg?raw=true" alt="Logo Loot Cast" class="thumb-img thumb-logo">
+                  <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/LootCast.jpg?raw=true"
+                    alt="Logo Loot Cast" class="thumb-img thumb-logo">
                   <span>Loot Cast</span>
                 </div>
                 <span class="destaque">21:00</span>
@@ -177,7 +206,9 @@
             <ul class="info-list">
               <li>
                 <div class="item-left">
-                  <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/CasaDosClassicos.jpg?raw=true" alt="Logo Casa dos Clássicos" class="thumb-img thumb-logo">
+                  <img
+                    src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/CasaDosClassicos.jpg?raw=true"
+                    alt="Logo Casa dos Clássicos" class="thumb-img thumb-logo">
                   <span>Casa dos Clássicos</span>
                 </div>
                 <span class="destaque">21:00</span>
@@ -188,7 +219,8 @@
             <ul class="info-list">
               <li>
                 <div class="item-left">
-                  <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/DanceTime.jpg?raw=true" alt="Logo Dance Time" class="thumb-img thumb-logo">
+                  <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/DanceTime.jpg?raw=true"
+                    alt="Logo Dance Time" class="thumb-img thumb-logo">
                   <span>Dance Time</span>
                 </div>
                 <span class="destaque">21:00</span>
@@ -199,7 +231,8 @@
             <ul class="info-list">
               <li>
                 <div class="item-left">
-                  <img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" alt="Logo AutoDJ" class="thumb-img thumb-logo">
+                  <img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" alt="Logo AutoDJ"
+                    class="thumb-img thumb-logo">
                   <span>AutoDJ</span>
                 </div>
                 <span class="destaque">24h</span>
@@ -210,14 +243,15 @@
             <ul class="info-list">
               <li>
                 <div class="item-left">
-                  <img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" alt="Logo AutoDJ" class="thumb-img thumb-logo">
+                  <img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" alt="Logo AutoDJ"
+                    class="thumb-img thumb-logo">
                   <span>AutoDJ</span>
                 </div>
                 <span class="destaque">24h</span>
               </li>
             </ul>
           </div>
-        </div> 
+        </div>
       </div>
     </div>
 
@@ -227,17 +261,19 @@
         <span class="close-btn" onclick="fecharModal('modal-locutores')">&times;</span>
         <h2 class="modal-title" style="border-bottom: 2px solid #333; padding-bottom: 10px;">Nossa Equipe</h2>
         <ul class="info-list" id="lista-equipe">
-          
+
           <!-- Alessandro -->
           <li>
             <div class="item-left">
-              <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/Alessandro.jpg?raw=true" alt="Foto Alessandro Neves" class="thumb-img thumb-avatar">
+              <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/Alessandro.jpg?raw=true"
+                alt="Foto Alessandro Neves" class="thumb-img thumb-avatar">
               <div class="member-info">
                 <span class="member-name">Alessandro Neves</span>
                 <div class="member-details-row">
                   <span class="member-role">Presidente, Locutor</span>
                   <div class="member-socials">
-                    <a href="https://www.instagram.com/alessandro_neves09/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.instagram.com/alessandro_neves09/" target="_blank" title="Instagram"><i
+                        class="fab fa-instagram"></i></a>
                   </div>
                 </div>
               </div>
@@ -247,7 +283,8 @@
           <!-- Fred -->
           <li>
             <div class="item-left">
-              <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/FredMacedo.jpg?raw=true" alt="Foto Fred Macêdo" class="thumb-img thumb-avatar">
+              <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/FredMacedo.jpg?raw=true"
+                alt="Foto Fred Macêdo" class="thumb-img thumb-avatar">
               <div class="member-info">
                 <span class="member-name">Fred Macêdo</span>
                 <div class="member-details-row">
@@ -260,13 +297,15 @@
           <!-- Rafa -->
           <li>
             <div class="item-left">
-              <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/RafaBarros.jpg?raw=true" alt="Foto Rafa Barros" class="thumb-img thumb-avatar">
+              <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/RafaBarros.jpg?raw=true"
+                alt="Foto Rafa Barros" class="thumb-img thumb-avatar">
               <div class="member-info">
                 <span class="member-name">Rafa Barros</span>
                 <div class="member-details-row">
                   <span class="member-role">Redator, Locutor</span>
                   <div class="member-socials">
-                    <a href="https://www.instagram.com/rbarrosesporte/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.instagram.com/rbarrosesporte/" target="_blank" title="Instagram"><i
+                        class="fab fa-instagram"></i></a>
                   </div>
                 </div>
               </div>
@@ -276,14 +315,17 @@
           <!-- Josiel -->
           <li>
             <div class="item-left">
-              <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/JosielPereira.jpg?raw=true" alt="Foto Josiel Pereira" class="thumb-img thumb-avatar">
+              <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/JosielPereira.jpg?raw=true"
+                alt="Foto Josiel Pereira" class="thumb-img thumb-avatar">
               <div class="member-info">
                 <span class="member-name">Josiel Pereira</span>
                 <div class="member-details-row">
                   <span class="member-role">Comentarista</span>
                   <div class="member-socials">
-                    <a href="https://www.instagram.com/josiel3500" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="https://www.youtube.com/@josielpereira6735" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.instagram.com/josiel3500" target="_blank" title="Instagram"><i
+                        class="fab fa-instagram"></i></a>
+                    <a href="https://www.youtube.com/@josielpereira6735" target="_blank" title="YouTube"><i
+                        class="fab fa-youtube"></i></a>
                   </div>
                 </div>
               </div>
@@ -293,13 +335,15 @@
           <!-- BigT -->
           <li>
             <div class="item-left">
-              <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/BigT.jpg?raw=true" alt="Foto BigT" class="thumb-img thumb-avatar">
+              <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/BigT.jpg?raw=true"
+                alt="Foto BigT" class="thumb-img thumb-avatar">
               <div class="member-info">
                 <span class="member-name">BigT</span>
                 <div class="member-details-row">
                   <span class="member-role">Locutor</span>
                   <div class="member-socials">
-                    <a href="https://www.instagram.com/pedroaffonsot/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.instagram.com/pedroaffonsot/" target="_blank" title="Instagram"><i
+                        class="fab fa-instagram"></i></a>
                   </div>
                 </div>
               </div>
@@ -309,14 +353,17 @@
           <!-- Alex Coelho -->
           <li>
             <div class="item-left">
-              <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/AlexCoelho.jpg?raw=true" alt="Foto Alex Coelho" class="thumb-img thumb-avatar">
+              <img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/AlexCoelho.jpg?raw=true"
+                alt="Foto Alex Coelho" class="thumb-img thumb-avatar">
               <div class="member-info">
                 <span class="member-name">Alex Coelho</span>
                 <div class="member-details-row">
                   <span class="member-role">Locutor</span>
                   <div class="member-socials">
-                    <a href="https://www.instagram.com/josiel3500" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="https://www.youtube.com/@josielpereira6735" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.instagram.com/josiel3500" target="_blank" title="Instagram"><i
+                        class="fab fa-instagram"></i></a>
+                    <a href="https://www.youtube.com/@josielpereira6735" target="_blank" title="YouTube"><i
+                        class="fab fa-youtube"></i></a>
                   </div>
                 </div>
               </div>
@@ -333,14 +380,18 @@
     <!-- RODAPÉ -->
     <footer class="footer">
       <div class="social-icons">
-        <a href="https://instagram.com/radiacaonet" target="_blank" rel="noopener noreferrer" class="icon-insta" title="Siga no Instagram">
+        <a href="https://instagram.com/radiacaonet" target="_blank" rel="noopener noreferrer" class="icon-insta"
+          title="Siga no Instagram">
           <i class="fab fa-instagram"></i>
         </a>
-        <a href="https://facebook.com/radiacaonet" target="_blank" rel="noopener noreferrer" class="icon-face" title="Curta no Facebook">
+        <a href="https://facebook.com/radiacaonet" target="_blank" rel="noopener noreferrer" class="icon-face"
+          title="Curta no Facebook">
           <i class="fab fa-facebook-f"></i>
         </a>
-        <a href="https://www.radios.com.br/aovivo/radio-radiacaonet/135970" target="_blank" rel="noopener noreferrer" class="icon-radio" title="Ouça no RadiosNet">
-          <img src="https://static.radios.com.br/img/logo-radiosnet-512-transparent.png" alt="RadiosNet" class="radiosnet-icon">
+        <a href="https://www.radios.com.br/aovivo/radio-radiacaonet/135970" target="_blank" rel="noopener noreferrer"
+          class="icon-radio" title="Ouça no RadiosNet">
+          <img src="https://static.radios.com.br/img/logo-radiosnet-512-transparent.png" alt="RadiosNet"
+            class="radiosnet-icon">
         </a>
       </div>
       <div>&copy; 2026 Radiação.Net - A web rádio de todas as tribos!</div>

@@ -1,3 +1,11 @@
+// --- VARIÁVEIS GLOBAIS DO PLAYER CUSTOMIZADO ---
+const audio = document.getElementById('audioElement');
+const playIcon = document.getElementById('playPauseIcon');
+const volumeControl = document.getElementById('volumeControl');
+const muteIcon = document.getElementById('muteIcon');
+const coverImg = document.getElementById('playerCover');
+let isPlaying = false;
+
 // 0. REGISTRA O SERVICE WORKER PARA O PWA FUNCIONAR
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -5,6 +13,84 @@ if ('serviceWorker' in navigator) {
       .then((reg) => console.log('Service Worker registrado com sucesso!', reg.scope))
       .catch((err) => console.log('Falha ao registrar Service Worker:', err));
   });
+}
+
+// SETUP INICIAL DO VOLUME
+if(audio && volumeControl) {
+  audio.volume = volumeControl.value / 100;
+}
+
+// --- FUNÇÕES DO PLAYER DE ÁUDIO ---
+function togglePlay() {
+  if (audio.paused) {
+    playIcon.className = "fas fa-spinner";
+    // Recarrega o stream para garantir que seja sempre "ao vivo" (sem delay ou cache)
+    audio.load();
+    
+    audio.play().then(() => {
+      isPlaying = true;
+      playIcon.className = "fas fa-pause";
+      coverImg.classList.add('playing');
+    }).catch(error => {
+      console.error("Erro ao reproduzir:", error);
+      playIcon.className = "fas fa-play";
+      alert("Não foi possível iniciar o áudio. Verifique sua conexão e tente novamente.");
+    });
+  } else {
+    audio.pause();
+    isPlaying = false;
+    playIcon.className = "fas fa-play";
+    coverImg.classList.remove('playing');
+  }
+}
+
+// Controle de Volume via Barra de Ajuste
+if(volumeControl) {
+  volumeControl.addEventListener('input', (e) => {
+    const vol = e.target.value / 100;
+    audio.volume = vol;
+    atualizarIconeVolume(vol);
+  });
+}
+
+// Muta ou Desmuta o áudio ao clicar no ícone do alto-falante
+function toggleMute() {
+  if (audio.volume > 0) {
+    audio.dataset.lastVol = audio.volume;
+    audio.volume = 0;
+    volumeControl.value = 0;
+    atualizarIconeVolume(0);
+  } else {
+    const lastVol = audio.dataset.lastVol || 0.8;
+    audio.volume = lastVol;
+    volumeControl.value = lastVol * 100;
+    atualizarIconeVolume(lastVol);
+  }
+}
+
+function atualizarIconeVolume(vol) {
+  if (vol === 0) {
+    muteIcon.className = "fas fa-volume-mute volume-icon";
+  } else if (vol < 0.5) {
+    muteIcon.className = "fas fa-volume-down volume-icon";
+  } else {
+    muteIcon.className = "fas fa-volume-up volume-icon";
+  }
+}
+
+// Configura os botões da tela de bloqueio do celular (MediaSession API)
+function updateMediaSession(title, artist, artworkUrl) {
+  if ('mediaSession' in navigator) {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: title,
+      artist: artist,
+      album: 'Radiação.Net',
+      artwork: [
+        { src: artworkUrl, sizes: '512x512', type: 'image/png' },
+        { src: artworkUrl, sizes: '192x192', type: 'image/png' }
+      ]
+    });
+  }
 }
 
 // 1. ANIMAÇÃO DE PARCEIROS
@@ -42,7 +128,7 @@ function abrirAba(evento, idAba) {
   evento.currentTarget.classList.add("active");
 }
 
-// 3. CONTROLE DE MODAIS (Atualizado com Animação de Fechamento)
+// 3. CONTROLE DE MODAIS (Com fechamento fluido)
 function abrirModal(idModal) {
   document.getElementById(idModal).classList.add('active');
   document.body.style.overflow = 'hidden';
@@ -50,11 +136,7 @@ function abrirModal(idModal) {
 
 function fecharModal(idModal) {
   const modal = document.getElementById(idModal);
-  
-  // Adiciona a classe que engatilha a animação no CSS
   modal.classList.add('closing');
-  
-  // Aguarda 350ms (tempo exato do CSS) para remover as classes
   setTimeout(() => {
     modal.classList.remove('active');
     modal.classList.remove('closing');
@@ -82,56 +164,83 @@ function compartilharSite() {
   }
 }
 
-// 5. ATUALIZAR ESTÚDIO AO VIVO E PREENCHER O CARD INTELIGENTE
+// 5. ATUALIZAR INFORMAÇÕES DA RÁDIO (COM EXTRAÇÃO DE VARIÁVEIS REAIS)
 async function atualizarNowPlaying() {
   try {
     const response = await fetch('https://painel.radiacao.net.br/api/nowplaying_static/radiacaonet.json');
     const data = await response.json();
 
-    const songText = data.now_playing.song.text; 
     const isLive = data.live.is_live; 
     const streamer = data.live.streamer_name; 
-    const liveStudioCard = document.getElementById('liveStudioCard');
+    
+    // Captura exata das variáveis sugeridas
+    const songTitle = data.now_playing.song.title || "Título Desconhecido";
+    const songArtist = data.now_playing.song.artist || "Artista Desconhecido";
+    const songAlbum = data.now_playing.song.album || "";
+    const coverUrl = data.now_playing.song.art || 'https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png';
 
-    // Limpa efeitos antigos dos membros da equipe
+    const playerWrapper = document.getElementById('customPlayerWrapper');
+    const btnRequest = document.getElementById('btnRequestLive');
+    const line1 = document.getElementById('playerLine1');
+    const line2 = document.getElementById('playerLine2');
+    const line3 = document.getElementById('playerLine3');
+
+    // Atualiza a arte
+    document.getElementById('playerCover').src = coverUrl;
+
+    // Limpa efeitos antigos da equipe
     document.querySelectorAll('.member-info').forEach(info => {
        const avatar = info.parentElement.querySelector('.thumb-avatar');
        if(avatar) avatar.classList.remove('live-avatar-pulse');
     });
 
-    if (isLive) {
-      // Preenche as informações no card inteligente
-      document.getElementById('liveProgramName').innerText = data.live.show_name || "Programa ao Vivo";
-      document.getElementById('liveStreamerName').innerText = `Locutor: ${streamer || 'Ao Vivo'}`;
-      document.getElementById('liveSongName').innerText = `Tocando: ${songText || 'Música ao vivo'}`;
-      
-      // Se houver arte do artista ou capa do programa na API, atualiza a foto esquerda
-      if (data.now_playing.song.art) {
-        document.getElementById('liveProgramImg').src = data.now_playing.song.art;
-      }
+    // Injeção de variáveis nas Linhas 1 e 2
+    line1.innerText = songTitle;
+    line2.innerText = songArtist;
 
-      // Exibe o card animado do estúdio
-      liveStudioCard.style.display = 'flex'; 
+    if (isLive) {
+      // MODO AO VIVO
+      playerWrapper.classList.add('is-live');
+      document.getElementById('playerLiveBadge').style.display = 'flex';
+      btnRequest.style.display = 'flex';
       
-      // Procura quem é o locutor na lista e acende a foto dele no modal de equipe
+      // Na linha 3, destacamos o Locutor se estiver ao vivo
+      line3.innerText = streamer ? `🎙️ Locutor: ${streamer}` : "🎙️ Ao Vivo";
+      line3.style.color = '#FF4C4C';
+      line3.style.display = 'block';
+      
+      updateMediaSession(songTitle, streamer || 'Radiação.Net', coverUrl);
+
+      // Efeito no painel da equipe
       if (streamer) {
          const streamerNameLower = streamer.toLowerCase();
          document.querySelectorAll('.member-info').forEach(info => {
             const memberName = info.querySelector('.member-name').innerText.toLowerCase();
             const firstName = memberName.split(' ')[0]; 
-            
             if (streamerNameLower.includes(firstName)) {
                info.parentElement.querySelector('.thumb-avatar').classList.add('live-avatar-pulse');
             }
          });
       }
     } else {
-      // Se estiver no AutoDJ, esconde o card de estúdio com botão de pedido
-      liveStudioCard.style.display = 'none';
+      // MODO AUTO-DJ
+      playerWrapper.classList.remove('is-live');
+      document.getElementById('playerLiveBadge').style.display = 'none';
+      btnRequest.style.display = 'none';
+
+      // Mostra o álbum se existir, senão esconde a linha
+      if (songAlbum) {
+         line3.innerText = `💿 ${songAlbum}`;
+         line3.style.color = '#bbbbbb';
+         line3.style.display = 'block';
+      } else {
+         line3.style.display = 'none';
+      }
+
+      updateMediaSession(songTitle, songArtist, coverUrl);
     }
   } catch (error) {
     console.error("Erro ao buscar dados da rádio:", error);
-    document.getElementById('liveStudioCard').style.display = 'none';
   }
 }
 
@@ -215,4 +324,10 @@ document.addEventListener('DOMContentLoaded', () => {
   inicializarParceiros();
   atualizarNowPlaying();
   setInterval(atualizarNowPlaying, 10000); 
+
+  // Associa os comandos da tela de bloqueio com o nosso player
+  if ('mediaSession' in navigator) {
+    navigator.mediaSession.setActionHandler('play', togglePlay);
+    navigator.mediaSession.setActionHandler('pause', togglePlay);
+  }
 });
