@@ -24,7 +24,6 @@ if(audio && volumeControl) {
 function togglePlay() {
   if (audio.paused) {
     playIcon.className = "fas fa-spinner";
-    // Recarrega o stream para garantir que seja sempre "ao vivo" (sem delay ou cache)
     audio.load();
     
     audio.play().then(() => {
@@ -205,7 +204,7 @@ async function atualizarNowPlaying() {
       btnRequest.style.display = 'flex';
       
       // Na linha 3, destacamos o Locutor se estiver ao vivo
-      line3.innerText = streamer ? `🎙️ Locutor: ${streamer}` : "🎙️ Ao Vivo";
+      line3.innerText = streamer ? `🎙️ Locutor: ${streamer}` : "🎙️️ Ao Vivo";
       line3.style.color = '#FF4C4C';
       line3.style.display = 'block';
       
@@ -244,24 +243,40 @@ async function atualizarNowPlaying() {
   }
 }
 
-// 6. LÓGICA DO BOTÃO "INSTALAR APP" (CONDICIONAL)
+// 6. LÓGICA DO BOTÃO "INSTALAR APP" (ANDROID + IOS DETECT)
+const btnInstall = document.getElementById('btnInstall');
 let eventoInstalacao;
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  eventoInstalacao = e;
-  document.getElementById('btnInstall').classList.add('visible-install');
-});
 
-document.getElementById('btnInstall').addEventListener('click', async () => {
-  if (eventoInstalacao) {
-    eventoInstalacao.prompt();
-    const { outcome } = await eventoInstalacao.userChoice;
-    if (outcome === 'accepted') {
-      document.getElementById('btnInstall').classList.remove('visible-install');
-    }
-    eventoInstalacao = null;
+// Regex simples para detectar iOS (iPhone, iPad, iPod)
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+if (isIOS) {
+  // Se for iOS e o site NÃO estiver rodando já instalado (standalone)
+  if (!window.navigator.standalone) {
+    btnInstall.classList.add('visible-install');
+    btnInstall.addEventListener('click', () => {
+      abrirModal('modal-ios');
+    });
   }
-});
+} else {
+  // Lógica padrão para Android (prompt nativo do Google)
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    eventoInstalacao = e;
+    btnInstall.classList.add('visible-install');
+  });
+
+  btnInstall.addEventListener('click', async () => {
+    if (eventoInstalacao) {
+      eventoInstalacao.prompt();
+      const { outcome } = await eventoInstalacao.userChoice;
+      if (outcome === 'accepted') {
+        btnInstall.classList.remove('visible-install');
+      }
+      eventoInstalacao = null;
+    }
+  });
+}
 
 // 7. FUNÇÃO DE ENVIO DE PEDIDO PARA O TELEGRAM
 async function enviarPedido(event) {
@@ -325,7 +340,6 @@ document.addEventListener('DOMContentLoaded', () => {
   atualizarNowPlaying();
   setInterval(atualizarNowPlaying, 10000); 
 
-  // Associa os comandos da tela de bloqueio com o nosso player
   if ('mediaSession' in navigator) {
     navigator.mediaSession.setActionHandler('play', togglePlay);
     navigator.mediaSession.setActionHandler('pause', togglePlay);
