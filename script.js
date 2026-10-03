@@ -204,7 +204,7 @@ async function atualizarNowPlaying() {
       btnRequest.style.display = 'flex';
       
       // Na linha 3, destacamos o Locutor se estiver ao vivo
-      line3.innerText = streamer ? `🎙️ Locutor: ${streamer}` : "🎙️️ Ao Vivo";
+      line3.innerText = streamer ? `🎙️ Locutor: ${streamer}` : "🎙 Ao Vivo";
       line3.style.color = '#FF4C4C';
       line3.style.display = 'block';
       
@@ -278,7 +278,7 @@ if (isIOS) {
   });
 }
 
-// 7. FUNÇÃO DE ENVIO DE PEDIDO PARA O TELEGRAM
+// 7. FUNÇÃO DE ENVIO DE PEDIDO PARA O FIREBASE
 async function enviarPedido(event) {
   event.preventDefault();
   
@@ -290,24 +290,18 @@ async function enviarPedido(event) {
   btn.disabled = true;
   btn.innerText = 'Enviando... ⏳';
 
-  const token = '8813122083:AAGkUT3zqsV44pvv2gd3S83xPhIEHgHVlzQ';
-  const chatId = '-1004448651469';
-  
-  let textoMsg = `🎵 *NOVO PEDIDO MUSICAL!* 🎵\n\n👤 *Ouvinte:* ${nome}\n🎧 *Música:* ${musica}`;
-  if (recado.trim() !== '') {
-     textoMsg += `\n💬 *Recado:* ${recado}`;
-  }
-
-  const url = `https://api.telegram.org/bot${token}/sendMessage`;
+  // URL do seu Firebase já configurada (o .json no final é obrigatório na API)
+  const firebaseUrl = 'https://radiacaonet-default-rtdb.firebaseio.com/pedidos.json';
   
   try {
-    const response = await fetch(url, {
+    const response = await fetch(firebaseUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        chat_id: chatId,
-        text: textoMsg,
-        parse_mode: 'Markdown'
+        nome: nome,
+        musica: musica,
+        recado: recado,
+        data_hora: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
       })
     });
     
@@ -321,7 +315,7 @@ async function enviarPedido(event) {
         btn.innerText = 'Enviar Pedido 🚀';
       }, 2000);
     } else {
-      throw new Error('Falha na API do Telegram');
+      throw new Error('Falha no Firebase');
     }
   } catch (error) {
     console.error('Erro ao enviar pedido:', error);

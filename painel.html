@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Painel do Locutor - Radiação.Net</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
+    <link rel="apple-touch-icon" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
+    
+    <!-- IMPORTANDO O CSS DO SITE PRINCIPAL -->
+    <link rel="stylesheet" href="./style.css">
+    
+    <!-- ESTILOS ESPECÍFICOS APENAS PARA O PAINEL -->
+    <style>
+      /* --- OVERRIDES DO PAINEL PARA FICAR MAIS LARGO (1000px) --- */
+      .title-wrapper, .custom-player-wrapper {
+        max-width: 1000px !important;
+      }
+      
+      @media (max-width: 480px) {
+        .floating-title { font-size: 1.4rem !important; }
+      }
+
+      /* Badge Online no Cabeçalho */
+      .status-badge {
+        background-color: rgba(46, 125, 50, 0.2);
+        border: 1px solid rgba(76, 175, 80, 0.5);
+        color: #4caf50;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-shrink: 0;
+      }
+      .pulse-dot-green {
+        width: 6px; height: 6px; background: #4caf50; border-radius: 50%;
+        animation: blink 1s infinite alternate;
+        box-shadow: 0 0 6px #4caf50;
+      }
+
+      /* Bloco de Ouvintes */
+      .listeners-block {
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        background: rgba(244, 116, 31, 0.15);
+        border: 1px solid rgba(244, 116, 31, 0.4);
+        padding: 8px 20px; border-radius: 12px;
+        min-width: 90px;
+      }
+      .listeners-count { font-size: 1.6rem; font-weight: 900; color: #fff; line-height: 1; }
+      .listeners-label { font-size: 0.65rem; color: #f4741f; font-weight: 700; text-transform: uppercase; margin-top: 4px;}
+
+      /* Container dos Pedidos - Mais Largo (1000px) */
+      .pedidos-wrapper {
+        width: 100%;
+        max-width: 1000px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        z-index: 10;
+        margin-top: 15px;
+      }
+      .section-title {
+        font-size: 1.1rem; font-weight: 900; color: #fff; text-transform: uppercase;
+        display: flex; align-items: center; gap: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+      }
+      .section-title::after {
+        content: ''; flex-grow: 1; height: 1px; background: rgba(255,255,255,0.1); margin-left: 10px;
+      }
+
+      /* Cards de Pedidos - GRID (3 por linha fixa) */
+      .lista-pedidos {
+        display: grid !important;
+        /* O auto-fill força a manter o tamanho do card mesmo que só tenha 1 na tela */
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
+        gap: 15px;
+        align-items: start; /* Impede que os cards estiquem na altura */
+      }
+      
+      .pedido-card {
+        background: rgba(20, 20, 20, 0.7);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-left: 4px solid #f4741f;
+        border-radius: 12px;
+        padding: 12px 15px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        display: flex; flex-direction: column; gap: 6px;
+        transition: opacity 0.3s ease;
+        width: 100%; /* Garante que respeite o limite do Grid */
+      }
+      
+      .pedido-hora { font-size: 0.7rem; color: #888; text-align: right; margin-top: -2px; font-weight: 700;}
+      .pedido-nome { font-weight: 700; color: #f4741f; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;}
+      .pedido-musica { font-size: 1rem; font-weight: 900; color: #fff; line-height: 1.2;}
+      .pedido-recado { 
+        font-size: 0.75rem; color: #ddd; font-style: italic; 
+        background: rgba(255,255,255,0.05); padding: 8px; border-radius: 6px; border-left: 2px solid #666;
+        margin-top: 2px;
+      }
+      
+      .btn-concluir {
+        background: rgba(244, 116, 31, 0.1);
+        border: 1px solid rgba(244, 116, 31, 0.4);
+        color: #f4741f;
+        padding: 8px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-family: inherit;
+        font-weight: 700;
+        font-size: 0.8rem;
+        transition: all 0.3s;
+        margin-top: 4px;
+        display: flex; align-items: center; justify-content: center; gap: 6px;
+      }
+      .btn-concluir:hover { background: #f4741f; color: #fff; border-color: #f4741f; }
+      
+      .sem-pedidos { 
+        text-align: center; color: #888; font-size: 1rem; padding: 30px 0; 
+        background: rgba(20,20,20,0.5); border-radius: 12px; backdrop-filter: blur(5px);
+        border: 1px solid rgba(255,255,255,0.05);
+        grid-column: 1 / -1; /* Força a ocupar a linha toda se não houver pedidos */
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- CABEÇALHO -->
+    <div class="title-wrapper">
+      <img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" class="logo-img" alt="Logo Radiação.Net">
+      <h1 class="floating-title">Painel do Locutor</h1>
+      <div class="status-badge"><span class="pulse-dot-green"></span> Online</div>
+    </div>
+
+    <!-- CARD INFORMATIVO (Player + Ouvintes) -->
+    <div class="custom-player-wrapper">
+      <div class="player-cover-container">
+        <img id="painelCover" src="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png" alt="Capa" class="player-cover">
+      </div>
+      
+      <div class="player-track-info">
+        <div class="song-title" id="painelLine1">Carregando...</div>
+        <div class="song-artist" id="painelLine2">Conectando ao servidor</div>
+        <div class="song-album" id="painelLine3"></div>
+      </div>
+
+      <!-- Ouvintes -->
+      <div class="player-controls-right">
+        <div class="listeners-block">
+          <span class="listeners-count" id="painelListeners">0</span>
+          <div class="listeners-label">Ouvintes</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SESSÃO DE PEDIDOS -->
+    <div class="pedidos-wrapper">
+      <h2 class="section-title">Últimos Pedidos <i class="fas fa-inbox" style="color: #f4741f;"></i></h2>
+      
+      <div class="lista-pedidos" id="container-pedidos">
+        <div class="sem-pedidos"><i class="fas fa-spinner fa-spin"></i> Conectando ao painel...</div>
+      </div>
+    </div>
+
+    <!-- SCRIPT 1: BUSCAR DADOS DA RÁDIO -->
+    <script>
+      async function atualizarInfoRadio() {
+        try {
+          const response = await fetch('https://painel.radiacao.net.br/api/nowplaying_static/radiacaonet.json');
+          const data = await response.json();
+
+          const songTitle = data.now_playing.song.title || "Título Desconhecido";
+          const songArtist = data.now_playing.song.artist || "Artista Desconhecido";
+          const songAlbum = data.now_playing.song.album || "";
+          const coverUrl = data.now_playing.song.art || 'https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png';
+          
+          const ouvintes = data.listeners.current || 0;
+
+          document.getElementById('painelCover').src = coverUrl;
+          document.getElementById('painelLine1').innerText = songTitle;
+          document.getElementById('painelLine2').innerText = songArtist;
+          document.getElementById('painelListeners').innerText = ouvintes;
+
+          const line3 = document.getElementById('painelLine3');
+          if (songAlbum) {
+            line3.innerText = `💿 ${songAlbum}`;
+            line3.style.display = 'block';
+            line3.style.color = '#bbbbbb';
+          } else {
+            line3.style.display = 'none';
+          }
+        } catch (error) {
+          console.error("Erro ao buscar dados da rádio:", error);
+        }
+      }
+
+      atualizarInfoRadio();
+      setInterval(atualizarInfoRadio, 10000);
+    </script>
+
+    <!-- SCRIPT 2: FIREBASE -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+      import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+      const firebaseConfig = {
+        databaseURL: "https://radiacaonet-default-rtdb.firebaseio.com/"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+      const pedidosRef = ref(db, 'pedidos');
+      const container = document.getElementById('container-pedidos');
+
+      onValue(pedidosRef, (snapshot) => {
+        container.innerHTML = ''; 
+        const dados = snapshot.val();
+
+        if (dados) {
+          const chaves = Object.keys(dados).reverse();
+          
+          chaves.forEach(chave => {
+            const pedido = dados[chave];
+            
+            const card = document.createElement('div');
+            card.className = 'pedido-card';
+            
+            let htmlCard = `
+              <div class="pedido-hora"><i class="far fa-clock"></i> ${pedido.data_hora}</div>
+              <div class="pedido-nome"><i class="fas fa-user-circle"></i> ${pedido.nome} pediu:</div>
+              <div class="pedido-musica">${pedido.musica}</div>
+            `;
+
+            if (pedido.recado && pedido.recado.trim() !== '') {
+              htmlCard += `<div class="pedido-recado">" ${pedido.recado} "</div>`;
+            }
+
+            htmlCard += `<button class="btn-concluir" data-id="${chave}"><i class="fas fa-check-circle"></i> Marcar como Tocado</button>`;
+            
+            card.innerHTML = htmlCard;
+            container.appendChild(card);
+          });
+
+          document.querySelectorAll('.btn-concluir').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const id = e.target.closest('button').dataset.id;
+              e.target.closest('.pedido-card').style.opacity = '0';
+              setTimeout(() => remove(ref(db, `pedidos/${id}`)), 300);
+            });
+          });
+
+        } else {
+          container.innerHTML = `
+            <div class="sem-pedidos">
+              <i class="fas fa-inbox fa-3x" style="margin-bottom: 15px; color: #555;"></i><br>
+              A fila está vazia. Aguardando novos pedidos...
+            </div>`;
+        }
+      });
+    </script>
+  </body>
+</html>
