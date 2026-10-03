@@ -15,7 +15,13 @@
     
     <!-- ESTILOS ESPECÍFICOS APENAS PARA O PAINEL -->
     <style>
-      /* --- OVERRIDES DO PAINEL PARA FICAR MAIS LARGO (1000px) --- */
+      /* Força o painel a começar no topo */
+      body {
+        justify-content: flex-start !important;
+        padding-top: 30px !important;
+      }
+
+      /* Largura de 1000px para o Dashboard */
       .title-wrapper, .custom-player-wrapper {
         max-width: 1000px !important;
       }
@@ -24,7 +30,7 @@
         .floating-title { font-size: 1.4rem !important; }
       }
 
-      /* Badge Online no Cabeçalho */
+      /* Badge Online */
       .status-badge {
         background-color: rgba(46, 125, 50, 0.2);
         border: 1px solid rgba(76, 175, 80, 0.5);
@@ -55,7 +61,7 @@
       .listeners-count { font-size: 1.6rem; font-weight: 900; color: #fff; line-height: 1; }
       .listeners-label { font-size: 0.65rem; color: #f4741f; font-weight: 700; text-transform: uppercase; margin-top: 4px;}
 
-      /* Container dos Pedidos - Mais Largo (1000px) */
+      /* Container dos Pedidos */
       .pedidos-wrapper {
         width: 100%;
         max-width: 1000px;
@@ -64,6 +70,7 @@
         gap: 15px;
         z-index: 10;
         margin-top: 15px;
+        margin-bottom: 40px;
       }
       .section-title {
         font-size: 1.1rem; font-weight: 900; color: #fff; text-transform: uppercase;
@@ -73,13 +80,12 @@
         content: ''; flex-grow: 1; height: 1px; background: rgba(255,255,255,0.1); margin-left: 10px;
       }
 
-      /* Cards de Pedidos - GRID (3 por linha fixa) */
+      /* Grid de 3 colunas para os pedidos */
       .lista-pedidos {
         display: grid !important;
-        /* O auto-fill força a manter o tamanho do card mesmo que só tenha 1 na tela */
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
         gap: 15px;
-        align-items: start; /* Impede que os cards estiquem na altura */
+        align-items: start;
       }
       
       .pedido-card {
@@ -93,12 +99,12 @@
         box-shadow: 0 8px 20px rgba(0,0,0,0.4);
         display: flex; flex-direction: column; gap: 6px;
         transition: opacity 0.3s ease;
-        width: 100%; /* Garante que respeite o limite do Grid */
+        width: 100%;
       }
       
       .pedido-hora { font-size: 0.7rem; color: #888; text-align: right; margin-top: -2px; font-weight: 700;}
       .pedido-nome { font-weight: 700; color: #f4741f; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;}
-      .pedido-musica { font-size: 1rem; font-weight: 900; color: #fff; line-height: 1.2;}
+      .pedido-musica { font-size: 0.85rem; color: #fff; line-height: 1.2;}
       .pedido-recado { 
         font-size: 0.75rem; color: #ddd; font-style: italic; 
         background: rgba(255,255,255,0.05); padding: 8px; border-radius: 6px; border-left: 2px solid #666;
@@ -125,7 +131,7 @@
         text-align: center; color: #888; font-size: 1rem; padding: 30px 0; 
         background: rgba(20,20,20,0.5); border-radius: 12px; backdrop-filter: blur(5px);
         border: 1px solid rgba(255,255,255,0.05);
-        grid-column: 1 / -1; /* Força a ocupar a linha toda se não houver pedidos */
+        grid-column: 1 / -1;
       }
     </style>
   </head>
@@ -138,7 +144,7 @@
       <div class="status-badge"><span class="pulse-dot-green"></span> Online</div>
     </div>
 
-    <!-- CARD INFORMATIVO (Player + Ouvintes) -->
+    <!-- CARD INFORMATIVO -->
     <div class="custom-player-wrapper">
       <div class="player-cover-container">
         <img id="painelCover" src="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png" alt="Capa" class="player-cover">
@@ -150,7 +156,6 @@
         <div class="song-album" id="painelLine3"></div>
       </div>
 
-      <!-- Ouvintes -->
       <div class="player-controls-right">
         <div class="listeners-block">
           <span class="listeners-count" id="painelListeners">0</span>
@@ -161,7 +166,7 @@
 
     <!-- SESSÃO DE PEDIDOS -->
     <div class="pedidos-wrapper">
-      <h2 class="section-title">Últimos Pedidos <i class="fas fa-inbox" style="color: #f4741f;"></i></h2>
+      <h2 class="section-title">Fila de Pedidos <i class="fas fa-inbox" style="color: #f4741f;"></i></h2>
       
       <div class="lista-pedidos" id="container-pedidos">
         <div class="sem-pedidos"><i class="fas fa-spinner fa-spin"></i> Conectando ao painel...</div>
@@ -204,7 +209,7 @@
       setInterval(atualizarInfoRadio, 10000);
     </script>
 
-    <!-- SCRIPT 2: FIREBASE -->
+    <!-- SCRIPT 2: FIREBASE (Sem filtro de data, exibindo todos da fila) -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
       import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
@@ -232,13 +237,13 @@
             card.className = 'pedido-card';
             
             let htmlCard = `
-              <div class="pedido-hora"><i class="far fa-clock"></i> ${pedido.data_hora}</div>
+              <div class="pedido-hora"><i class="far fa-clock"></i> ${pedido.data_hora || ''}</div>
               <div class="pedido-nome"><i class="fas fa-user-circle"></i> ${pedido.nome} pediu:</div>
               <div class="pedido-musica">${pedido.musica}</div>
             `;
 
             if (pedido.recado && pedido.recado.trim() !== '') {
-              htmlCard += `<div class="pedido-recado">" ${pedido.recado} "</div>`;
+              htmlCard += `<div class="pedido-recado"><b>Recado:</b> ${pedido.recado}</div>`;
             }
 
             htmlCard += `<button class="btn-concluir" data-id="${chave}"><i class="fas fa-check-circle"></i> Marcar como Tocado</button>`;
