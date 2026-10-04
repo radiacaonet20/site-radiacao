@@ -163,7 +163,7 @@ function compartilharSite() {
   }
 }
 
-// 5. ATUALIZAR INFORMAÇÕES DA RÁDIO (COM EXTRAÇÃO DE VARIÁVEIS REAIS)
+// 5. ATUALIZAR INFORMAÇÕES DA RÁDIO
 async function atualizarNowPlaying() {
   try {
     const response = await fetch('https://painel.radiacao.net.br/api/nowplaying_static/radiacaonet.json');
@@ -278,10 +278,23 @@ if (isIOS) {
   });
 }
 
-// 7. FUNÇÃO DE ENVIO DE PEDIDO PARA O FIREBASE
+// 7. FUNÇÃO DE ENVIO DE PEDIDO PARA O FIREBASE (COM TRAVA ANTI-SPAM)
 async function enviarPedido(event) {
   event.preventDefault();
   
+  // ---> INÍCIO DA TRAVA ANTI-SPAM <---
+  const ultimoPedidoTimestamp = localStorage.getItem('radiacao_ultimo_pedido');
+  if (ultimoPedidoTimestamp) {
+    const tempoDecorrido = Date.now() - parseInt(ultimoPedidoTimestamp);
+    const tempoDeEspera = 3 * 60 * 1000; // 3 minutos em milissegundos
+    
+    if (tempoDecorrido < tempoDeEspera) {
+      alert("⏳ O seu pedido já está na fila! Para evitar spam, aguarde alguns minutos para pedir outra música.");
+      return; // Trava a execução aqui
+    }
+  }
+  // ---> FIM DA TRAVA <---
+
   const btn = document.getElementById('btn-enviar-pedido');
   const nome = document.getElementById('pedido-nome').value;
   const musica = document.getElementById('pedido-musica').value;
@@ -306,6 +319,9 @@ async function enviarPedido(event) {
     });
     
     if (response.ok) {
+      // REGISTRA A HORA EXATA DO SUCESSO NO NAVEGADOR DO OUVINTE
+      localStorage.setItem('radiacao_ultimo_pedido', Date.now().toString());
+
       btn.innerText = 'Pedido Enviado! ✅';
       
       setTimeout(() => {

@@ -7,6 +7,10 @@
     <link rel="icon" type="image/png" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
     <link rel="apple-touch-icon" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
     
+    <!-- MANIFEST PARA TRANSFORMAR O PAINEL EM APP -->
+    <link rel="manifest" href="./manifest-painel.json">
+    <meta name="theme-color" content="#f4741f">
+
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -66,12 +70,16 @@
       .dot-green { background: #4caf50; box-shadow: 0 0 6px #4caf50; }
       .dot-red { background: #ff4c4c; box-shadow: 0 0 6px #ff4c4c; }
 
-      .btn-sair {
+      /* Botões do Topo */
+      .btn-sair, .btn-instalar-app {
         background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
         color: #fff; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold;
-        cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 6px; margin-left: 10px;
+        cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 6px; margin-left: 5px;
       }
-      .btn-sair:hover { background: rgba(255, 255, 255, 0.2); }
+      .btn-sair:hover { background: rgba(255, 76, 76, 0.2); border-color: rgba(255, 76, 76, 0.5); color: #ff4c4c; }
+      
+      .btn-instalar-app { display: none; background: rgba(33, 150, 243, 0.2); border-color: rgba(33, 150, 243, 0.5); color: #2196F3; }
+      .btn-instalar-app:hover { background: #2196F3; color: #fff; border-color: #2196F3; }
 
       .listeners-block {
         display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -136,13 +144,13 @@
       <div class="title-wrapper">
         <img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" class="logo-img" alt="Logo">
         <h1 class="floating-title">Painel do Locutor</h1>
-        <div style="display: flex; gap: 10px; margin-left: auto; align-items: center;">
-          <!-- A badge começa cinzenta/neutra, o JS atualiza imediatamente -->
+        <div style="display: flex; gap: 5px; margin-left: auto; align-items: center; flex-wrap: wrap; justify-content: flex-end;">
           <div class="status-badge" id="badgeStatus">
             <span class="pulse-dot" id="dotStatus"></span>
             <span id="textStatus">A ligar...</span>
           </div>
-          <button class="btn-sair" id="btn-logout"><i class="fas fa-power-off"></i> Sair</button>
+          <button class="btn-instalar-app" id="btn-instalar-painel" title="Instalar App"><i class="fas fa-download"></i> App</button>
+          <button class="btn-sair" id="btn-logout" title="Sair do Painel"><i class="fas fa-power-off"></i> Sair</button>
         </div>
       </div>
 
@@ -173,6 +181,26 @@
       </div>
     </div>
 
+    <!-- SCRIPT 0: INSTALAR PWA NO PAINEL -->
+    <script>
+      let deferredPromptPainel;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPromptPainel = e;
+        document.getElementById('btn-instalar-painel').style.display = 'flex';
+      });
+      document.getElementById('btn-instalar-painel').addEventListener('click', async () => {
+        if (deferredPromptPainel) {
+          deferredPromptPainel.prompt();
+          const { outcome } = await deferredPromptPainel.userChoice;
+          if (outcome === 'accepted') {
+            document.getElementById('btn-instalar-painel').style.display = 'none';
+          }
+          deferredPromptPainel = null;
+        }
+      });
+    </script>
+
     <!-- SCRIPT 1: BUSCAR DADOS DA RÁDIO E ATUALIZAR STATUS -->
     <script>
       async function atualizarInfoRadio() {
@@ -180,7 +208,6 @@
           const response = await fetch('https://painel.radiacao.net.br/api/nowplaying_static/radiacaonet.json');
           const data = await response.json();
           
-          // --- ATUALIZAÇÃO DOS DADOS DA FAIXA E OUVINTES ---
           document.getElementById('painelCover').src = data.now_playing.song.art || 'https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png';
           document.getElementById('painelLine1').innerText = data.now_playing.song.title || "Desconhecido";
           document.getElementById('painelLine2').innerText = data.now_playing.song.artist || "Desconhecido";
@@ -196,19 +223,16 @@
             line3.style.display = 'none'; 
           }
 
-          // --- NOVA LÓGICA: ATUALIZAÇÃO DA BADGE (Online vs Auto DJ) ---
           const isLive = data.live.is_live;
           const badgeStatus = document.getElementById('badgeStatus');
           const textStatus = document.getElementById('textStatus');
           const dotStatus = document.getElementById('dotStatus');
 
           if (isLive) {
-            // Status Verde: Locutor Online
             badgeStatus.className = "status-badge status-online";
             textStatus.innerText = "Online";
             dotStatus.className = "pulse-dot dot-green";
           } else {
-            // Status Vermelho: Auto DJ a funcionar
             badgeStatus.className = "status-badge status-autodj";
             textStatus.innerText = "Auto DJ";
             dotStatus.className = "pulse-dot dot-red";
@@ -221,13 +245,13 @@
       setInterval(atualizarInfoRadio, 10000);
     </script>
 
-    <!-- SCRIPT 2: FIREBASE AUTH E DATABASE -->
+    <!-- SCRIPT 2: FIREBASE AUTH, DATABASE E ALERTAS -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
       import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
       import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
-      // AS SUAS CHAVES DO FIREBASE MANTIDAS
+      // AS SUAS CHAVES INTÁCTAS DA ÚLTIMA VERSÃO
       const firebaseConfig = {
         apiKey: "AIzaSyDLCYfYApZZt4ycMmr-f4Xq002ZBalYmdU",
         authDomain: "radiacaonet.firebaseapp.com",
@@ -250,12 +274,36 @@
       const btnEntrar = document.getElementById('btn-entrar');
       const container = document.getElementById('container-pedidos');
 
+      // ---> LÓGICA DO ALERTA SONORO/VISUAL <---
+      const notificationSound = new Audio('https://actions.google.com/sounds/v1/ui/bubble_pop.ogg');
+      let cargaInicial = true;
+      let quantidadePedidosAnterior = 0;
+      let intervaloPiscar;
+
+      function notificarAba() {
+        clearInterval(intervaloPiscar);
+        let piscar = false;
+        intervaloPiscar = setInterval(() => {
+          document.title = piscar ? "🔔 Novo Pedido!" : "Painel do Locutor";
+          piscar = !piscar;
+        }, 1000);
+        setTimeout(() => {
+          clearInterval(intervaloPiscar);
+          document.title = "Painel do Locutor - Radiação.Net";
+        }, 10000);
+      }
+
+      window.addEventListener('click', () => {
+        clearInterval(intervaloPiscar);
+        document.title = "Painel do Locutor - Radiação.Net";
+      });
+
       // 1. MONITOR DE ESTADO DE LOGIN
       onAuthStateChanged(auth, (user) => {
         if (user) {
           telaLogin.style.display = 'none';
           telaDashboard.style.display = 'flex';
-          atualizarInfoRadio(); // Atualiza a rádio e a badge imediatamente ao entrar
+          atualizarInfoRadio(); 
           iniciarLeituraPedidos();
         } else {
           telaLogin.style.display = 'flex';
@@ -296,6 +344,17 @@
 
           if (dados) {
             const chaves = Object.keys(dados).reverse();
+            const quantidadeAtual = chaves.length;
+
+            // TOCA O SOM SE O NÚMERO DE PEDIDOS AUMENTOU
+            if (!cargaInicial && quantidadeAtual > quantidadePedidosAnterior) {
+               notificationSound.play().catch(e => console.log("Áudio bloqueado pelo navegador"));
+               notificarAba();
+            }
+            
+            quantidadePedidosAnterior = quantidadeAtual;
+            cargaInicial = false;
+
             chaves.forEach(chave => {
               const pedido = dados[chave];
               const card = document.createElement('div');
@@ -320,9 +379,12 @@
                 const id = e.target.closest('button').dataset.id;
                 e.target.closest('.pedido-card').style.opacity = '0';
                 setTimeout(() => remove(ref(db, `pedidos/${id}`)), 300);
+                quantidadePedidosAnterior--; // Diminui o contador pra não apitar de forma errada
               });
             });
           } else {
+            quantidadePedidosAnterior = 0;
+            cargaInicial = false;
             container.innerHTML = `
               <div class="sem-pedidos">
                 <i class="fas fa-inbox fa-3x" style="margin-bottom: 15px; color: #555;"></i><br>
