@@ -205,7 +205,9 @@
     <script>
       async function atualizarInfoRadio() {
         try {
-          const response = await fetch('https://painel.radiacao.net.br/api/nowplaying_static/radiacaonet.json');
+          // CORREÇÃO: Cache bypass adicionado
+          const urlBusca = 'https://painel.radiacao.net.br/api/nowplaying_static/radiacaonet.json?_=' + new Date().getTime();
+          const response = await fetch(urlBusca, { cache: 'no-store' });
           const data = await response.json();
           
           document.getElementById('painelCover').src = data.now_playing.song.art || 'https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png';
@@ -242,7 +244,8 @@
           console.error("Erro na rádio:", error); 
         }
       }
-      setInterval(atualizarInfoRadio, 10000);
+      // CORREÇÃO: Reduzido para 5 segundos (5000ms)
+      setInterval(atualizarInfoRadio, 5000);
     </script>
 
     <!-- SCRIPT 2: FIREBASE AUTH, DATABASE E ALERTAS -->

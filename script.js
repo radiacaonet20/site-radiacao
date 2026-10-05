@@ -163,10 +163,12 @@ function compartilharSite() {
   }
 }
 
-// 5. ATUALIZAR INFORMAÇÕES DA RÁDIO
+// 5. ATUALIZAR INFORMAÇÕES DA RÁDIO (COM EXTRAÇÃO DE VARIÁVEIS REAIS)
 async function atualizarNowPlaying() {
   try {
-    const response = await fetch('https://painel.radiacao.net.br/api/nowplaying_static/radiacaonet.json');
+    // CORREÇÃO: Adicionado o bypass de cache para atualização instantânea
+    const urlBusca = 'https://painel.radiacao.net.br/api/nowplaying_static/radiacaonet.json?_=' + new Date().getTime();
+    const response = await fetch(urlBusca, { cache: 'no-store' });
     const data = await response.json();
 
     const isLive = data.live.is_live; 
@@ -348,7 +350,9 @@ async function enviarPedido(event) {
 document.addEventListener('DOMContentLoaded', () => {
   inicializarParceiros();
   atualizarNowPlaying();
-  setInterval(atualizarNowPlaying, 10000); 
+  
+  // CORREÇÃO: Reduzido para 5 segundos (5000ms) para maior rapidez
+  setInterval(atualizarNowPlaying, 5000); 
 
   if ('mediaSession' in navigator) {
     navigator.mediaSession.setActionHandler('play', togglePlay);
