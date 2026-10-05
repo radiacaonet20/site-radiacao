@@ -259,11 +259,42 @@ async function enviarPedido(event) {
   }
 }
 
+// --- LÓGICA DA ABA DO DIA AUTOMÁTICA ---
+function definirAbaDoDia() {
+  // Array com os IDs na ordem exata dos dias do JavaScript (0 = Domingo, 1 = Segunda...)
+  const diasDaSemana = ['tab-dom', 'tab-seg', 'tab-ter', 'tab-qua', 'tab-qui', 'tab-sex', 'tab-sab'];
+  const hoje = new Date().getDay(); 
+  const idAbaHoje = diasDaSemana[hoje];
+
+  // Limpa todas as abas e botões que estiverem ativos (como a Segunda-feira padrão)
+  let conteudos = document.getElementsByClassName("tab-pane");
+  for (let i = 0; i < conteudos.length; i++) conteudos[i].classList.remove("active");
+  
+  let botoes = document.getElementsByClassName("tab-btn");
+  for (let i = 0; i < botoes.length; i++) botoes[i].classList.remove("active");
+
+  // Ativa o conteúdo do dia atual
+  document.getElementById(idAbaHoje).classList.add("active");
+  
+  // Encontra o botão do dia atual, ativa-o e centraliza-o no mobile
+  for (let i = 0; i < botoes.length; i++) {
+    if (botoes[i].getAttribute("onclick").includes(idAbaHoje)) {
+      botoes[i].classList.add("active");
+      // Faz o scroll automático no menu de abas caso esteja no celular
+      botoes[i].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      break;
+    }
+  }
+}
+
+// --- INICIALIZAÇÃO DO SITE ---
 document.addEventListener('DOMContentLoaded', () => {
   inicializarParceiros();
   atualizarNowPlaying();
   setInterval(atualizarNowPlaying, 5000); 
-
+  
+  definirAbaDoDia(); // A mágica da aba automática acontece aqui!
+  
   if ('mediaSession' in navigator) {
     navigator.mediaSession.setActionHandler('play', togglePlay);
     navigator.mediaSession.setActionHandler('pause', togglePlay);
