@@ -156,8 +156,8 @@ body {
 .member-name { font-weight: 700; }
 .member-details-row { display: flex; align-items: center; gap: 12px; }
 .member-role { color: var(--cor-primaria); font-size: 0.85rem; font-weight: bold; display: flex; align-items: center; }
-.member-socials { display: flex; gap: 10px; }
-.member-socials a { color: #888; font-size: 0.9rem; text-decoration: none; transition: color 0.2s ease, transform 0.2s ease; padding: 4px; }
+.member-socials { display: flex; gap: 4px; align-items: center; }
+.member-socials a { color: #888; font-size: 1.1rem; text-decoration: none; transition: color 0.2s ease, transform 0.2s ease; padding: 2px; }
 .member-socials a:hover { color: var(--cor-primaria); transform: scale(1.1); }
 .destaque { color: var(--cor-primaria); font-weight: bold; text-align: right; }
 
