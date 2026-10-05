@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -55,7 +56,7 @@
             <i class="fas fa-history"></i>
           </button>
           <button class="btn-request-mini" onclick="enviarReacao()" title="Amei esta música!">
-            <i class="fas fa-heart"></i>
+            <i class="fas fa-heart"></i> <span id="contador-likes" style="font-weight: 900;">0</span>
           </button>
 
           <div class="volume-wrapper-mini" id="desktopVolume">
@@ -73,10 +74,14 @@
     </div>
 
     <div class="menu-container">
-      <button class="btn-menu" onclick="abrirModal('modal-grade')"><i class="far fa-calendar-alt"></i>&nbsp;&nbsp;Programação</button>
-      <button class="btn-menu" onclick="abrirModal('modal-locutores')"><i class="fas fa-users"></i>&nbsp;&nbsp;Nossa Equipe</button>
-      <button class="btn-menu" onclick="window.open('https://chat.whatsapp.com/FKr00cdRZME68ppTR3gilZ', '_blank')"><i class="fab fa-whatsapp"></i>&nbsp;&nbsp;Grupo WhatsApp</button>
-      <button class="btn-menu" onclick="compartilharSite()"><i class="fas fa-share-alt"></i>&nbsp;&nbsp;Compartilhar</button>
+      <button class="btn-menu" onclick="abrirModal('modal-grade')"><i
+          class="far fa-calendar-alt"></i>&nbsp;&nbsp;Programação</button>
+      <button class="btn-menu" onclick="abrirModal('modal-locutores')"><i class="fas fa-users"></i>&nbsp;&nbsp;Nossa
+        Equipe</button>
+      <button class="btn-menu" onclick="window.open('https://chat.whatsapp.com/FKr00cdRZME68ppTR3gilZ', '_blank')"><i
+          class="fab fa-whatsapp"></i>&nbsp;&nbsp;Grupo WhatsApp</button>
+      <button class="btn-menu" onclick="compartilharSite()"><i
+          class="fas fa-share-alt"></i>&nbsp;&nbsp;Compartilhar</button>
       <button class="btn-menu" id="btnInstall"><i class="fas fa-download"></i>&nbsp;&nbsp;Instalar App</button>
     </div>
 
@@ -395,16 +400,38 @@
       const app = initializeApp(firebaseConfig);
       const db = getDatabase(app);
 
-      // --- 1. SISTEMA DE REAÇÕES (CHUVA DE CORAÇÕES) ---
+      // --- 1. SISTEMA DE REAÇÕES (CHUVA DE CORAÇÕES E CONTADOR) ---
       const reacoesRef = ref(db, 'reacoes');
+      const contadorRef = ref(db, 'estatisticas/total_likes'); // Novo banco de dados para os números
       let ultimoLike = 0;
+
+      // Escuta o total de likes em tempo real e atualiza a tela
+      onValue(contadorRef, (snapshot) => {
+        const total = snapshot.val() || 0;
+        document.getElementById('contador-likes').innerText = formatarNumero(total);
+      });
+
+      // Transforma 1500 em 1.5k
+      function formatarNumero(num) {
+        if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+        if (num >= 1000) return (num / 1000).toFixed(1) + 'k';
+        return num;
+      }
 
       window.enviarReacao = function () {
         const agora = Date.now();
-        if (agora - ultimoLike < 1000) return;
+        if (agora - ultimoLike < 1000) return; // Trava de 1 segundo
         ultimoLike = agora;
+
         criarCoracaoLocal();
+
+        // 1. Dispara a animação visual para todos
         push(reacoesRef, { timestamp: agora });
+
+        // 2. Salva e soma +1 no contador de forma segura (Anti-bug de cliques simultâneos)
+        runTransaction(contadorRef, (votosAtuais) => {
+          return (votosAtuais || 0) + 1;
+        });
       };
 
       function criarCoracaoLocal() {
@@ -498,4 +525,5 @@
       };
     </script>
   </body>
+
 </html>
