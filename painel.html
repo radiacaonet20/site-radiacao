@@ -7,92 +7,55 @@
     <link rel="icon" type="image/png" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
     <link rel="apple-touch-icon" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
     
-    <!-- MANIFEST PARA TRANSFORMAR O PAINEL EM APP -->
+    <!-- MANIFEST PWA EXCLUSIVO PARA LOCUTORES -->
     <link rel="manifest" href="./manifest-painel.json">
     <meta name="theme-color" content="#f4741f">
 
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- IMPORTANDO O CSS DO SITE PRINCIPAL -->
     <link rel="stylesheet" href="./style.css">
     
     <style>
       body { justify-content: flex-start !important; padding-top: 30px !important; }
       
-      /* --- ECRÃ DE LOGIN --- */
-      #tela-login {
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        width: 100%; height: 80vh; z-index: 1000;
-      }
-      .login-box {
-        background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-        border: 1px solid rgba(255, 255, 255, 0.1); border-top: 4px solid #f4741f;
-        padding: 40px 30px; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-        width: 100%; max-width: 400px; text-align: center;
-      }
+      #tela-login { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 80vh; z-index: 1000; }
+      .login-box { background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-top: 4px solid #f4741f; padding: 40px 30px; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); width: 100%; max-width: 400px; text-align: center; }
       .login-box img { width: 80px; margin-bottom: 20px; }
       .login-box h2 { font-weight: 900; margin-bottom: 25px; color: #fff; }
       .input-group { margin-bottom: 15px; text-align: left; }
       .input-group label { display: block; font-size: 0.8rem; color: #aaa; margin-bottom: 5px; font-weight: 700; }
-      .input-group input {
-        width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);
-        background: rgba(0,0,0,0.5); color: #fff; font-family: inherit; font-size: 1rem;
-      }
+      .input-group input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.5); color: #fff; font-family: inherit; font-size: 1rem; }
       .input-group input:focus { outline: none; border-color: #f4741f; }
-      .btn-login {
-        width: 100%; padding: 14px; border: none; border-radius: 8px; background: #f4741f;
-        color: #fff; font-weight: 900; font-size: 1rem; cursor: pointer; transition: 0.3s; margin-top: 10px;
-      }
+      .btn-login { width: 100%; padding: 14px; border: none; border-radius: 8px; background: #f4741f; color: #fff; font-weight: 900; font-size: 1rem; cursor: pointer; transition: 0.3s; margin-top: 10px; }
       .btn-login:hover { background: #ff8c42; }
       #msg-erro { color: #ff4c4c; font-size: 0.85rem; margin-top: 15px; display: none; font-weight: bold; }
 
-      /* --- ECRÃ DO DASHBOARD --- */
       #tela-dashboard { display: none; width: 100%; max-width: 1000px; margin: 0 auto; flex-direction: column; gap: 15px; }
 
       .title-wrapper, .custom-player-wrapper { max-width: 1000px !important; }
       @media (max-width: 480px) { .floating-title { font-size: 1.4rem !important; } }
 
-      /* Estilos dinâmicos da Badge de Status */
-      .status-badge {
-        padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold;
-        display: flex; align-items: center; gap: 6px; flex-shrink: 0; transition: all 0.3s ease;
-      }
+      .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; display: flex; align-items: center; gap: 6px; flex-shrink: 0; transition: all 0.3s ease; }
       .status-online { background-color: rgba(46, 125, 50, 0.2); border: 1px solid rgba(76, 175, 80, 0.5); color: #4caf50; }
       .status-autodj { background-color: rgba(255, 76, 76, 0.2); border: 1px solid rgba(255, 76, 76, 0.5); color: #ff4c4c; }
       .pulse-dot { width: 6px; height: 6px; border-radius: 50%; animation: blink 1s infinite alternate; }
       .dot-green { background: #4caf50; box-shadow: 0 0 6px #4caf50; }
       .dot-red { background: #ff4c4c; box-shadow: 0 0 6px #ff4c4c; }
 
-      /* Botões do Topo */
-      .btn-topo {
-        background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
-        color: #fff; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold;
-        cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 6px; margin-left: 5px;
-      }
+      /* BOTOES TOPO */
+      .btn-topo { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 6px; margin-left: 5px; }
       .btn-topo:hover { background: rgba(255, 255, 255, 0.2); }
-      
       #btn-logout:hover { background: rgba(255, 76, 76, 0.2); border-color: rgba(255, 76, 76, 0.5); color: #ff4c4c; }
-      
       .btn-instalar-app { display: none; background: rgba(33, 150, 243, 0.2); border-color: rgba(33, 150, 243, 0.5); color: #2196F3; }
       .btn-instalar-app:hover { background: #2196F3; color: #fff; border-color: #2196F3; }
 
-      /* Botão de Alertas (Sininho) */
+      /* SINO DE ALERTAS */
       .btn-alertas { padding: 5px 10px; border-radius: 50%; }
       .btn-alertas.ativo { background: rgba(76, 175, 80, 0.2); border-color: rgba(76, 175, 80, 0.5); color: #4caf50; }
       .btn-alertas.inativo { background: rgba(255, 76, 76, 0.2); border-color: rgba(255, 76, 76, 0.5); color: #ff4c4c; animation: pulse-red 2s infinite; }
+      @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(255, 76, 76, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(255, 76, 76, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 76, 76, 0); } }
 
-      @keyframes pulse-red {
-        0% { box-shadow: 0 0 0 0 rgba(255, 76, 76, 0.7); }
-        70% { box-shadow: 0 0 0 6px rgba(255, 76, 76, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(255, 76, 76, 0); }
-      }
-
-      .listeners-block {
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        background: rgba(244, 116, 31, 0.15); border: 1px solid rgba(244, 116, 31, 0.4);
-        padding: 8px 20px; border-radius: 12px; min-width: 90px;
-      }
+      .listeners-block { display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(244, 116, 31, 0.15); border: 1px solid rgba(244, 116, 31, 0.4); padding: 8px 20px; border-radius: 12px; min-width: 90px; }
       .listeners-count { font-size: 1.6rem; font-weight: 900; color: #fff; line-height: 1; }
       .listeners-label { font-size: 0.65rem; color: #f4741f; font-weight: 700; text-transform: uppercase; margin-top: 4px;}
 
@@ -101,25 +64,13 @@
       .section-title::after { content: ''; flex-grow: 1; height: 1px; background: rgba(255,255,255,0.1); margin-left: 10px; }
 
       .lista-pedidos { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important; gap: 15px; align-items: start; }
-      
-      .pedido-card {
-        background: rgba(20, 20, 20, 0.7); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1);
-        border-left: 4px solid #f4741f; border-radius: 12px; padding: 12px 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-        display: flex; flex-direction: column; gap: 6px; transition: opacity 0.3s ease; width: 100%;
-      }
-      
+      .pedido-card { background: rgba(20, 20, 20, 0.7); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-left: 4px solid #f4741f; border-radius: 12px; padding: 12px 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 6px; transition: opacity 0.3s ease; width: 100%; }
       .pedido-hora { font-size: 0.7rem; color: #888; text-align: right; margin-top: -2px; font-weight: 700;}
       .pedido-nome { font-weight: 700; color: #f4741f; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;}
       .pedido-musica { font-size: 1rem; font-weight: 900; color: #fff; line-height: 1.2;}
       .pedido-recado { font-size: 0.75rem; color: #ddd; font-style: italic; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 6px; border-left: 2px solid #666; margin-top: 2px;}
-      
-      .btn-concluir {
-        background: rgba(244, 116, 31, 0.1); border: 1px solid rgba(244, 116, 31, 0.4); color: #f4741f;
-        padding: 8px; border-radius: 6px; cursor: pointer; font-family: inherit; font-weight: 700; font-size: 0.8rem;
-        transition: all 0.3s; margin-top: 4px; display: flex; align-items: center; justify-content: center; gap: 6px;
-      }
+      .btn-concluir { background: rgba(244, 116, 31, 0.1); border: 1px solid rgba(244, 116, 31, 0.4); color: #f4741f; padding: 8px; border-radius: 6px; cursor: pointer; font-family: inherit; font-weight: 700; font-size: 0.8rem; transition: all 0.3s; margin-top: 4px; display: flex; align-items: center; justify-content: center; gap: 6px; }
       .btn-concluir:hover { background: #f4741f; color: #fff; border-color: #f4741f; }
-      
       .sem-pedidos { text-align: center; color: #888; font-size: 1rem; padding: 30px 0; background: rgba(20,20,20,0.5); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); grid-column: 1 / -1; }
     </style>
   </head>
@@ -156,11 +107,8 @@
             <span class="pulse-dot" id="dotStatus"></span>
             <span id="textStatus">A ligar...</span>
           </div>
-          
-          <!-- BOTÃO DE ALERTAS -->
-          <button class="btn-topo btn-alertas inativo" id="btn-alertas" title="Clique para ativar sons e alertas">
-            <i class="fas fa-bell-slash"></i>
-          </button>
+          <!-- BOTÃO SINO DE ALERTAS -->
+          <button class="btn-topo btn-alertas inativo" id="btn-alertas" title="Clique para ativar sons e alertas"><i class="fas fa-bell-slash"></i></button>
           
           <button class="btn-topo btn-instalar-app" id="btn-instalar-painel" title="Instalar App"><i class="fas fa-download"></i> App</button>
           <button class="btn-topo" id="btn-logout" title="Sair do Painel"><i class="fas fa-power-off"></i> Sair</button>
@@ -194,7 +142,6 @@
       </div>
     </div>
 
-    <!-- SCRIPT 0: INSTALAR PWA NO PAINEL -->
     <script>
       let deferredPromptPainel;
       window.addEventListener('beforeinstallprompt', (e) => {
@@ -206,15 +153,12 @@
         if (deferredPromptPainel) {
           deferredPromptPainel.prompt();
           const { outcome } = await deferredPromptPainel.userChoice;
-          if (outcome === 'accepted') {
-            document.getElementById('btn-instalar-painel').style.display = 'none';
-          }
+          if (outcome === 'accepted') { document.getElementById('btn-instalar-painel').style.display = 'none'; }
           deferredPromptPainel = null;
         }
       });
     </script>
 
-    <!-- SCRIPT 1: BUSCAR DADOS DA RÁDIO E ATUALIZAR STATUS -->
     <script>
       async function atualizarInfoRadio() {
         try {
@@ -229,13 +173,8 @@
           
           const songAlbum = data.now_playing.song.album || "";
           const line3 = document.getElementById('painelLine3');
-          if (songAlbum) { 
-            line3.innerText = `💿 ${songAlbum}`; 
-            line3.style.display = 'block'; 
-            line3.style.color = '#bbbbbb'; 
-          } else { 
-            line3.style.display = 'none'; 
-          }
+          if (songAlbum) { line3.innerText = `💿 ${songAlbum}`; line3.style.display = 'block'; line3.style.color = '#bbbbbb'; } 
+          else { line3.style.display = 'none'; }
 
           const isLive = data.live.is_live;
           const badgeStatus = document.getElementById('badgeStatus');
@@ -243,23 +182,15 @@
           const dotStatus = document.getElementById('dotStatus');
 
           if (isLive) {
-            badgeStatus.className = "status-badge status-online";
-            textStatus.innerText = "Online";
-            dotStatus.className = "pulse-dot dot-green";
+            badgeStatus.className = "status-badge status-online"; textStatus.innerText = "Online"; dotStatus.className = "pulse-dot dot-green";
           } else {
-            badgeStatus.className = "status-badge status-autodj";
-            textStatus.innerText = "Auto DJ";
-            dotStatus.className = "pulse-dot dot-red";
+            badgeStatus.className = "status-badge status-autodj"; textStatus.innerText = "Auto DJ"; dotStatus.className = "pulse-dot dot-red";
           }
-
-        } catch (error) { 
-          console.error("Erro na rádio:", error); 
-        }
+        } catch (error) { console.error("Erro na rádio:", error); }
       }
       setInterval(atualizarInfoRadio, 5000);
     </script>
 
-    <!-- SCRIPT 2: FIREBASE AUTH E NOVO SISTEMA DE ALERTAS -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
       import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -288,104 +219,50 @@
       const container = document.getElementById('container-pedidos');
       const btnAlertas = document.getElementById('btn-alertas');
 
-      // --- SISTEMA DE NOTIFICAÇÕES MELHORADO ---
       const notificationSound = new Audio('https://actions.google.com/sounds/v1/ui/bubble_pop.ogg');
-      let cargaInicial = true;
-      let quantidadePedidosAnterior = 0;
-      let intervaloPiscar;
-      let isBlinking = false;
-      let alertasAtivados = false;
+      let cargaInicial = true; let quantidadePedidosAnterior = 0; let intervaloPiscar; let isBlinking = false; let alertasAtivados = false;
 
-      // FUNÇÃO PARA ATIVAR O SOM E AS NOTIFICAÇÕES (Forçada pelo clique)
       function habilitarAlertas() {
         if (alertasAtivados) return;
-        
-        // Toca o áudio silenciosamente para "desbloquear" o navegador
-        notificationSound.play().then(() => {
-          notificationSound.pause();
-          notificationSound.currentTime = 0;
-        }).catch(err => console.log("Áudio ainda bloqueado", err));
-
-        // Pede permissão para mostrar notificação no PC/Celular
-        if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
-          Notification.requestPermission();
-        }
-
+        notificationSound.play().then(() => { notificationSound.pause(); notificationSound.currentTime = 0; }).catch(err => console.log("Áudio bloqueado", err));
+        if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") { Notification.requestPermission(); }
         alertasAtivados = true;
-        btnAlertas.className = "btn-topo btn-alertas ativo";
-        btnAlertas.innerHTML = '<i class="fas fa-bell"></i>';
-        btnAlertas.title = "Alertas Sonoros e Notificações Ativados";
+        btnAlertas.className = "btn-topo btn-alertas ativo"; btnAlertas.innerHTML = '<i class="fas fa-bell"></i>'; btnAlertas.title = "Alertas Sonoros Ativados";
       }
 
-      // O primeiro clique em qualquer parte da tela ativa os alertas
       window.addEventListener('click', habilitarAlertas, { once: true });
       btnAlertas.addEventListener('click', habilitarAlertas);
 
-      // Função de piscar a aba
       function notificarAba() {
-        if(isBlinking) return; // Se já estiver piscando, não reinicia
-        
-        isBlinking = true;
-        let piscar = false;
-        intervaloPiscar = setInterval(() => {
-          document.title = piscar ? "🔔 NOVO PEDIDO!" : "Painel do Locutor";
-          piscar = !piscar;
-        }, 1000);
-        
-        setTimeout(() => {
-          clearInterval(intervaloPiscar);
-          document.title = "Painel do Locutor - Radiação.Net";
-          isBlinking = false;
-        }, 15000); // Para sozinho após 15s
+        if(isBlinking) return;
+        isBlinking = true; let piscar = false;
+        intervaloPiscar = setInterval(() => { document.title = piscar ? "🔔 NOVO PEDIDO!" : "Painel do Locutor"; piscar = !piscar; }, 1000);
+        setTimeout(() => { clearInterval(intervaloPiscar); document.title = "Painel do Locutor - Radiação.Net"; isBlinking = false; }, 15000);
       }
 
-      // NOVO: A aba só para de piscar quando o locutor voltar para a tela (ganhar foco)
       window.addEventListener('focus', () => {
-        if (isBlinking) {
-          clearInterval(intervaloPiscar);
-          document.title = "Painel do Locutor - Radiação.Net";
-          isBlinking = false;
-        }
+        if (isBlinking) { clearInterval(intervaloPiscar); document.title = "Painel do Locutor - Radiação.Net"; isBlinking = false; }
       });
 
-      // 1. MONITOR DE ESTADO DE LOGIN
       onAuthStateChanged(auth, (user) => {
-        if (user) {
-          telaLogin.style.display = 'none';
-          telaDashboard.style.display = 'flex';
-          atualizarInfoRadio(); 
-          iniciarLeituraPedidos();
-        } else {
-          telaLogin.style.display = 'flex';
-          telaDashboard.style.display = 'none';
-        }
+        if (user) { telaLogin.style.display = 'none'; telaDashboard.style.display = 'flex'; atualizarInfoRadio(); iniciarLeituraPedidos(); } 
+        else { telaLogin.style.display = 'flex'; telaDashboard.style.display = 'none'; }
       });
 
-      // 2. FUNÇÃO DE LOGIN
       formLogin.addEventListener('submit', (e) => {
         e.preventDefault();
-        habilitarAlertas(); // O clique de login já ativa os sons
+        habilitarAlertas();
         const email = document.getElementById('login-email').value;
         const senha = document.getElementById('login-senha').value;
-        
-        btnEntrar.innerText = "A verificar... ⏳";
-        msgErro.style.display = 'none';
+        btnEntrar.innerText = "A verificar... ⏳"; msgErro.style.display = 'none';
 
         signInWithEmailAndPassword(auth, email, senha)
           .then(() => { btnEntrar.innerHTML = 'Entrar <i class="fas fa-sign-in-alt"></i>'; })
-          .catch((error) => {
-            console.error(error);
-            btnEntrar.innerHTML = 'Entrar <i class="fas fa-sign-in-alt"></i>';
-            msgErro.style.display = 'block';
-          });
+          .catch((error) => { console.error(error); btnEntrar.innerHTML = 'Entrar <i class="fas fa-sign-in-alt"></i>'; msgErro.style.display = 'block'; });
       });
 
-      // 3. FUNÇÃO DE LOGOUT
-      document.getElementById('btn-logout').addEventListener('click', () => {
-        signOut(auth).catch((error) => console.error("Erro ao sair", error));
-      });
+      document.getElementById('btn-logout').addEventListener('click', () => { signOut(auth).catch((error) => console.error("Erro", error)); });
 
-      // 4. LER PEDIDOS
       function iniciarLeituraPedidos() {
         onValue(pedidosRef, (snapshot) => {
           container.innerHTML = ''; 
@@ -395,65 +272,36 @@
             const chaves = Object.keys(dados).reverse();
             const quantidadeAtual = chaves.length;
 
-            // LÓGICA DE ALERTA SE HOUVER PEDIDO NOVO
             if (!cargaInicial && quantidadeAtual > quantidadePedidosAnterior) {
-               
-               if(alertasAtivados) {
-                 notificationSound.currentTime = 0;
-                 notificationSound.play().catch(e => console.log("Áudio bloqueado", e));
-               }
-               
+               if(alertasAtivados) { notificationSound.currentTime = 0; notificationSound.play().catch(e => console.log("Áudio block", e)); }
                notificarAba();
-
-               // Manda notificação do Windows/Mac/Android se autorizado
                if ("Notification" in window && Notification.permission === "granted") {
-                 const ultimoPedidoKey = chaves[0];
-                 const pedidoNovo = dados[ultimoPedidoKey];
-                 new Notification("Radiação.Net - Novo Pedido!", {
-                    body: `${pedidoNovo.nome} acabou de pedir: ${pedidoNovo.musica}`,
-                    icon: "https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png"
-                 });
+                 const pedidoNovo = dados[chaves[0]];
+                 new Notification("Radiação.Net - Novo Pedido!", { body: `${pedidoNovo.nome} pediu: ${pedidoNovo.musica}`, icon: "https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png" });
                }
             }
             
-            quantidadePedidosAnterior = quantidadeAtual;
-            cargaInicial = false;
+            quantidadePedidosAnterior = quantidadeAtual; cargaInicial = false;
 
             chaves.forEach(chave => {
               const pedido = dados[chave];
               const card = document.createElement('div');
               card.className = 'pedido-card';
-              
-              let htmlCard = `
-                <div class="pedido-hora"><i class="far fa-clock"></i> ${pedido.data_hora || ''}</div>
-                <div class="pedido-nome"><i class="fas fa-user-circle"></i> ${pedido.nome} pediu:</div>
-                <div class="pedido-musica">${pedido.musica}</div>
-              `;
-              if (pedido.recado && pedido.recado.trim() !== '') {
-                htmlCard += `<div class="pedido-recado">" ${pedido.recado} "</div>`;
-              }
+              let htmlCard = `<div class="pedido-hora"><i class="far fa-clock"></i> ${pedido.data_hora || ''}</div><div class="pedido-nome"><i class="fas fa-user-circle"></i> ${pedido.nome} pediu:</div><div class="pedido-musica">${pedido.musica}</div>`;
+              if (pedido.recado && pedido.recado.trim() !== '') { htmlCard += `<div class="pedido-recado">" ${pedido.recado} "</div>`; }
               htmlCard += `<button class="btn-concluir" data-id="${chave}"><i class="fas fa-check-circle"></i> Marcar como Tocado</button>`;
-              
-              card.innerHTML = htmlCard;
-              container.appendChild(card);
+              card.innerHTML = htmlCard; container.appendChild(card);
             });
 
             document.querySelectorAll('.btn-concluir').forEach(btn => {
               btn.addEventListener('click', (e) => {
-                const id = e.target.closest('button').dataset.id;
-                e.target.closest('.pedido-card').style.opacity = '0';
-                setTimeout(() => remove(ref(db, `pedidos/${id}`)), 300);
-                quantidadePedidosAnterior--; 
+                const id = e.target.closest('button').dataset.id; e.target.closest('.pedido-card').style.opacity = '0';
+                setTimeout(() => remove(ref(db, `pedidos/${id}`)), 300); quantidadePedidosAnterior--; 
               });
             });
           } else {
-            quantidadePedidosAnterior = 0;
-            cargaInicial = false;
-            container.innerHTML = `
-              <div class="sem-pedidos">
-                <i class="fas fa-inbox fa-3x" style="margin-bottom: 15px; color: #555;"></i><br>
-                A fila está vazia. A aguardar novos pedidos...
-              </div>`;
+            quantidadePedidosAnterior = 0; cargaInicial = false;
+            container.innerHTML = `<div class="sem-pedidos"><i class="fas fa-inbox fa-3x" style="margin-bottom: 15px; color: #555;"></i><br>A fila está vazia. A aguardar novos pedidos...</div>`;
           }
         });
       }
