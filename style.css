@@ -36,17 +36,14 @@ body {
 .equalizer .bar:nth-child(4) { animation-delay: -0.4s; }
 @keyframes eq-bounce { 0% { transform: scaleY(0.2); } 100% { transform: scaleY(1); } }
 
-/* --- PLAYER --- */
 .custom-player-wrapper {
-  position: relative; /* Necessário para a chuva de corações */
-  width: 100%; max-width: 600px; background: var(--bg-card); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+  position: relative; width: 100%; max-width: 600px; background: var(--bg-card); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
   border: 1px solid var(--borda-clara); border-radius: 20px; padding: 15px 20px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.05);
   display: flex; flex-direction: row; align-items: center; gap: 15px; z-index: 10; transition: all 0.4s ease;
 }
 .custom-player-wrapper.is-live { border-color: rgba(255, 76, 76, 0.4); box-shadow: 0 10px 40px rgba(255, 76, 76, 0.25), inset 0 1px 0 rgba(255,255,255,0.1); }
 
-/* --- REAÇÕES AO VIVO (CHUVA DE LIKES) --- */
 .hearts-container { position: absolute; bottom: 100%; right: 25px; width: 50px; height: 250px; pointer-events: none; z-index: 9999; overflow: visible; }
 .heart-fly { position: absolute; bottom: -20px; font-size: 1.6rem; color: var(--cor-secundaria); animation: flyUp 2.5s ease-in-out forwards; text-shadow: 0 2px 5px rgba(0,0,0,0.5); }
 @keyframes flyUp {
@@ -174,8 +171,40 @@ body {
 .btn-enviar:hover { background-color: var(--cor-primaria-hover); transform: translateY(-2px); }
 .btn-enviar:disabled { background-color: #555; box-shadow: none; cursor: not-allowed; transform: none; }
 
+/* --- ENQUETES PARA O OUVINTE --- */
+.btn-enquete-flutuante {
+  position: fixed; bottom: 85px; right: 20px;
+  background: linear-gradient(135deg, var(--cor-secundaria), var(--cor-primaria));
+  color: var(--cor-texto); border: none; padding: 12px 20px; border-radius: 30px;
+  font-weight: 900; font-family: var(--fonte-principal); font-size: 0.9rem;
+  box-shadow: 0 5px 15px rgba(255, 76, 76, 0.5); cursor: pointer;
+  display: none; align-items: center; gap: 8px; z-index: 50;
+  animation: pulse-enquete 2s infinite;
+}
+@keyframes pulse-enquete {
+  0% { transform: scale(1); box-shadow: 0 5px 15px rgba(255, 76, 76, 0.5); }
+  50% { transform: scale(1.05); box-shadow: 0 5px 25px rgba(255, 76, 76, 0.8); }
+  100% { transform: scale(1); box-shadow: 0 5px 15px rgba(255, 76, 76, 0.5); }
+}
+.btn-opcao-voto {
+  width: 100%; background: var(--bg-input); border: 2px solid var(--borda-clara);
+  color: var(--cor-texto); padding: 15px; border-radius: 12px; font-weight: bold;
+  font-size: 1rem; cursor: pointer; transition: all 0.3s; margin-bottom: 10px;
+}
+.btn-opcao-voto:hover { border-color: var(--cor-primaria); background: rgba(244, 116, 31, 0.1); }
+.enquete-resultados { display: none; flex-direction: column; gap: 15px; }
+.enquete-opcoes { display: flex; flex-direction: column; gap: 10px; }
+
+.stat-row { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+.stat-bar-bg { width: 100%; background: rgba(255,255,255,0.1); height: 12px; border-radius: 6px; overflow: hidden; }
+.stat-bar-fill { height: 100%; background: var(--cor-primaria); width: 0%; transition: width 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.stat-labels { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: bold; color: var(--cor-texto); }
+.blink { animation: blinker 1s linear infinite; color: var(--cor-secundaria); }
+@keyframes blinker { 50% { opacity: 0; } }
+
 @media (max-width: 480px) {
   body { padding-bottom: 75px; }
+  .btn-enquete-flutuante { bottom: 95px; right: 15px; }
   .player-cover-container { width: 65px; height: 65px; }
   .btn-play-pause { width: 50px; height: 50px; font-size: 1.2rem; }
   .volume-wrapper-mini { display: none; }

@@ -7,7 +7,6 @@
     <link rel="icon" type="image/png" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
     <link rel="apple-touch-icon" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
     
-    <!-- MANIFEST PWA EXCLUSIVO PARA LOCUTORES -->
     <link rel="manifest" href="./manifest-painel.json">
     <meta name="theme-color" content="#f4741f">
 
@@ -30,10 +29,25 @@
       .btn-login:hover { background: #ff8c42; }
       #msg-erro { color: #ff4c4c; font-size: 0.85rem; margin-top: 15px; display: none; font-weight: bold; }
 
-      #tela-dashboard { display: none; width: 100%; max-width: 1000px; margin: 0 auto; flex-direction: column; gap: 15px; }
+      /* --- ESTRUTURA DASHBOARD PANORÂMICO --- */
+      #tela-dashboard { display: none; width: 100%; max-width: 1400px; margin: 0 auto; flex-direction: column; gap: 20px; }
+      
+      /* ALINHAMENTO DO TÍTULO CORRIGIDO PARA A ESQUERDA */
+      #tela-dashboard .title-wrapper { max-width: 100% !important; justify-content: flex-start; margin-bottom: 5px; }
+      
+      .dashboard-grid { display: grid; grid-template-columns: 360px 1fr; gap: 25px; align-items: start; width: 100%; }
+      .dash-sidebar { display: flex; flex-direction: column; gap: 20px; }
+      
+      /* ESTRUTURA DIREITA (TÍTULO FORA DA CAIXA) */
+      .dash-right-col { display: flex; flex-direction: column; height: 100%; }
+      .dash-main-box { background: rgba(20, 20, 20, 0.4); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 20px; box-shadow: inset 0 0 20px rgba(0,0,0,0.3); min-height: 500px; flex-grow: 1; }
 
-      .title-wrapper, .custom-player-wrapper { max-width: 1000px !important; }
-      @media (max-width: 480px) { .floating-title { font-size: 1.4rem !important; } }
+      @media (max-width: 900px) {
+        .dashboard-grid { grid-template-columns: 1fr; }
+        .dash-main-box { padding: 10px; background: none; border: none; box-shadow: none; min-height: auto; }
+        #tela-dashboard .title-wrapper { flex-wrap: wrap !important; justify-content: center !important; }
+        #tela-dashboard .title-wrapper > div { width: 100%; justify-content: center !important; margin-top: 10px; }
+      }
 
       .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; display: flex; align-items: center; gap: 6px; flex-shrink: 0; transition: all 0.3s ease; }
       .status-online { background-color: rgba(46, 125, 50, 0.2); border: 1px solid rgba(76, 175, 80, 0.5); color: #4caf50; }
@@ -42,41 +56,48 @@
       .dot-green { background: #4caf50; box-shadow: 0 0 6px #4caf50; }
       .dot-red { background: #ff4c4c; box-shadow: 0 0 6px #ff4c4c; }
 
-      /* BOTOES TOPO */
       .btn-topo { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 6px; margin-left: 5px; }
       .btn-topo:hover { background: rgba(255, 255, 255, 0.2); }
       #btn-logout:hover { background: rgba(255, 76, 76, 0.2); border-color: rgba(255, 76, 76, 0.5); color: #ff4c4c; }
       .btn-instalar-app { display: none; background: rgba(33, 150, 243, 0.2); border-color: rgba(33, 150, 243, 0.5); color: #2196F3; }
       .btn-instalar-app:hover { background: #2196F3; color: #fff; border-color: #2196F3; }
 
-      /* SINO DE ALERTAS */
       .btn-alertas { padding: 5px 10px; border-radius: 50%; }
       .btn-alertas.ativo { background: rgba(76, 175, 80, 0.2); border-color: rgba(76, 175, 80, 0.5); color: #4caf50; }
       .btn-alertas.inativo { background: rgba(255, 76, 76, 0.2); border-color: rgba(255, 76, 76, 0.5); color: #ff4c4c; animation: pulse-red 2s infinite; }
       @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(255, 76, 76, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(255, 76, 76, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 76, 76, 0); } }
 
-      .listeners-block { display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(244, 116, 31, 0.15); border: 1px solid rgba(244, 116, 31, 0.4); padding: 8px 20px; border-radius: 12px; min-width: 90px; }
-      .listeners-count { font-size: 1.6rem; font-weight: 900; color: #fff; line-height: 1; }
-      .listeners-label { font-size: 0.65rem; color: #f4741f; font-weight: 700; text-transform: uppercase; margin-top: 4px;}
-
-      .pedidos-wrapper { display: flex; flex-direction: column; gap: 15px; margin-top: 15px; margin-bottom: 40px; }
+      .pedidos-wrapper { display: flex; flex-direction: column; gap: 15px; margin-top: 0; }
       .section-title { font-size: 1.1rem; font-weight: 900; color: #fff; text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
       .section-title::after { content: ''; flex-grow: 1; height: 1px; background: rgba(255,255,255,0.1); margin-left: 10px; }
 
-      .lista-pedidos { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important; gap: 15px; align-items: start; }
+      .enquete-form { display: flex; flex-direction: column; gap: 10px; }
+      .enquete-input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5); color: #fff; font-family: inherit; }
+      .enquete-input:focus { border-color: #f4741f; outline: none; }
+      .btn-enquete { background: #f4741f; color: #fff; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 5px;}
+      .btn-enquete:hover { background: #ff8c42; }
+      .btn-encerrar { background: rgba(255, 76, 76, 0.2); border: 1px solid rgba(255, 76, 76, 0.5); color: #ff4c4c; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 15px; width: 100%; transition: 0.3s; }
+      .btn-encerrar:hover { background: #ff4c4c; color: #fff; }
+      .stat-row { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+      .stat-bar-bg { width: 100%; background: rgba(255,255,255,0.1); height: 12px; border-radius: 6px; overflow: hidden; }
+      .stat-bar-fill { height: 100%; background: #f4741f; width: 0%; transition: width 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+      .stat-labels { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: bold; color: #fff; }
+      .blink { animation: blinker 1s linear infinite; color: #ff4c4c; }
+      @keyframes blinker { 50% { opacity: 0; } }
+
+      .lista-pedidos { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important; gap: 15px; align-items: start; }
       .pedido-card { background: rgba(20, 20, 20, 0.7); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-left: 4px solid #f4741f; border-radius: 12px; padding: 12px 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 6px; transition: opacity 0.3s ease; width: 100%; }
       .pedido-hora { font-size: 0.7rem; color: #888; text-align: right; margin-top: -2px; font-weight: 700;}
       .pedido-nome { font-weight: 700; color: #f4741f; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;}
       .pedido-musica { font-size: 1rem; font-weight: 900; color: #fff; line-height: 1.2;}
       .pedido-recado { font-size: 0.75rem; color: #ddd; font-style: italic; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 6px; border-left: 2px solid #666; margin-top: 2px;}
-      .btn-concluir { background: rgba(244, 116, 31, 0.1); border: 1px solid rgba(244, 116, 31, 0.4); color: #f4741f; padding: 8px; border-radius: 6px; cursor: pointer; font-family: inherit; font-weight: 700; font-size: 0.8rem; transition: all 0.3s; margin-top: 4px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+      .btn-concluir { background: rgba(244, 116, 31, 0.1); border: 1px solid rgba(244, 116, 31, 0.4); color: #f4741f; padding: 8px; border-radius: 6px; cursor: pointer; font-family: inherit; font-weight: 700; font-size: 0.8rem; transition: all 0.3s; margin-top: auto; display: flex; align-items: center; justify-content: center; gap: 6px; }
       .btn-concluir:hover { background: #f4741f; color: #fff; border-color: #f4741f; }
       .sem-pedidos { text-align: center; color: #888; font-size: 1rem; padding: 30px 0; background: rgba(20,20,20,0.5); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); grid-column: 1 / -1; }
     </style>
   </head>
   <body>
 
-    <!-- ================= ECRÃ DE LOGIN ================= -->
     <div id="tela-login">
       <div class="login-box">
         <img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" alt="Logo">
@@ -96,58 +117,83 @@
       </div>
     </div>
 
-    <!-- ================= ECRÃ DO DASHBOARD ================= -->
     <div id="tela-dashboard">
-      <!-- CABEÇALHO -->
+      <!-- CABEÇALHO COM TÍTULO NA ESQUERDA -->
       <div class="title-wrapper">
         <img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" class="logo-img" alt="Logo">
         <h1 class="floating-title">Painel do Locutor</h1>
         <div style="display: flex; gap: 5px; margin-left: auto; align-items: center; flex-wrap: wrap; justify-content: flex-end;">
-          <div class="status-badge" id="badgeStatus">
-            <span class="pulse-dot" id="dotStatus"></span>
-            <span id="textStatus">A ligar...</span>
-          </div>
-          <!-- BOTÃO SINO DE ALERTAS -->
+          <div class="status-badge" id="badgeStatus"><span class="pulse-dot" id="dotStatus"></span><span id="textStatus">A ligar...</span></div>
           <button class="btn-topo btn-alertas inativo" id="btn-alertas" title="Clique para ativar sons e alertas"><i class="fas fa-bell-slash"></i></button>
-          
           <button class="btn-topo btn-instalar-app" id="btn-instalar-painel" title="Instalar App"><i class="fas fa-download"></i> App</button>
           <button class="btn-topo" id="btn-logout" title="Sair do Painel"><i class="fas fa-power-off"></i> Sair</button>
         </div>
       </div>
 
-      <!-- CARD INFORMATIVO -->
-      <div class="custom-player-wrapper">
-        <div class="player-cover-container">
-          <img id="painelCover" src="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png" alt="Capa" class="player-cover">
-        </div>
-        <div class="player-track-info">
-          <div class="song-title" id="painelLine1">A carregar...</div>
-          <div class="song-artist" id="painelLine2">A ligar ao servidor</div>
-          <div class="song-album" id="painelLine3"></div>
-        </div>
-        <div class="player-controls-right">
-          <div class="listeners-block">
-            <span class="listeners-count" id="painelListeners">0</span>
-            <div class="listeners-label">Ouvintes</div>
+      <!-- GRID DO DASHBOARD PANORÂMICO -->
+      <div class="dashboard-grid">
+        
+        <!-- COLUNA ESQUERDA: CONTROLES E STATUS -->
+        <div class="dash-sidebar">
+          
+          <div class="pedidos-wrapper" style="margin-bottom: 0;">
+            <h2 class="section-title">Status da Rádio <i class="fas fa-broadcast-tower" style="color: #f4741f;"></i></h2>
+            <div class="pedido-card" style="border-left-color: #2196F3;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px;">
+                <div style="font-weight: 900; color: #2196F3; font-size: 0.85rem; text-transform: uppercase;">
+                  <i class="fas fa-info-circle"></i> Tocando Agora
+                </div>
+                <div style="background: rgba(33, 150, 243, 0.15); border: 1px solid rgba(33, 150, 243, 0.4); color: #2196F3; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; display: flex; align-items: center; gap: 6px;">
+                  <i class="fas fa-users"></i> <span id="painelListeners">0</span> Ouvintes
+                </div>
+              </div>
+              <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;">
+                <li style="display: flex; align-items: flex-start; gap: 10px;">
+                  <i class="fas fa-music" style="color: #aaa; margin-top: 3px; font-size: 0.9rem;"></i>
+                  <div style="display: flex; flex-direction: column; gap: 2px;">
+                    <span id="painelLine1" style="font-weight: 900; color: #fff; font-size: 1.05rem; line-height: 1.2;">A carregar...</span>
+                    <span id="painelLine2" style="font-size: 0.85rem; color: #f4741f; font-weight: 700;">A ligar ao servidor</span>
+                  </div>
+                </li>
+                <li id="li-album" style="display: none; align-items: center; gap: 10px; color: #888; font-size: 0.8rem; background: rgba(255,255,255,0.03); padding: 6px 10px; border-radius: 6px;">
+                  <i class="fas fa-compact-disc"></i> <span id="painelLine3"></span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="pedidos-wrapper">
+            <h2 class="section-title">Enquete ao Vivo <i class="fas fa-poll" style="color: #f4741f;"></i></h2>
+            <div id="enquete-container">
+              <div class="pedido-card">
+                <div class="sem-pedidos"><i class="fas fa-spinner fa-spin"></i> Conectando à Enquete...</div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- SESSÃO DE PEDIDOS -->
-      <div class="pedidos-wrapper">
-        <h2 class="section-title">Fila de Pedidos <i class="fas fa-inbox" style="color: #f4741f;"></i></h2>
-        <div class="lista-pedidos" id="container-pedidos">
-          <div class="sem-pedidos"><i class="fas fa-spinner fa-spin"></i> A carregar pedidos...</div>
+        <!-- COLUNA DIREITA: TÍTULO NIVELADO E CAIXA DE TRABALHO -->
+        <div class="dash-right-col">
+          <div class="pedidos-wrapper" style="margin-bottom: 0; display: flex; flex-direction: column; height: 100%;">
+            <!-- Título nivelado com a coluna esquerda -->
+            <h2 class="section-title">Fila de Pedidos <i class="fas fa-inbox" style="color: #f4741f;"></i></h2>
+            
+            <!-- Caixa escura englobando apenas o conteúdo -->
+            <div class="dash-main-box">
+              <div class="lista-pedidos" id="container-pedidos">
+                <div class="sem-pedidos"><i class="fas fa-spinner fa-spin"></i> A carregar pedidos...</div>
+              </div>
+            </div>
+          </div>
         </div>
+
       </div>
     </div>
 
     <script>
       let deferredPromptPainel;
       window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPromptPainel = e;
-        document.getElementById('btn-instalar-painel').style.display = 'flex';
+        e.preventDefault(); deferredPromptPainel = e; document.getElementById('btn-instalar-painel').style.display = 'flex';
       });
       document.getElementById('btn-instalar-painel').addEventListener('click', async () => {
         if (deferredPromptPainel) {
@@ -157,24 +203,21 @@
           deferredPromptPainel = null;
         }
       });
-    </script>
 
-    <script>
       async function atualizarInfoRadio() {
         try {
           const urlBusca = 'https://painel.radiacao.net.br/api/nowplaying_static/radiacaonet.json?_=' + new Date().getTime();
           const response = await fetch(urlBusca, { cache: 'no-store' });
           const data = await response.json();
           
-          document.getElementById('painelCover').src = data.now_playing.song.art || 'https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png';
           document.getElementById('painelLine1').innerText = data.now_playing.song.title || "Desconhecido";
           document.getElementById('painelLine2').innerText = data.now_playing.song.artist || "Desconhecido";
           document.getElementById('painelListeners').innerText = data.listeners.current || 0;
           
           const songAlbum = data.now_playing.song.album || "";
           const line3 = document.getElementById('painelLine3');
-          if (songAlbum) { line3.innerText = `💿 ${songAlbum}`; line3.style.display = 'block'; line3.style.color = '#bbbbbb'; } 
-          else { line3.style.display = 'none'; }
+          const liAlbum = document.getElementById('li-album');
+          if (songAlbum) { line3.innerText = songAlbum; liAlbum.style.display = 'flex'; } else { liAlbum.style.display = 'none'; }
 
           const isLive = data.live.is_live;
           const badgeStatus = document.getElementById('badgeStatus');
@@ -194,7 +237,7 @@
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
       import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-      import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+      import { getDatabase, ref, onValue, remove, set, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
       const firebaseConfig = {
         apiKey: "AIzaSyDLCYfYApZZt4ycMmr-f4Xq002ZBalYmdU",
@@ -210,6 +253,7 @@
       const auth = getAuth(app);
       const db = getDatabase(app);
       const pedidosRef = ref(db, 'pedidos');
+      const enqueteRef = ref(db, 'enquete_atual');
 
       const telaLogin = document.getElementById('tela-login');
       const telaDashboard = document.getElementById('tela-dashboard');
@@ -218,6 +262,7 @@
       const btnEntrar = document.getElementById('btn-entrar');
       const container = document.getElementById('container-pedidos');
       const btnAlertas = document.getElementById('btn-alertas');
+      const containerEnquete = document.getElementById('enquete-container');
 
       const notificationSound = new Audio('https://actions.google.com/sounds/v1/ui/bubble_pop.ogg');
       let cargaInicial = true; let quantidadePedidosAnterior = 0; let intervaloPiscar; let isBlinking = false; let alertasAtivados = false;
@@ -245,7 +290,10 @@
       });
 
       onAuthStateChanged(auth, (user) => {
-        if (user) { telaLogin.style.display = 'none'; telaDashboard.style.display = 'flex'; atualizarInfoRadio(); iniciarLeituraPedidos(); } 
+        if (user) { 
+          telaLogin.style.display = 'none'; telaDashboard.style.display = 'flex'; 
+          atualizarInfoRadio(); iniciarLeituraPedidos(); iniciarControleEnquete(); 
+        } 
         else { telaLogin.style.display = 'flex'; telaDashboard.style.display = 'none'; }
       });
 
@@ -262,6 +310,65 @@
       });
 
       document.getElementById('btn-logout').addEventListener('click', () => { signOut(auth).catch((error) => console.error("Erro", error)); });
+
+      window.criarEnquete = function() {
+        const pergunta = document.getElementById('enq-pergunta').value;
+        const op1 = document.getElementById('enq-op1').value;
+        const op2 = document.getElementById('enq-op2').value;
+
+        if(!pergunta || !op1 || !op2) { alert("Preencha a pergunta e as duas opções!"); return; }
+
+        set(enqueteRef, {
+            ativa: true, pergunta: pergunta,
+            opcoes: { op1: { texto: op1, votos: 0 }, op2: { texto: op2, votos: 0 } }
+        });
+      };
+
+      window.encerrarEnquete = function() { update(enqueteRef, { ativa: false }); };
+
+      function iniciarControleEnquete() {
+          onValue(enqueteRef, (snapshot) => {
+              const data = snapshot.val();
+              if (data && data.ativa) {
+                  const votos1 = data.opcoes.op1.votos || 0;
+                  const votos2 = data.opcoes.op2.votos || 0;
+                  const totalVotos = votos1 + votos2;
+                  const perc1 = totalVotos === 0 ? 0 : Math.round((votos1 / totalVotos) * 100);
+                  const perc2 = totalVotos === 0 ? 0 : Math.round((votos2 / totalVotos) * 100);
+
+                  containerEnquete.innerHTML = `
+                      <div class="pedido-card" style="border-left-color: #4caf50;">
+                          <div style="font-weight: 900; color: #4caf50; font-size: 0.8rem; margin-bottom: 5px;">
+                              <i class="fas fa-broadcast-tower blink"></i> ENQUETE NO AR
+                          </div>
+                          <p style="font-weight: 700; font-size: 1.1rem; color: #fff; margin-bottom: 15px;">${data.pergunta}</p>
+                          <div class="stat-row">
+                              <div class="stat-labels"><span>${data.opcoes.op1.texto}</span> <span>${perc1}% (${votos1})</span></div>
+                              <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${perc1}%;"></div></div>
+                          </div>
+                          <div class="stat-row">
+                              <div class="stat-labels"><span>${data.opcoes.op2.texto}</span> <span>${perc2}% (${votos2})</span></div>
+                              <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${perc2}%;"></div></div>
+                          </div>
+                          <div style="text-align: center; font-size: 0.8rem; color: #aaa; margin-top: 5px;">Total de votos: ${totalVotos}</div>
+                          <button class="btn-encerrar" onclick="encerrarEnquete()"><i class="fas fa-stop-circle"></i> Encerrar Votação</button>
+                      </div>
+                  `;
+              } else {
+                  containerEnquete.innerHTML = `
+                      <div class="pedido-card">
+                          <p style="margin-bottom: 12px; font-size: 0.85rem; color: #aaa;">Preencha os campos para iniciar uma batalha de bandas com os ouvintes:</p>
+                          <div class="enquete-form">
+                              <input type="text" id="enq-pergunta" class="enquete-input" placeholder="Pergunta (Ex: Qual clássico fecha?)">
+                              <input type="text" id="enq-op1" class="enquete-input" placeholder="Opção 1 (Ex: Iron Maiden)">
+                              <input type="text" id="enq-op2" class="enquete-input" placeholder="Opção 2 (Ex: Metallica)">
+                              <button class="btn-enquete" onclick="criarEnquete()"><i class="fas fa-play"></i> Colocar no Ar</button>
+                          </div>
+                      </div>
+                  `;
+              }
+          });
+      }
 
       function iniciarLeituraPedidos() {
         onValue(pedidosRef, (snapshot) => {

@@ -3,24 +3,23 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
+    
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#121212">
-
+    
     <title>Radiação.Net - A web rádio de todas as tribos!</title>
     <link rel="icon" type="image/png" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
     <link rel="apple-touch-icon" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
     <link rel="manifest" href="./manifest.json">
-
+    
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="./style.css">
   </head>
-
   <body>
-
+    
     <div class="title-wrapper">
       <img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" class="logo-img" alt="Logo Radiação.Net">
       <h1 class="floating-title">Radiação.Net</h1>
@@ -31,31 +30,27 @@
 
     <!-- PLAYER CUSTOMIZADO -->
     <div class="custom-player-wrapper" id="customPlayerWrapper">
-
-      <!-- CONTÊINER DA CHUVA DE LIKES (NOVA FEATURE) -->
+      
       <div id="hearts-container" class="hearts-container"></div>
-
       <audio id="audioElement" src="https://painel.radiacao.net.br/listen/radiacaonet/radio.mp3" preload="none"></audio>
-
+      
       <div class="player-cover-container">
         <img id="playerCover" src="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png" alt="Capa" class="player-cover">
         <div class="live-indicator" id="playerLiveBadge" style="display: none;">
           <span class="pulse-dot"></span> AO VIVO
         </div>
       </div>
-
+      
       <div class="player-track-info">
         <div class="song-title" id="playerLine1">Carregando...</div>
         <div class="song-artist" id="playerLine2">Radiação.Net</div>
         <div class="song-album" id="playerLine3"></div>
-
+        
         <div class="player-extras">
-          <button class="btn-request-mini" id="btnRequestLive" onclick="abrirModal('modal-pedido')" style="display: none;"
-            title="Pedir Música">
+          <button class="btn-request-mini" id="btnRequestLive" onclick="abrirModal('modal-pedido')" style="display: none;" title="Pedir Música">
             <i class="fas fa-comment-dots"></i> Pedir
           </button>
-
-          <!-- BOTÕES DE HISTÓRICO E LIKES (NOVA FEATURE) -->
+          
           <button class="btn-request-mini" onclick="abrirModal('modal-historico')" title="Últimas Tocadas">
             <i class="fas fa-history"></i>
           </button>
@@ -80,22 +75,17 @@
     <div class="menu-container">
       <button class="btn-menu" onclick="abrirModal('modal-grade')">📅 Programação</button>
       <button class="btn-menu" onclick="abrirModal('modal-locutores')">🎙 Nossa Equipe</button>
-      <button class="btn-menu" onclick="window.open('https://chat.whatsapp.com/FKr00cdRZME68ppTR3gilZ', '_blank')">💬
-        Grupo WhatsApp</button>
+      <button class="btn-menu" onclick="window.open('https://chat.whatsapp.com/FKr00cdRZME68ppTR3gilZ', '_blank')">💬 Grupo WhatsApp</button>
       <button class="btn-menu" onclick="compartilharSite()">📲 Compartilhar</button>
       <button class="btn-menu" id="btnInstall">⬇️ Instalar App</button>
     </div>
 
     <div class="apps-container">
-      <a href="https://play.google.com/store/apps/details?id=br.com.radios.radiosmobile.radiosnet" target="_blank"
-        rel="noopener noreferrer" class="app-card" title="Baixar no Google Play">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
-          alt="Disponível no Google Play">
+      <a href="https://play.google.com/store/apps/details?id=br.com.radios.radiosmobile.radiosnet" target="_blank" rel="noopener noreferrer" class="app-card" title="Baixar no Google Play">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Disponível no Google Play">
       </a>
-      <a href="https://apps.apple.com/br/app/radiosnet/id1089302078" target="_blank" rel="noopener noreferrer"
-        class="app-card" title="Baixar na App Store">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg"
-          alt="Baixar na App Store">
+      <a href="https://apps.apple.com/br/app/radiosnet/id1089302078" target="_blank" rel="noopener noreferrer" class="app-card" title="Baixar na App Store">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Baixar na App Store">
       </a>
     </div>
 
@@ -103,20 +93,52 @@
       <h3 class="partners-title">Nossos Parceiros</h3>
       <div class="partners-slider" id="partnersSlider">
         <div class="partners-track" id="partnersTrack">
-          <a href="https://www.instagram.com/ironcont/" target="_blank" class="partner-card"><img
-              src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/parceiro_ironcont.jpg?raw=true"
-              alt="Iron Cont"></a>
-          <a href="https://www.instagram.com/petmaisvidaslz/" target="_blank" class="partner-card"><img
-              src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/parceiro_petmaisvida.jpg?raw=true"
-              alt="PetMaisVida"></a>
-          <a href="https://www.instagram.com/tspowersuplementos/" target="_blank" class="partner-card"><img
-              src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/parceiro_tspowersuplementos.jpg?raw=true"
-              alt="TS Power Suplementos"></a>
+          <a href="https://www.instagram.com/ironcont/" target="_blank" class="partner-card"><img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/parceiro_ironcont.jpg?raw=true" alt="Iron Cont"></a>
+          <a href="https://www.instagram.com/petmaisvidaslz/" target="_blank" class="partner-card"><img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/parceiro_petmaisvida.jpg?raw=true" alt="PetMaisVida"></a>
+          <a href="https://www.instagram.com/tspowersuplementos/" target="_blank" class="partner-card"><img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/parceiro_tspowersuplementos.jpg?raw=true" alt="TS Power Suplementos"></a>
         </div>
       </div>
     </div>
 
-    <!-- MODAL HISTÓRICO DE MÚSICAS (NOVA FEATURE) -->
+    <!-- BOTÃO FLUTUANTE DE ENQUETE (Fica oculto por padrão) -->
+    <button id="btn-enquete-flutuante" class="btn-enquete-flutuante" onclick="abrirModal('modal-enquete')">
+      <i class="fas fa-poll blink" style="color: #fff;"></i> Enquete no Ar!
+    </button>
+
+    <!-- MODAL ENQUETE AO VIVO -->
+    <div id="modal-enquete" class="modal-overlay" onclick="fecharModalFora(event, 'modal-enquete')">
+      <div class="modal-content">
+        <span class="close-btn" onclick="fecharModal('modal-enquete')">&times;</span>
+        <h2 class="modal-title" style="border-bottom: 2px solid #333; padding-bottom: 10px; color: #f4741f;">
+          <i class="fas fa-broadcast-tower blink"></i> Batalha de Bandas
+        </h2>
+        
+        <p id="enquete-pergunta-texto" style="font-weight: 900; font-size: 1.2rem; text-align: center; margin-bottom: 20px;"></p>
+        
+        <!-- Tela de Votação (Para quem ainda não votou) -->
+        <div id="enquete-opcoes" class="enquete-opcoes">
+          <button class="btn-opcao-voto" id="btn-voto-op1" onclick="votarEnquete('op1')"></button>
+          <button class="btn-opcao-voto" id="btn-voto-op2" onclick="votarEnquete('op2')"></button>
+        </div>
+
+        <!-- Tela de Resultados (Para quem já votou) -->
+        <div id="enquete-resultados" class="enquete-resultados">
+          <div class="stat-row">
+              <div class="stat-labels"><span id="lbl-res-op1"></span> <span id="perc-res-op1"></span></div>
+              <div class="stat-bar-bg"><div class="stat-bar-fill" id="bar-res-op1"></div></div>
+          </div>
+          <div class="stat-row">
+              <div class="stat-labels"><span id="lbl-res-op2"></span> <span id="perc-res-op2"></span></div>
+              <div class="stat-bar-bg"><div class="stat-bar-fill" id="bar-res-op2"></div></div>
+          </div>
+          <p style="text-align: center; color: #aaa; font-size: 0.8rem; margin-top: 15px;">
+            Obrigado por votar! Resultados sendo atualizados em tempo real.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL HISTÓRICO DE MÚSICAS -->
     <div id="modal-historico" class="modal-overlay" onclick="fecharModalFora(event, 'modal-historico')">
       <div class="modal-content">
         <span class="close-btn" onclick="fecharModal('modal-historico')">&times;</span>
@@ -132,18 +154,11 @@
       <div class="modal-content" style="text-align: center;">
         <span class="close-btn" onclick="fecharModal('modal-ios')">&times;</span>
         <h2 class="modal-title">Instalar App 🍏</h2>
-        <p style="margin-bottom: 20px; color: #ccc; font-size: 0.9rem;">Para instalar a Radiação.Net no seu iPhone, siga
-          estes 3 passos no Safari:</p>
-        <ul
-          style="text-align: left; margin: 0 auto; max-width: 280px; color: #fff; line-height: 1.8; list-style: none; padding: 0;">
-          <li style="margin-bottom: 10px;"><span style="color: #f4741f; font-weight: bold; margin-right: 5px;">1.</span>
-            Toque no ícone de <b>Compartilhar</b> <i class="fas fa-share-square"
-              style="color: #007aff; font-size: 1.2rem; vertical-align: middle;"></i>.</li>
-          <li style="margin-bottom: 10px;"><span style="color: #f4741f; font-weight: bold; margin-right: 5px;">2.</span>
-            Role as opções para baixo e selecione <b>"Adicionar à Tela de Início"</b> <i class="fas fa-plus-square"
-              style="color: #fff; font-size: 1.1rem; vertical-align: middle;"></i>.</li>
-          <li><span style="color: #f4741f; font-weight: bold; margin-right: 5px;">3.</span> Toque em <b>Adicionar</b> no
-            canto superior direito.</li>
+        <p style="margin-bottom: 20px; color: #ccc; font-size: 0.9rem;">Para instalar a Radiação.Net no seu iPhone, siga estes 3 passos no Safari:</p>
+        <ul style="text-align: left; margin: 0 auto; max-width: 280px; color: #fff; line-height: 1.8; list-style: none; padding: 0;">
+          <li style="margin-bottom: 10px;"><span style="color: #f4741f; font-weight: bold; margin-right: 5px;">1.</span> Toque no ícone de <b>Compartilhar</b> <i class="fas fa-share-square" style="color: #007aff; font-size: 1.2rem; vertical-align: middle;"></i>.</li>
+          <li style="margin-bottom: 10px;"><span style="color: #f4741f; font-weight: bold; margin-right: 5px;">2.</span> Role as opções para baixo e selecione <b>"Adicionar à Tela de Início"</b> <i class="fas fa-plus-square" style="color: #fff; font-size: 1.1rem; vertical-align: middle;"></i>.</li>
+          <li><span style="color: #f4741f; font-weight: bold; margin-right: 5px;">3.</span> Toque em <b>Adicionar</b> no canto superior direito.</li>
         </ul>
         <button class="btn-enviar" onclick="fecharModal('modal-ios')" style="margin-top: 25px;">Entendi!</button>
       </div>
@@ -155,94 +170,31 @@
         <span class="close-btn" onclick="fecharModal('modal-pedido')">&times;</span>
         <h2 class="modal-title" style="border-bottom: 2px solid #333; padding-bottom: 10px;">Pedir Música</h2>
         <form id="form-pedido" onsubmit="enviarPedido(event)">
-          <div class="form-group"><label for="pedido-nome">Seu Nome</label><input type="text" id="pedido-nome" required
-              placeholder="Ex: João Silva"></div>
-          <div class="form-group"><label for="pedido-musica">Música e Artista</label><input type="text" id="pedido-musica"
-              required placeholder="Ex: Linkin Park - Numb"></div>
-          <div class="form-group"><label for="pedido-recado">Recado (Opcional)</label><textarea id="pedido-recado"
-              rows="3" placeholder="Quer mandar um abraço para alguém?"></textarea></div>
+          <div class="form-group"><label for="pedido-nome">Seu Nome</label><input type="text" id="pedido-nome" required placeholder="Ex: João Silva"></div>
+          <div class="form-group"><label for="pedido-musica">Música e Artista</label><input type="text" id="pedido-musica" required placeholder="Ex: Linkin Park - Numb"></div>
+          <div class="form-group"><label for="pedido-recado">Recado (Opcional)</label><textarea id="pedido-recado" rows="3" placeholder="Quer mandar um abraço para alguém?"></textarea></div>
           <button type="submit" class="btn-enviar" id="btn-enviar-pedido">Enviar Pedido 🚀</button>
         </form>
       </div>
     </div>
-
+    
     <!-- Modal: Grade de Programação -->
     <div id="modal-grade" class="modal-overlay" onclick="fecharModalFora(event, 'modal-grade')">
       <div class="modal-content">
         <span class="close-btn" onclick="fecharModal('modal-grade')">&times;</span>
         <h2 class="modal-title">Programação</h2>
         <div class="tabs-header">
-          <button class="tab-btn active" onclick="abrirAba(event, 'tab-seg')">SEG</button><button class="tab-btn"
-            onclick="abrirAba(event, 'tab-ter')">TER</button><button class="tab-btn"
-            onclick="abrirAba(event, 'tab-qua')">QUA</button><button class="tab-btn"
-            onclick="abrirAba(event, 'tab-qui')">QUI</button><button class="tab-btn"
-            onclick="abrirAba(event, 'tab-sex')">SEX</button><button class="tab-btn"
-            onclick="abrirAba(event, 'tab-sab')">SÁB</button><button class="tab-btn"
-            onclick="abrirAba(event, 'tab-dom')">DOM</button>
+          <button class="tab-btn active" onclick="abrirAba(event, 'tab-seg')">SEG</button><button class="tab-btn" onclick="abrirAba(event, 'tab-ter')">TER</button><button class="tab-btn" onclick="abrirAba(event, 'tab-qua')">QUA</button><button class="tab-btn" onclick="abrirAba(event, 'tab-qui')">QUI</button><button class="tab-btn" onclick="abrirAba(event, 'tab-sex')">SEX</button><button class="tab-btn" onclick="abrirAba(event, 'tab-sab')">SÁB</button><button class="tab-btn" onclick="abrirAba(event, 'tab-dom')">DOM</button>
         </div>
         <div class="tabs-content">
-          <div id="tab-seg" class="tab-pane active">
-            <ul class="info-list">
-              <li>
-                <div class="item-left"><img
-                    src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/SemClubismo300.jpg?raw=true"
-                    class="thumb-img thumb-logo"><span>Sem Clubismo</span></div><span class="destaque">21:00</span>
-              </li>
-            </ul>
-          </div>
-          <div id="tab-ter" class="tab-pane">
-            <ul class="info-list">
-              <li>
-                <div class="item-left"><img
-                    src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/RastaFlow.jpg?raw=true"
-                    class="thumb-img thumb-logo"><span>Rasta Flow</span></div><span class="destaque">21:00</span>
-              </li>
-            </ul>
-          </div>
-          <div id="tab-qua" class="tab-pane">
-            <ul class="info-list">
-              <li>
-                <div class="item-left"><img
-                    src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/LootCast.jpg?raw=true"
-                    class="thumb-img thumb-logo"><span>Loot Cast</span></div><span class="destaque">21:00</span>
-              </li>
-            </ul>
-          </div>
-          <div id="tab-qui" class="tab-pane">
-            <ul class="info-list">
-              <li>
-                <div class="item-left"><img
-                    src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/CasaDosClassicos.jpg?raw=true"
-                    class="thumb-img thumb-logo"><span>Casa dos Clássicos</span></div><span class="destaque">21:00</span>
-              </li>
-            </ul>
-          </div>
-          <div id="tab-sex" class="tab-pane">
-            <ul class="info-list">
-              <li>
-                <div class="item-left"><img
-                    src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/DanceTime.jpg?raw=true"
-                    class="thumb-img thumb-logo"><span>Dance Time</span></div><span class="destaque">21:00</span>
-              </li>
-            </ul>
-          </div>
-          <div id="tab-sab" class="tab-pane">
-            <ul class="info-list">
-              <li>
-                <div class="item-left"><img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png"
-                    class="thumb-img thumb-logo"><span>AutoDJ</span></div><span class="destaque">24h</span>
-              </li>
-            </ul>
-          </div>
-          <div id="tab-dom" class="tab-pane">
-            <ul class="info-list">
-              <li>
-                <div class="item-left"><img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png"
-                    class="thumb-img thumb-logo"><span>AutoDJ</span></div><span class="destaque">24h</span>
-              </li>
-            </ul>
-          </div>
-        </div>
+          <div id="tab-seg" class="tab-pane active"><ul class="info-list"><li><div class="item-left"><img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/SemClubismo300.jpg?raw=true" class="thumb-img thumb-logo"><span>Sem Clubismo</span></div><span class="destaque">21:00</span></li></ul></div>
+          <div id="tab-ter" class="tab-pane"><ul class="info-list"><li><div class="item-left"><img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/RastaFlow.jpg?raw=true" class="thumb-img thumb-logo"><span>Rasta Flow</span></div><span class="destaque">21:00</span></li></ul></div>
+          <div id="tab-qua" class="tab-pane"><ul class="info-list"><li><div class="item-left"><img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/LootCast.jpg?raw=true" class="thumb-img thumb-logo"><span>Loot Cast</span></div><span class="destaque">21:00</span></li></ul></div>
+          <div id="tab-qui" class="tab-pane"><ul class="info-list"><li><div class="item-left"><img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/CasaDosClassicos.jpg?raw=true" class="thumb-img thumb-logo"><span>Casa dos Clássicos</span></div><span class="destaque">21:00</span></li></ul></div>
+          <div id="tab-sex" class="tab-pane"><ul class="info-list"><li><div class="item-left"><img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/DanceTime.jpg?raw=true" class="thumb-img thumb-logo"><span>Dance Time</span></div><span class="destaque">21:00</span></li></ul></div>
+          <div id="tab-sab" class="tab-pane"><ul class="info-list"><li><div class="item-left"><img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" class="thumb-img thumb-logo"><span>AutoDJ</span></div><span class="destaque">24h</span></li></ul></div>
+          <div id="tab-dom" class="tab-pane"><ul class="info-list"><li><div class="item-left"><img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" class="thumb-img thumb-logo"><span>AutoDJ</span></div><span class="destaque">24h</span></li></ul></div>
+        </div> 
       </div>
     </div>
 
@@ -252,77 +204,12 @@
         <span class="close-btn" onclick="fecharModal('modal-locutores')">&times;</span>
         <h2 class="modal-title" style="border-bottom: 2px solid #333; padding-bottom: 10px;">Nossa Equipe</h2>
         <ul class="info-list" id="lista-equipe">
-          <li>
-            <div class="item-left"><img
-                src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/Alessandro.jpg?raw=true"
-                class="thumb-img thumb-avatar">
-              <div class="member-info"><span class="member-name">Alessandro Neves</span>
-                <div class="member-details-row"><span class="member-role">Presidente, Locutor</span>
-                  <div class="member-socials"><a href="https://www.instagram.com/alessandro_neves09/" target="_blank"><i
-                        class="fab fa-instagram"></i></a></div>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li>
-            <div class="item-left"><img
-                src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/FredMacedo.jpg?raw=true"
-                class="thumb-img thumb-avatar">
-              <div class="member-info"><span class="member-name">Fred Macêdo</span>
-                <div class="member-details-row"><span class="member-role">Locutor</span></div>
-              </div>
-            </div>
-          </li>
-          <li>
-            <div class="item-left"><img
-                src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/RafaBarros.jpg?raw=true"
-                class="thumb-img thumb-avatar">
-              <div class="member-info"><span class="member-name">Rafa Barros</span>
-                <div class="member-details-row"><span class="member-role">Redator, Locutor</span>
-                  <div class="member-socials"><a href="https://www.instagram.com/rbarrosesporte/" target="_blank"><i
-                        class="fab fa-instagram"></i></a></div>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li>
-            <div class="item-left"><img
-                src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/JosielPereira.jpg?raw=true"
-                class="thumb-img thumb-avatar">
-              <div class="member-info"><span class="member-name">Josiel Pereira</span>
-                <div class="member-details-row"><span class="member-role">Comentarista</span>
-                  <div class="member-socials"><a href="https://www.instagram.com/josiel3500" target="_blank"><i
-                        class="fab fa-instagram"></i></a><a href="https://www.youtube.com/@josielpereira6735"
-                      target="_blank"><i class="fab fa-youtube"></i></a></div>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li>
-            <div class="item-left"><img
-                src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/BigT.jpg?raw=true"
-                class="thumb-img thumb-avatar">
-              <div class="member-info"><span class="member-name">BigT</span>
-                <div class="member-details-row"><span class="member-role">Locutor</span>
-                  <div class="member-socials"><a href="https://www.instagram.com/pedroaffonsot/" target="_blank"><i
-                        class="fab fa-instagram"></i></a></div>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li>
-            <div class="item-left"><img
-                src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/AlexCoelho.jpg?raw=true"
-                class="thumb-img thumb-avatar">
-              <div class="member-info"><span class="member-name">Alex Coelho</span>
-                <div class="member-details-row"><span class="member-role">Locutor</span>
-                  <div class="member-socials"><a href="https://www.instagram.com/josiel3500" target="_blank"><i
-                        class="fab fa-instagram"></i></a><a href="https://www.youtube.com/@josielpereira6735"
-                      target="_blank"><i class="fab fa-youtube"></i></a></div>
-                </div>
-              </div>
-            </div>
-          </li>
+          <li><div class="item-left"><img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/Alessandro.jpg?raw=true" class="thumb-img thumb-avatar"><div class="member-info"><span class="member-name">Alessandro Neves</span><div class="member-details-row"><span class="member-role">Presidente, Locutor</span><div class="member-socials"><a href="https://www.instagram.com/alessandro_neves09/" target="_blank"><i class="fab fa-instagram"></i></a></div></div></div></div></li>
+          <li><div class="item-left"><img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/FredMacedo.jpg?raw=true" class="thumb-img thumb-avatar"><div class="member-info"><span class="member-name">Fred Macêdo</span><div class="member-details-row"><span class="member-role">Locutor</span></div></div></div></li>
+          <li><div class="item-left"><img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/RafaBarros.jpg?raw=true" class="thumb-img thumb-avatar"><div class="member-info"><span class="member-name">Rafa Barros</span><div class="member-details-row"><span class="member-role">Redator, Locutor</span><div class="member-socials"><a href="https://www.instagram.com/rbarrosesporte/" target="_blank"><i class="fab fa-instagram"></i></a></div></div></div></div></li>
+          <li><div class="item-left"><img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/JosielPereira.jpg?raw=true" class="thumb-img thumb-avatar"><div class="member-info"><span class="member-name">Josiel Pereira</span><div class="member-details-row"><span class="member-role">Comentarista</span><div class="member-socials"><a href="https://www.instagram.com/josiel3500" target="_blank"><i class="fab fa-instagram"></i></a><a href="https://www.youtube.com/@josielpereira6735" target="_blank"><i class="fab fa-youtube"></i></a></div></div></div></div></li>
+          <li><div class="item-left"><img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/BigT.jpg?raw=true" class="thumb-img thumb-avatar"><div class="member-info"><span class="member-name">BigT</span><div class="member-details-row"><span class="member-role">Locutor</span><div class="member-socials"><a href="https://www.instagram.com/pedroaffonsot/" target="_blank"><i class="fab fa-instagram"></i></a></div></div></div></div></li>
+          <li><div class="item-left"><img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/AlexCoelho.jpg?raw=true" class="thumb-img thumb-avatar"><div class="member-info"><span class="member-name">Alex Coelho</span><div class="member-details-row"><span class="member-role">Locutor</span><div class="member-socials"><a href="https://www.instagram.com/josiel3500" target="_blank"><i class="fab fa-instagram"></i></a><a href="https://www.youtube.com/@josielpereira6735" target="_blank"><i class="fab fa-youtube"></i></a></div></div></div></div></li>
         </ul>
       </div>
     </div>
@@ -332,19 +219,17 @@
       <div class="social-icons">
         <a href="https://instagram.com/radiacaonet" target="_blank"><i class="fab fa-instagram"></i></a>
         <a href="https://facebook.com/radiacaonet" target="_blank"><i class="fab fa-facebook-f"></i></a>
-        <a href="https://www.radios.com.br/aovivo/radio-radiacaonet/135970" target="_blank"><img
-            src="https://static.radios.com.br/img/logo-radiosnet-512-transparent.png" class="radiosnet-icon"></a>
+        <a href="https://www.radios.com.br/aovivo/radio-radiacaonet/135970" target="_blank"><img src="https://static.radios.com.br/img/logo-radiosnet-512-transparent.png" class="radiosnet-icon"></a>
       </div>
       <div>&copy; 2026 Radiação.Net - A web rádio de todas as tribos!</div>
     </footer>
 
-    <!-- SCRIPT DO SEU SITE -->
     <script src="./script.js"></script>
 
-    <!-- SCRIPT DE REAÇÕES EM TEMPO REAL (FIREBASE) -->
+    <!-- FIREBASE: REAÇÕES E ENQUETES -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-      import { getDatabase, ref, push, onChildAdded, query, limitToLast } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+      import { getDatabase, ref, push, onChildAdded, query, limitToLast, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
       const firebaseConfig = {
         apiKey: "AIzaSyDLCYfYApZZt4ycMmr-f4Xq002ZBalYmdU",
@@ -358,42 +243,108 @@
 
       const app = initializeApp(firebaseConfig);
       const db = getDatabase(app);
+      
+      // --- 1. SISTEMA DE REAÇÕES (CHUVA DE CORAÇÕES) ---
       const reacoesRef = ref(db, 'reacoes');
-
       let ultimoLike = 0;
-
-      // Função acionada pelo botão de coração
-      window.enviarReacao = function () {
-        const agora = Date.now();
-        if (agora - ultimoLike < 1000) return; // Limite de 1 clique por segundo para evitar abuso
-        ultimoLike = agora;
-
-        criarCoracaoLocal(); // Feedback imediato para quem clicou
-        push(reacoesRef, { timestamp: agora }); // Manda pro Firebase avisar os outros ouvintes
+      
+      window.enviarReacao = function() {
+         const agora = Date.now();
+         if(agora - ultimoLike < 1000) return; 
+         ultimoLike = agora;
+         criarCoracaoLocal();
+         push(reacoesRef, { timestamp: agora });
       };
 
-      // Desenha a animação do coração subindo
       function criarCoracaoLocal() {
-        const heart = document.createElement('div');
-        heart.innerHTML = '<i class="fas fa-heart"></i>';
-        heart.className = 'heart-fly';
-        heart.style.left = (Math.random() * 60) + '%';
-        document.getElementById('hearts-container').appendChild(heart);
-        setTimeout(() => heart.remove(), 2500);
+         const heart = document.createElement('div');
+         heart.innerHTML = '<i class="fas fa-heart"></i>';
+         heart.className = 'heart-fly';
+         heart.style.left = (Math.random() * 60) + '%';
+         document.getElementById('hearts-container').appendChild(heart);
+         setTimeout(() => heart.remove(), 2500);
       }
 
-      // Escuta em tempo real os likes que as outras pessoas deram
       let primeiraCarga = true;
-      const reacoesQuery = query(reacoesRef, limitToLast(1));
-
-      onChildAdded(reacoesQuery, (snapshot) => {
-        if (primeiraCarga) { primeiraCarga = false; return; }
-        const data = snapshot.val();
-        // Se o clique foi há menos de 5 segundos, cria o coração na tela de todos!
-        if (Date.now() - data.timestamp < 5000) {
-          criarCoracaoLocal();
-        }
+      onChildAdded(query(reacoesRef, limitToLast(1)), (snapshot) => {
+         if (primeiraCarga) { primeiraCarga = false; return; }
+         if(Date.now() - snapshot.val().timestamp < 5000) { criarCoracaoLocal(); }
       });
+
+      // --- 2. SISTEMA DE ENQUETES (OUVINTE) ---
+      const enqueteRef = ref(db, 'enquete_atual');
+      const btnFlutuante = document.getElementById('btn-enquete-flutuante');
+      const divOpcoes = document.getElementById('enquete-opcoes');
+      const divResultados = document.getElementById('enquete-resultados');
+      let enqueteAtualData = null;
+
+      // Escuta mudanças na enquete do painel em tempo real
+      onValue(enqueteRef, (snapshot) => {
+          const data = snapshot.val();
+          enqueteAtualData = data;
+
+          if (data && data.ativa) {
+              // ENQUETE NO AR
+              btnFlutuante.style.display = 'flex';
+              document.getElementById('enquete-pergunta-texto').innerText = data.pergunta;
+              
+              // Verifica se o ouvinte já votou (gravado no navegador)
+              const chaveVoto = 'voto_' + encodeURIComponent(data.pergunta);
+              const votoSalvo = localStorage.getItem(chaveVoto);
+              
+              if (votoSalvo) {
+                  // JÁ VOTOU: Esconde os botões e mostra as barras
+                  divOpcoes.style.display = 'none';
+                  divResultados.style.display = 'flex';
+                  
+                  const v1 = data.opcoes.op1.votos || 0;
+                  const v2 = data.opcoes.op2.votos || 0;
+                  const total = v1 + v2;
+                  const p1 = total === 0 ? 0 : Math.round((v1/total)*100);
+                  const p2 = total === 0 ? 0 : Math.round((v2/total)*100);
+
+                  document.getElementById('lbl-res-op1').innerText = data.opcoes.op1.texto;
+                  document.getElementById('perc-res-op1').innerText = p1 + '% (' + v1 + ' votos)';
+                  document.getElementById('bar-res-op1').style.width = p1 + '%';
+
+                  document.getElementById('lbl-res-op2').innerText = data.opcoes.op2.texto;
+                  document.getElementById('perc-res-op2').innerText = p2 + '% (' + v2 + ' votos)';
+                  document.getElementById('bar-res-op2').style.width = p2 + '%';
+
+              } else {
+                  // NÃO VOTOU: Mostra as opções
+                  divOpcoes.style.display = 'flex';
+                  divResultados.style.display = 'none';
+                  document.getElementById('btn-voto-op1').innerText = data.opcoes.op1.texto;
+                  document.getElementById('btn-voto-op2').innerText = data.opcoes.op2.texto;
+              }
+          } else {
+              // ENQUETE FECHADA
+              btnFlutuante.style.display = 'none';
+              const modalEnq = document.getElementById('modal-enquete');
+              if (modalEnq.classList.contains('active')) {
+                  fecharModal('modal-enquete');
+              }
+          }
+      });
+
+      // Função acionada quando o ouvinte clica num botão de opção
+      window.votarEnquete = function(opcao) {
+          if (!enqueteAtualData || !enqueteAtualData.ativa) return;
+          
+          // Marca no navegador que o ouvinte votou
+          const chaveVoto = 'voto_' + encodeURIComponent(enqueteAtualData.pergunta);
+          localStorage.setItem(chaveVoto, 'true');
+
+          // Incrementa o voto no Firebase com segurança (Transação)
+          const votoRef = ref(db, `enquete_atual/opcoes/${opcao}/votos`);
+          runTransaction(votoRef, (votosAtuais) => {
+              return (votosAtuais || 0) + 1;
+          });
+          
+          // Não precisa atualizar a tela manualmente, o "onValue" lá em cima
+          // vai perceber a mudança do Firebase e desenhar as barras sozinho!
+      };
     </script>
   </body>
 </html>
