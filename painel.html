@@ -31,20 +31,24 @@
 
       /* --- ESTRUTURA DASHBOARD PANORÂMICO --- */
       #tela-dashboard { display: none; width: 100%; max-width: 1400px; margin: 0 auto; flex-direction: column; gap: 20px; }
-      
-      /* ALINHAMENTO DO TÍTULO CORRIGIDO PARA A ESQUERDA */
       #tela-dashboard .title-wrapper { max-width: 100% !important; justify-content: flex-start; margin-bottom: 5px; }
       
       .dashboard-grid { display: grid; grid-template-columns: 360px 1fr; gap: 25px; align-items: start; width: 100%; }
       .dash-sidebar { display: flex; flex-direction: column; gap: 20px; }
-      
-      /* ESTRUTURA DIREITA (TÍTULO FORA DA CAIXA) */
       .dash-right-col { display: flex; flex-direction: column; height: 100%; }
       .dash-main-box { background: rgba(20, 20, 20, 0.4); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 20px; box-shadow: inset 0 0 20px rgba(0,0,0,0.3); min-height: 500px; flex-grow: 1; }
 
-      @media (max-width: 900px) {
+      /* --- REGRAS DE TELA MÉDIA (RadioBOSS / Tablets) --- */
+      @media (max-width: 1100px) {
         .dashboard-grid { grid-template-columns: 1fr; }
+        .dash-sidebar { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .dash-sidebar > div { margin-bottom: 0 !important; height: 100%; }
         .dash-main-box { padding: 10px; background: none; border: none; box-shadow: none; min-height: auto; }
+      }
+
+      /* --- REGRAS DE CELULAR (Telas pequenas) --- */
+      @media (max-width: 700px) {
+        .dash-sidebar { display: flex; flex-direction: column; }
         #tela-dashboard .title-wrapper { flex-wrap: wrap !important; justify-content: center !important; }
         #tela-dashboard .title-wrapper > div { width: 100%; justify-content: center !important; margin-top: 10px; }
       }
@@ -67,7 +71,7 @@
       .btn-alertas.inativo { background: rgba(255, 76, 76, 0.2); border-color: rgba(255, 76, 76, 0.5); color: #ff4c4c; animation: pulse-red 2s infinite; }
       @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(255, 76, 76, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(255, 76, 76, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 76, 76, 0); } }
 
-      .pedidos-wrapper { display: flex; flex-direction: column; gap: 15px; margin-top: 0; }
+      .pedidos-wrapper { display: flex; flex-direction: column; gap: 15px; margin-top: 0; height: 100%;}
       .section-title { font-size: 1.1rem; font-weight: 900; color: #fff; text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
       .section-title::after { content: ''; flex-grow: 1; height: 1px; background: rgba(255,255,255,0.1); margin-left: 10px; }
 
@@ -86,7 +90,7 @@
       @keyframes blinker { 50% { opacity: 0; } }
 
       .lista-pedidos { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important; gap: 15px; align-items: start; }
-      .pedido-card { background: rgba(20, 20, 20, 0.7); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-left: 4px solid #f4741f; border-radius: 12px; padding: 12px 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 6px; transition: opacity 0.3s ease; width: 100%; }
+      .pedido-card { background: rgba(20, 20, 20, 0.7); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-left: 4px solid #f4741f; border-radius: 12px; padding: 12px 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 6px; transition: opacity 0.3s ease; width: 100%; height: 100%; }
       .pedido-hora { font-size: 0.7rem; color: #888; text-align: right; margin-top: -2px; font-weight: 700;}
       .pedido-nome { font-weight: 700; color: #f4741f; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;}
       .pedido-musica { font-size: 1rem; font-weight: 900; color: #fff; line-height: 1.2;}
@@ -118,7 +122,6 @@
     </div>
 
     <div id="tela-dashboard">
-      <!-- CABEÇALHO COM TÍTULO NA ESQUERDA -->
       <div class="title-wrapper">
         <img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" class="logo-img" alt="Logo">
         <h1 class="floating-title">Painel do Locutor</h1>
@@ -130,13 +133,12 @@
         </div>
       </div>
 
-      <!-- GRID DO DASHBOARD PANORÂMICO -->
       <div class="dashboard-grid">
         
-        <!-- COLUNA ESQUERDA: CONTROLES E STATUS -->
+        <!-- COLUNA ESQUERDA: STATUS E ENQUETE (Lado a lado no RadioBOSS) -->
         <div class="dash-sidebar">
           
-          <div class="pedidos-wrapper" style="margin-bottom: 0;">
+          <div class="pedidos-wrapper">
             <h2 class="section-title">Status da Rádio <i class="fas fa-broadcast-tower" style="color: #f4741f;"></i></h2>
             <div class="pedido-card" style="border-left-color: #2196F3;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px;">
@@ -164,7 +166,7 @@
 
           <div class="pedidos-wrapper">
             <h2 class="section-title">Enquete ao Vivo <i class="fas fa-poll" style="color: #f4741f;"></i></h2>
-            <div id="enquete-container">
+            <div id="enquete-container" style="height: 100%;">
               <div class="pedido-card">
                 <div class="sem-pedidos"><i class="fas fa-spinner fa-spin"></i> Conectando à Enquete...</div>
               </div>
@@ -172,13 +174,10 @@
           </div>
         </div>
 
-        <!-- COLUNA DIREITA: TÍTULO NIVELADO E CAIXA DE TRABALHO -->
+        <!-- COLUNA DIREITA: PEDIDOS -->
         <div class="dash-right-col">
           <div class="pedidos-wrapper" style="margin-bottom: 0; display: flex; flex-direction: column; height: 100%;">
-            <!-- Título nivelado com a coluna esquerda -->
             <h2 class="section-title">Fila de Pedidos <i class="fas fa-inbox" style="color: #f4741f;"></i></h2>
-            
-            <!-- Caixa escura englobando apenas o conteúdo -->
             <div class="dash-main-box">
               <div class="lista-pedidos" id="container-pedidos">
                 <div class="sem-pedidos"><i class="fas fa-spinner fa-spin"></i> A carregar pedidos...</div>
@@ -337,7 +336,7 @@
                   const perc2 = totalVotos === 0 ? 0 : Math.round((votos2 / totalVotos) * 100);
 
                   containerEnquete.innerHTML = `
-                      <div class="pedido-card" style="border-left-color: #4caf50;">
+                      <div class="pedido-card" style="border-left-color: #4caf50; height: 100%;">
                           <div style="font-weight: 900; color: #4caf50; font-size: 0.8rem; margin-bottom: 5px;">
                               <i class="fas fa-broadcast-tower blink"></i> ENQUETE NO AR
                           </div>
@@ -356,7 +355,7 @@
                   `;
               } else {
                   containerEnquete.innerHTML = `
-                      <div class="pedido-card">
+                      <div class="pedido-card" style="height: 100%;">
                           <p style="margin-bottom: 12px; font-size: 0.85rem; color: #aaa;">Preencha os campos para iniciar uma batalha de bandas com os ouvintes:</p>
                           <div class="enquete-form">
                               <input type="text" id="enq-pergunta" class="enquete-input" placeholder="Pergunta (Ex: Qual clássico fecha?)">
