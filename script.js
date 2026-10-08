@@ -208,9 +208,13 @@ async function atualizarNowPlaying() {
 
 const btnInstall = document.getElementById('btnInstall');
 let eventoInstalacao;
-const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+const userAgent = navigator.userAgent || navigator.vendor || window.opera || '';
+const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
 
-if (btnInstall) {
+// O botão de instalação é propositalmente exclusivo para dispositivos móveis.
+// Em desktop, mesmo que o navegador ofereça instalação de PWA, o botão não aparece.
+if (btnInstall && isMobileDevice) {
   if (isIOS) {
     if (!window.navigator.standalone) {
       btnInstall.classList.add('visible-install');
@@ -223,21 +227,22 @@ if (btnInstall) {
       btnInstall.classList.add('visible-install');
     });
 
+    window.addEventListener('appinstalled', () => {
+      eventoInstalacao = null;
+      btnInstall.classList.remove('visible-install');
+    });
+
     btnInstall.addEventListener('click', async () => {
       if (!eventoInstalacao) return;
       eventoInstalacao.prompt();
       const { outcome } = await eventoInstalacao.userChoice;
-      if (outcome === 'accepted') btnInstall.classList.remove('visible-install');
-      eventoInstalacao = null;
-    });
-
-    window.addEventListener('appinstalled', () => {
-      btnInstall.classList.remove('visible-install');
+      if (outcome === 'accepted') {
+        btnInstall.classList.remove('visible-install');
+      }
       eventoInstalacao = null;
     });
   }
 }
-
 async function enviarPedido(event) {
   event.preventDefault();
   const ultimoPedidoTimestamp = localStorage.getItem('radiacao_ultimo_pedido');

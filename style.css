@@ -235,4 +235,3 @@ body { padding-top: max(30px, env(safe-area-inset-top)); padding-bottom: max(90p
   body { overscroll-behavior-y: contain; }
   .footer { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
 }
-#btnInstall.visible-install { display: block; }
