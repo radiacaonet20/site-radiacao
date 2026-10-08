@@ -8,104 +8,171 @@
     <link rel="apple-touch-icon" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
     
     <link rel="manifest" href="./manifest-painel.json">
-    <meta name="theme-color" content="#f4741f">
+    <meta name="theme-color" content="#09090b">
 
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Fontes e Ícones -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS global -->
     <link rel="stylesheet" href="./style.css?v=2.2">
     
     <style>
-      body { justify-content: flex-start !important; padding-top: 30px !important; }
+      /* --- TEMA DISCLOUD COM FUNDO DA RÁDIO --- */
+      :root {
+        --bg-body: #09090b;
+        --border-color: rgba(255, 255, 255, 0.1);
+        --text-main: #fafafa;
+        --text-muted: #a1a1aa;
+        --accent-orange: #f4741f;
+        --accent-green: #22c55e;
+        --accent-blue: #3b82f6;
+        --bg-hover: rgba(255, 255, 255, 0.05);
+      }
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
       
-      #tela-login { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 80vh; z-index: 1000; }
-      .login-box { background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-top: 4px solid #f4741f; padding: 40px 30px; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); width: 100%; max-width: 400px; text-align: center; }
-      .login-box img { width: 80px; margin-bottom: 20px; }
-      .login-box h2 { font-weight: 900; margin-bottom: 25px; color: #fff; }
+      body { 
+        font-family: 'Inter', sans-serif; 
+        color: var(--text-main); 
+        min-height: 100vh; 
+        padding: 30px 20px 20px 20px; 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center;
+        justify-content: flex-start !important; /* <-- AQUI ESTÁ A CORREÇÃO QUE COLA NO TOPO */
+        
+        /* Imagem de fundo escurecida */
+        background-color: #000;
+        background-image: linear-gradient(rgba(9, 9, 11, 0.85), rgba(9, 9, 11, 0.85)), url('https://painel.radiacao.net.br/static/uploads/radiacaonet/background.1779332336.webp') !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-attachment: fixed !important;
+      }
+
+      input, button, textarea { font-family: 'Inter', sans-serif; }
+
+      /* --- LOGIN --- */
+      #tela-login { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 85vh; z-index: 1000; }
+      .login-box { 
+        background: rgba(24, 24, 27, 0.65); 
+        backdrop-filter: blur(15px); 
+        -webkit-backdrop-filter: blur(15px); 
+        border: 1px solid var(--border-color); 
+        padding: 40px 30px; 
+        border-radius: 12px; 
+        width: 100%; 
+        max-width: 380px; 
+        text-align: center; 
+        box-shadow: 0 15px 35px rgba(0,0,0,0.6); 
+      }
+      .login-box img { width: 60px; margin-bottom: 15px; border-radius: 10px; }
+      .login-box h2 { font-weight: 600; margin-bottom: 25px; color: var(--text-main); font-size: 1.3rem; }
       .input-group { margin-bottom: 15px; text-align: left; }
-      .input-group label { display: block; font-size: 0.8rem; color: #aaa; margin-bottom: 5px; font-weight: 700; }
-      .input-group input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.5); color: #fff; font-family: inherit; font-size: 1rem; }
-      .input-group input:focus { outline: none; border-color: #f4741f; }
-      .btn-login { width: 100%; padding: 14px; border: none; border-radius: 8px; background: #f4741f; color: #fff; font-weight: 900; font-size: 1rem; cursor: pointer; transition: 0.3s; margin-top: 10px; }
-      .btn-login:hover { background: #ff8c42; }
-      #msg-erro { color: #ff4c4c; font-size: 0.85rem; margin-top: 15px; display: none; font-weight: bold; }
+      .input-group label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px; font-weight: 500; }
+      .input-group input { width: 100%; padding: 10px 12px; border-radius: 6px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.5); color: #fff; font-size: 0.95rem; outline: none; transition: border 0.2s; }
+      .input-group input:focus { border-color: var(--accent-orange); }
+      .btn-login { width: 100%; padding: 12px; border: none; border-radius: 6px; background: var(--accent-orange); color: #fff; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: 0.2s; margin-top: 10px; }
+      .btn-login:hover { filter: brightness(1.1); }
+      #msg-erro { color: #ef4444; font-size: 0.85rem; margin-top: 15px; display: none; font-weight: 500; }
 
-      /* --- ESTRUTURA DASHBOARD PANORÂMICO --- */
+      /* --- DASHBOARD WRAPPER --- */
       #tela-dashboard { display: none; width: 100%; max-width: 1400px; margin: 0 auto; flex-direction: column; gap: 20px; }
-      #tela-dashboard .title-wrapper { max-width: 100% !important; justify-content: flex-start; margin-bottom: 5px; }
-      
-      .dashboard-grid { display: grid; grid-template-columns: 360px 1fr; gap: 25px; align-items: start; width: 100%; }
-      .dash-sidebar { display: flex; flex-direction: column; gap: 20px; }
-      .dash-right-col { display: flex; flex-direction: column; height: 100%; }
-      .dash-main-box { background: rgba(20, 20, 20, 0.4); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 20px; box-shadow: inset 0 0 20px rgba(0,0,0,0.3); min-height: 500px; flex-grow: 1; }
 
-      /* --- REGRAS DE TELA MÉDIA (RadioBOSS / Tablets) --- */
+      /* --- HEADER --- */
+      .top-header { display: flex; justify-content: space-between; align-items: center; width: 100%; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); margin-bottom: 10px; flex-wrap: wrap; gap: 15px; }
+      .brand-area { display: flex; align-items: center; gap: 15px; }
+      .brand-area img { width: 40px; border-radius: 8px; }
+      .brand-titles { display: flex; flex-direction: column; }
+      .brand-titles h1 { font-size: 1.2rem; font-weight: 700; color: var(--text-main); line-height: 1.2; display: flex; align-items: center; gap: 10px; margin: 0; }
+      .brand-sub { font-size: 0.75rem; color: var(--text-muted); font-family: monospace; margin-top: 2px; }
+
+      .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; border: 1px solid var(--border-color); background: rgba(0,0,0,0.3); }
+      .dot { width: 8px; height: 8px; border-radius: 50%; animation: blink 1s infinite alternate; }
+      .dot.green { background-color: var(--accent-green); box-shadow: 0 0 8px rgba(34, 197, 94, 0.4); }
+      .dot.red { background-color: #ef4444; box-shadow: 0 0 8px rgba(239, 68, 68, 0.4); }
+      @keyframes blink { from { opacity: 0.6; } to { opacity: 1; } }
+      
+      .actions-area { display: flex; align-items: center; gap: 8px; }
+      .btn-flat { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-main); padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+      .btn-flat:hover { background: var(--bg-hover); }
+      .btn-flat.active { border-color: var(--accent-green); color: var(--accent-green); background: rgba(34, 197, 94, 0.1); }
+
+      /* --- GRID LAYOUT --- */
+      .dashboard-grid { display: grid; grid-template-columns: 320px 1fr; gap: 20px; align-items: start; width: 100%; }
+      .left-col { display: flex; flex-direction: column; gap: 20px; }
+      .right-col { display: flex; flex-direction: column; height: 100%; }
+      
       @media (max-width: 1100px) {
         .dashboard-grid { grid-template-columns: 1fr; }
-        .dash-sidebar { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .dash-sidebar > div { margin-bottom: 0 !important; height: 100%; }
-        .dash-main-box { padding: 10px; background: none; border: none; box-shadow: none; min-height: auto; }
+        .left-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
       }
+      @media (max-width: 650px) { .left-col { display: flex; flex-direction: column; } }
 
-      /* --- REGRAS DE CELULAR (Telas pequenas) --- */
-      @media (max-width: 700px) {
-        .dash-sidebar { display: flex; flex-direction: column; }
-        #tela-dashboard .title-wrapper { flex-wrap: wrap !important; justify-content: center !important; }
-        #tela-dashboard .title-wrapper > div { width: 100%; justify-content: center !important; margin-top: 10px; }
+      /* --- CARDS (VIDRO FUMÊ) --- */
+      .card { 
+        background: rgba(24, 24, 27, 0.65); 
+        backdrop-filter: blur(15px); 
+        -webkit-backdrop-filter: blur(15px); 
+        border: 1px solid var(--border-color); 
+        border-radius: 8px; 
+        padding: 20px; 
+        display: flex; 
+        flex-direction: column; 
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
       }
+      .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+      .card-title { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
+      .card-title i { font-size: 0.9rem; }
 
-      .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; display: flex; align-items: center; gap: 6px; flex-shrink: 0; transition: all 0.3s ease; }
-      .status-online { background-color: rgba(46, 125, 50, 0.2); border: 1px solid rgba(76, 175, 80, 0.5); color: #4caf50; }
-      .status-autodj { background-color: rgba(255, 76, 76, 0.2); border: 1px solid rgba(255, 76, 76, 0.5); color: #ff4c4c; }
-      .pulse-dot { width: 6px; height: 6px; border-radius: 50%; animation: blink 1s infinite alternate; }
-      .dot-green { background: #4caf50; box-shadow: 0 0 6px #4caf50; }
-      .dot-red { background: #ff4c4c; box-shadow: 0 0 6px #ff4c4c; }
+      .status-info { display: flex; flex-direction: column; gap: 15px; }
+      .info-block { display: flex; align-items: flex-start; gap: 12px; }
+      .info-icon { background: rgba(0,0,0,0.3); padding: 8px; border-radius: 6px; color: var(--text-muted); display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-color); }
+      .info-texts { display: flex; flex-direction: column; min-width: 0; }
+      .info-value { font-size: 0.95rem; font-weight: 700; color: var(--text-main); line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .info-label { font-size: 0.75rem; color: var(--accent-orange); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-      .btn-topo { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 6px; margin-left: 5px; }
-      .btn-topo:hover { background: rgba(255, 255, 255, 0.2); }
-      #btn-logout:hover { background: rgba(255, 76, 76, 0.2); border-color: rgba(255, 76, 76, 0.5); color: #ff4c4c; }
-      .btn-instalar-app { display: none; background: rgba(33, 150, 243, 0.2); border-color: rgba(33, 150, 243, 0.5); color: #2196F3; }
-      .btn-instalar-app:hover { background: #2196F3; color: #fff; border-color: #2196F3; }
+      .enquete-form { display: flex; flex-direction: column; gap: 8px; }
+      .input-flat { width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.4); color: var(--text-main); font-size: 0.85rem; outline: none; }
+      .input-flat:focus { border-color: var(--accent-orange); }
+      .btn-primary { background: var(--accent-orange); color: #fff; border: none; padding: 8px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer; margin-top: 5px; }
+      .btn-danger { background: rgba(0,0,0,0.3); border: 1px solid #ef4444; color: #ef4444; padding: 8px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer; margin-top: 15px; width: 100%; }
+      .btn-danger:hover { background: rgba(239, 68, 68, 0.1); }
+      
+      .stat-row { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
+      .stat-labels { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 600; color: var(--text-main); }
+      .stat-bar-bg { width: 100%; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); height: 8px; border-radius: 4px; overflow: hidden; }
+      .stat-bar-fill { height: 100%; background: var(--accent-orange); width: 0%; transition: width 0.8s ease; }
 
-      .btn-alertas { padding: 5px 10px; border-radius: 50%; }
-      .btn-alertas.ativo { background: rgba(76, 175, 80, 0.2); border-color: rgba(76, 175, 80, 0.5); color: #4caf50; }
-      .btn-alertas.inativo { background: rgba(255, 76, 76, 0.2); border-color: rgba(255, 76, 76, 0.5); color: #ff4c4c; animation: pulse-red 2s infinite; }
-      @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(255, 76, 76, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(255, 76, 76, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 76, 76, 0); } }
+      .pedidos-list { display: flex; flex-direction: column; }
+      .pedido-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-color); gap: 15px; animation: fadeIn 0.3s ease; }
+      .pedido-row:last-child { border-bottom: none; padding-bottom: 0; }
+      
+      .pedido-left { display: flex; align-items: flex-start; gap: 12px; flex-grow: 1; min-width: 0; }
+      .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-blue); margin-top: 5px; flex-shrink: 0; box-shadow: 0 0 5px var(--accent-blue); }
+      
+      .pedido-info { display: flex; flex-direction: column; min-width: 0; }
+      .pedido-musica { font-size: 0.95rem; font-weight: 600; color: var(--text-main); line-height: 1.2; }
+      .pedido-autor { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+      .pedido-autor span { color: var(--accent-orange); font-weight: 500; }
+      .pedido-recado { font-size: 0.75rem; color: #ddd; font-style: italic; margin-top: 4px; background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 4px; border-left: 2px solid var(--border-color); display: inline-block; }
+      
+      .pedido-right { display: flex; align-items: center; gap: 15px; flex-shrink: 0; }
+      .pedido-hora { font-size: 0.75rem; color: var(--text-muted); font-family: monospace; }
+      .btn-concluir { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-muted); border-radius: 6px; padding: 6px 10px; cursor: pointer; transition: 0.2s; }
+      .btn-concluir:hover { background: var(--bg-hover); color: var(--accent-green); border-color: var(--accent-green); }
 
-      .pedidos-wrapper { display: flex; flex-direction: column; gap: 15px; margin-top: 0; height: 100%;}
-      .section-title { font-size: 1.1rem; font-weight: 900; color: #fff; text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
-      .section-title::after { content: ''; flex-grow: 1; height: 1px; background: rgba(255,255,255,0.1); margin-left: 10px; }
-
-      .enquete-form { display: flex; flex-direction: column; gap: 10px; }
-      .enquete-input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5); color: #fff; font-family: inherit; }
-      .enquete-input:focus { border-color: #f4741f; outline: none; }
-      .btn-enquete { background: #f4741f; color: #fff; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 5px;}
-      .btn-enquete:hover { background: #ff8c42; }
-      .btn-encerrar { background: rgba(255, 76, 76, 0.2); border: 1px solid rgba(255, 76, 76, 0.5); color: #ff4c4c; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 15px; width: 100%; transition: 0.3s; }
-      .btn-encerrar:hover { background: #ff4c4c; color: #fff; }
-      .stat-row { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
-      .stat-bar-bg { width: 100%; background: rgba(255,255,255,0.1); height: 12px; border-radius: 6px; overflow: hidden; }
-      .stat-bar-fill { height: 100%; background: #f4741f; width: 0%; transition: width 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-      .stat-labels { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: bold; color: #fff; }
-      .blink { animation: blinker 1s linear infinite; color: #ff4c4c; }
-      @keyframes blinker { 50% { opacity: 0; } }
-
-      .lista-pedidos { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important; gap: 15px; align-items: start; }
-      .pedido-card { background: rgba(20, 20, 20, 0.7); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-left: 4px solid #f4741f; border-radius: 12px; padding: 12px 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 6px; transition: opacity 0.3s ease; width: 100%; height: 100%; }
-      .pedido-hora { font-size: 0.7rem; color: #888; text-align: right; margin-top: -2px; font-weight: 700;}
-      .pedido-nome { font-weight: 700; color: #f4741f; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;}
-      .pedido-musica { font-size: 1rem; font-weight: 900; color: #fff; line-height: 1.2;}
-      .pedido-recado { font-size: 0.75rem; color: #ddd; font-style: italic; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 6px; border-left: 2px solid #666; margin-top: 2px;}
-      .btn-concluir { background: rgba(244, 116, 31, 0.1); border: 1px solid rgba(244, 116, 31, 0.4); color: #f4741f; padding: 8px; border-radius: 6px; cursor: pointer; font-family: inherit; font-weight: 700; font-size: 0.8rem; transition: all 0.3s; margin-top: auto; display: flex; align-items: center; justify-content: center; gap: 6px; }
-      .btn-concluir:hover { background: #f4741f; color: #fff; border-color: #f4741f; }
-      .sem-pedidos { text-align: center; color: #888; font-size: 1rem; padding: 30px 0; background: rgba(20,20,20,0.5); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); grid-column: 1 / -1; }
+      .empty-state { text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 40px 0; }
+      @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
   </head>
   <body>
 
+    <!-- TELA DE LOGIN -->
     <div id="tela-login">
       <div class="login-box">
         <img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" alt="Logo">
-        <h2>Acesso Restrito</h2>
+        <h2>Acesso ao Sistema</h2>
         <form id="form-login">
           <div class="input-group">
             <label>E-mail do Locutor</label>
@@ -115,73 +182,80 @@
             <label>Senha</label>
             <input type="password" id="login-senha" required placeholder="••••••••">
           </div>
-          <button type="submit" class="btn-login" id="btn-entrar">Entrar <i class="fas fa-sign-in-alt"></i></button>
+          <button type="submit" class="btn-login" id="btn-entrar">Autenticar</button>
           <div id="msg-erro"><i class="fas fa-exclamation-triangle"></i> E-mail ou senha incorretos!</div>
         </form>
       </div>
     </div>
 
+    <!-- TELA PRINCIPAL (DASHBOARD) -->
     <div id="tela-dashboard">
-      <div class="title-wrapper">
-        <img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" class="logo-img" alt="Logo">
-        <h1 class="floating-title">Painel do Locutor</h1>
-        <div style="display: flex; gap: 5px; margin-left: auto; align-items: center; flex-wrap: wrap; justify-content: flex-end;">
-          <div class="status-badge" id="badgeStatus"><span class="pulse-dot" id="dotStatus"></span><span id="textStatus">A ligar...</span></div>
-          <button class="btn-topo btn-alertas inativo" id="btn-alertas" title="Clique para ativar sons e alertas"><i class="fas fa-bell-slash"></i></button>
-          <button class="btn-topo btn-instalar-app" id="btn-instalar-painel" title="Instalar App"><i class="fas fa-download"></i> App</button>
-          <button class="btn-topo" id="btn-logout" title="Sair do Painel"><i class="fas fa-power-off"></i> Sair</button>
+      
+      <!-- CABEÇALHO ESTILO DISCLOUD -->
+      <header class="top-header">
+        <div class="brand-area">
+          <img src="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png" id="painelCover" alt="Logo">
+          <div class="brand-titles">
+            <h1>Painel do Locutor 
+              <div class="status-badge" id="badgeStatus"><div class="dot red" id="dotStatus"></div> <span id="textStatus">Desconectado</span></div>
+            </h1>
+            <div class="brand-sub"><i class="fas fa-server"></i> radiacaonet / admin</div>
+          </div>
         </div>
-      </div>
+        
+        <div class="actions-area">
+          <button class="btn-flat" id="btn-alertas" title="Clique para ativar alertas sonoros"><i class="fas fa-bell-slash"></i> Alertas</button>
+          <button class="btn-flat" id="btn-instalar-painel" style="display: none;"><i class="fas fa-download"></i> Instalar</button>
+          <button class="btn-flat" id="btn-logout"><i class="fas fa-power-off"></i> Sair</button>
+        </div>
+      </header>
 
+      <!-- CORPO DO PAINEL -->
       <div class="dashboard-grid">
         
-        <!-- COLUNA ESQUERDA: STATUS E ENQUETE (Lado a lado no RadioBOSS) -->
-        <div class="dash-sidebar">
+        <!-- COLUNA ESQUERDA -->
+        <div class="left-col">
           
-          <div class="pedidos-wrapper">
-            <h2 class="section-title">Status da Rádio <i class="fas fa-broadcast-tower" style="color: #f4741f;"></i></h2>
-            <div class="pedido-card" style="border-left-color: #2196F3;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px;">
-                <div style="font-weight: 900; color: #2196F3; font-size: 0.85rem; text-transform: uppercase;">
-                  <i class="fas fa-info-circle"></i> Tocando Agora
-                </div>
-                <div style="background: rgba(33, 150, 243, 0.15); border: 1px solid rgba(33, 150, 243, 0.4); color: #2196F3; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; display: flex; align-items: center; gap: 6px;">
-                  <i class="fas fa-users"></i> <span id="painelListeners">0</span> Ouvintes
+          <!-- CARD DE STATUS -->
+          <div class="card">
+            <div class="card-header"><div class="card-title"><i class="fas fa-memory"></i> Status da Rádio</div></div>
+            <div class="status-info">
+              
+              <div class="info-block">
+                <div class="info-icon"><i class="fas fa-music"></i></div>
+                <div class="info-texts">
+                  <div class="info-value" id="painelLine1">A carregar...</div>
+                  <div class="info-label" id="painelLine2">Conectando ao servidor</div>
                 </div>
               </div>
-              <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;">
-                <li style="display: flex; align-items: flex-start; gap: 10px;">
-                  <i class="fas fa-music" style="color: #aaa; margin-top: 3px; font-size: 0.9rem;"></i>
-                  <div style="display: flex; flex-direction: column; gap: 2px;">
-                    <span id="painelLine1" style="font-weight: 900; color: #fff; font-size: 1.05rem; line-height: 1.2;">A carregar...</span>
-                    <span id="painelLine2" style="font-size: 0.85rem; color: #f4741f; font-weight: 700;">A ligar ao servidor</span>
-                  </div>
-                </li>
-                <li id="li-album" style="display: none; align-items: center; gap: 10px; color: #888; font-size: 0.8rem; background: rgba(255,255,255,0.03); padding: 6px 10px; border-radius: 6px;">
-                  <i class="fas fa-compact-disc"></i> <span id="painelLine3"></span>
-                </li>
-              </ul>
+
+              <div class="info-block">
+                <div class="info-icon"><i class="fas fa-users"></i></div>
+                <div class="info-texts">
+                  <div class="info-value" id="painelListeners">0</div>
+                  <div class="info-label" style="color: var(--text-muted);">Ouvintes Simultâneos</div>
+                </div>
+              </div>
+
             </div>
           </div>
 
-          <div class="pedidos-wrapper">
-            <h2 class="section-title">Enquete ao Vivo <i class="fas fa-poll" style="color: #f4741f;"></i></h2>
-            <div id="enquete-container" style="height: 100%;">
-              <div class="pedido-card">
-                <div class="sem-pedidos"><i class="fas fa-spinner fa-spin"></i> Conectando à Enquete...</div>
-              </div>
+          <!-- CARD DE ENQUETES -->
+          <div class="card">
+            <div class="card-header"><div class="card-title"><i class="fas fa-chart-bar"></i> Enquete Ativa</div></div>
+            <div id="enquete-container">
+              <div class="empty-state"><i class="fas fa-spinner fa-spin"></i> Carregando módulo...</div>
             </div>
           </div>
+          
         </div>
 
-        <!-- COLUNA DIREITA: PEDIDOS -->
-        <div class="dash-right-col">
-          <div class="pedidos-wrapper" style="margin-bottom: 0; display: flex; flex-direction: column; height: 100%;">
-            <h2 class="section-title">Fila de Pedidos <i class="fas fa-inbox" style="color: #f4741f;"></i></h2>
-            <div class="dash-main-box">
-              <div class="lista-pedidos" id="container-pedidos">
-                <div class="sem-pedidos"><i class="fas fa-spinner fa-spin"></i> A carregar pedidos...</div>
-              </div>
+        <!-- COLUNA DIREITA (PEDIDOS) -->
+        <div class="right-col">
+          <div class="card" style="height: 100%;">
+            <div class="card-header"><div class="card-title"><i class="fas fa-stream"></i> Fila de Pedidos</div></div>
+            <div class="pedidos-list" id="container-pedidos">
+              <div class="empty-state"><i class="fas fa-spinner fa-spin"></i> Sincronizando fila...</div>
             </div>
           </div>
         </div>
@@ -189,6 +263,7 @@
       </div>
     </div>
 
+    <!-- SCRIPTS DE AZURACAST E PWA -->
     <script>
       let deferredPromptPainel;
       window.addEventListener('beforeinstallprompt', (e) => {
@@ -213,26 +288,24 @@
           document.getElementById('painelLine2').innerText = data.now_playing.song.artist || "Desconhecido";
           document.getElementById('painelListeners').innerText = data.listeners.current || 0;
           
-          const songAlbum = data.now_playing.song.album || "";
-          const line3 = document.getElementById('painelLine3');
-          const liAlbum = document.getElementById('li-album');
-          if (songAlbum) { line3.innerText = songAlbum; liAlbum.style.display = 'flex'; } else { liAlbum.style.display = 'none'; }
+          const coverUrl = data.now_playing.song.art || 'https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png';
+          document.getElementById('painelCover').src = coverUrl;
 
           const isLive = data.live.is_live;
-          const badgeStatus = document.getElementById('badgeStatus');
           const textStatus = document.getElementById('textStatus');
           const dotStatus = document.getElementById('dotStatus');
 
           if (isLive) {
-            badgeStatus.className = "status-badge status-online"; textStatus.innerText = "Online"; dotStatus.className = "pulse-dot dot-green";
+            textStatus.innerText = "AO VIVO"; dotStatus.className = "dot green";
           } else {
-            badgeStatus.className = "status-badge status-autodj"; textStatus.innerText = "Auto DJ"; dotStatus.className = "pulse-dot dot-red";
+            textStatus.innerText = "Auto DJ"; dotStatus.className = "dot red";
           }
         } catch (error) { console.error("Erro na rádio:", error); }
       }
       setInterval(atualizarInfoRadio, 5000);
     </script>
 
+    <!-- FIREBASE (SEUS DADOS ORIGINAIS) -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
       import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -271,7 +344,8 @@
         notificationSound.play().then(() => { notificationSound.pause(); notificationSound.currentTime = 0; }).catch(err => console.log("Áudio bloqueado", err));
         if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") { Notification.requestPermission(); }
         alertasAtivados = true;
-        btnAlertas.className = "btn-topo btn-alertas ativo"; btnAlertas.innerHTML = '<i class="fas fa-bell"></i>'; btnAlertas.title = "Alertas Sonoros Ativados";
+        btnAlertas.classList.add("active"); 
+        btnAlertas.innerHTML = '<i class="fas fa-bell"></i> Alertas On';
       }
 
       window.addEventListener('click', habilitarAlertas, { once: true });
@@ -304,8 +378,8 @@
         btnEntrar.innerText = "A verificar... ⏳"; msgErro.style.display = 'none';
 
         signInWithEmailAndPassword(auth, email, senha)
-          .then(() => { btnEntrar.innerHTML = 'Entrar <i class="fas fa-sign-in-alt"></i>'; })
-          .catch((error) => { console.error(error); btnEntrar.innerHTML = 'Entrar <i class="fas fa-sign-in-alt"></i>'; msgErro.style.display = 'block'; });
+          .then(() => { btnEntrar.innerText = 'Autenticar'; })
+          .catch((error) => { console.error(error); btnEntrar.innerText = 'Autenticar'; msgErro.style.display = 'block'; });
       });
 
       document.getElementById('btn-logout').addEventListener('click', () => { signOut(auth).catch((error) => console.error("Erro", error)); });
@@ -336,34 +410,21 @@
                   const perc2 = totalVotos === 0 ? 0 : Math.round((votos2 / totalVotos) * 100);
 
                   containerEnquete.innerHTML = `
-                      <div class="pedido-card" style="border-left-color: #4caf50; height: 100%;">
-                          <div style="font-weight: 900; color: #4caf50; font-size: 0.8rem; margin-bottom: 5px;">
-                              <i class="fas fa-broadcast-tower blink"></i> ENQUETE NO AR
-                          </div>
-                          <p style="font-weight: 700; font-size: 1.1rem; color: #fff; margin-bottom: 15px;">${data.pergunta}</p>
-                          <div class="stat-row">
-                              <div class="stat-labels"><span>${data.opcoes.op1.texto}</span> <span>${perc1}% (${votos1})</span></div>
-                              <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${perc1}%;"></div></div>
-                          </div>
-                          <div class="stat-row">
-                              <div class="stat-labels"><span>${data.opcoes.op2.texto}</span> <span>${perc2}% (${votos2})</span></div>
-                              <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${perc2}%;"></div></div>
-                          </div>
-                          <div style="text-align: center; font-size: 0.8rem; color: #aaa; margin-top: 5px;">Total de votos: ${totalVotos}</div>
-                          <button class="btn-encerrar" onclick="encerrarEnquete()"><i class="fas fa-stop-circle"></i> Encerrar Votação</button>
-                      </div>
+                    <div style="margin-bottom: 15px; color: var(--accent-green); font-weight: 600; font-size: 0.8rem; display: flex; align-items: center; gap: 6px;"><div class="dot green"></div> NO AR</div>
+                    <div style="font-weight: 600; font-size: 1rem; margin-bottom: 15px; line-height: 1.3; color: var(--text-main);">${data.pergunta}</div>
+                    <div class="stat-row"><div class="stat-labels"><span>${data.opcoes.op1.texto}</span><span>${perc1}% (${votos1})</span></div><div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${perc1}%;"></div></div></div>
+                    <div class="stat-row"><div class="stat-labels"><span>${data.opcoes.op2.texto}</span><span>${perc2}% (${votos2})</span></div><div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${perc2}%;"></div></div></div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); text-align: right; margin-top: 5px;">Total: ${totalVotos} votos</div>
+                    <button class="btn-danger" onclick="encerrarEnquete()"><i class="fas fa-stop"></i> Encerrar Votação</button>
                   `;
               } else {
                   containerEnquete.innerHTML = `
-                      <div class="pedido-card" style="height: 100%;">
-                          <p style="margin-bottom: 12px; font-size: 0.85rem; color: #aaa;">Preencha os campos para iniciar uma batalha de bandas com os ouvintes:</p>
-                          <div class="enquete-form">
-                              <input type="text" id="enq-pergunta" class="enquete-input" placeholder="Pergunta (Ex: Qual clássico fecha?)">
-                              <input type="text" id="enq-op1" class="enquete-input" placeholder="Opção 1 (Ex: Iron Maiden)">
-                              <input type="text" id="enq-op2" class="enquete-input" placeholder="Opção 2 (Ex: Metallica)">
-                              <button class="btn-enquete" onclick="criarEnquete()"><i class="fas fa-play"></i> Colocar no Ar</button>
-                          </div>
-                      </div>
+                    <div class="enquete-form">
+                      <input type="text" id="enq-pergunta" class="input-flat" placeholder="Pergunta (Ex: Qual clássico fecha?)">
+                      <input type="text" id="enq-op1" class="input-flat" placeholder="Opção 1 (Ex: Iron Maiden)">
+                      <input type="text" id="enq-op2" class="input-flat" placeholder="Opção 2 (Ex: Metallica)">
+                      <button class="btn-primary" onclick="criarEnquete()">Colocar no Ar</button>
+                    </div>
                   `;
               }
           });
@@ -390,24 +451,42 @@
             quantidadePedidosAnterior = quantidadeAtual; cargaInicial = false;
 
             chaves.forEach(chave => {
-              const pedido = dados[chave];
-              const card = document.createElement('div');
-              card.className = 'pedido-card';
-              let htmlCard = `<div class="pedido-hora"><i class="far fa-clock"></i> ${pedido.data_hora || ''}</div><div class="pedido-nome"><i class="fas fa-user-circle"></i> ${pedido.nome} pediu:</div><div class="pedido-musica">${pedido.musica}</div>`;
-              if (pedido.recado && pedido.recado.trim() !== '') { htmlCard += `<div class="pedido-recado">" ${pedido.recado} "</div>`; }
-              htmlCard += `<button class="btn-concluir" data-id="${chave}"><i class="fas fa-check-circle"></i> Marcar como Tocado</button>`;
-              card.innerHTML = htmlCard; container.appendChild(card);
+              const p = dados[chave];
+              const row = document.createElement('div');
+              row.className = 'pedido-row';
+              
+              let recadoHtml = p.recado && p.recado.trim() !== '' ? `<div class="pedido-recado">"${p.recado}"</div>` : '';
+              
+              let html = `
+                <div class="pedido-left">
+                  <div class="status-dot"></div>
+                  <div class="pedido-info">
+                    <div class="pedido-musica">${p.musica}</div>
+                    <div class="pedido-autor">Pedida por <span>${p.nome}</span></div>
+                    ${recadoHtml}
+                  </div>
+                </div>
+                <div class="pedido-right">
+                  <div class="pedido-hora">${p.data_hora || ''}</div>
+                  <button class="btn-concluir" data-id="${chave}" title="Marcar como tocado"><i class="fas fa-check"></i></button>
+                </div>
+              `;
+              
+              row.innerHTML = html; 
+              container.appendChild(row);
             });
 
             document.querySelectorAll('.btn-concluir').forEach(btn => {
               btn.addEventListener('click', (e) => {
-                const id = e.target.closest('button').dataset.id; e.target.closest('.pedido-card').style.opacity = '0';
-                setTimeout(() => remove(ref(db, `pedidos/${id}`)), 300); quantidadePedidosAnterior--; 
+                const id = e.currentTarget.dataset.id; 
+                e.currentTarget.closest('.pedido-row').style.opacity = '0';
+                setTimeout(() => remove(ref(db, `pedidos/${id}`)), 300); 
+                quantidadePedidosAnterior--; 
               });
             });
           } else {
             quantidadePedidosAnterior = 0; cargaInicial = false;
-            container.innerHTML = `<div class="sem-pedidos"><i class="fas fa-inbox fa-3x" style="margin-bottom: 15px; color: #555;"></i><br>A fila está vazia. A aguardar novos pedidos...</div>`;
+            container.innerHTML = `<div class="empty-state"><i class="fas fa-inbox fa-2x" style="margin-bottom: 10px; color: #3f3f46;"></i><br>Nenhum pedido na fila.</div>`;
           }
         });
       }
