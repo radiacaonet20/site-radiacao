@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Painel do Locutor - Radiação.Net</title>
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
+    <link rel="apple-touch-icon" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
+    
+    <link rel="manifest" href="./manifest-painel.json">
+    <meta name="theme-color" content="#09090b">
+
+    <!-- Fontes e Ícones -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS global -->
+    <link rel="stylesheet" href="./style.css?v=3.0">
+    <link rel="stylesheet" href="./painel.css?v=3.0">
+  </head>
+  <body>
+
+    <!-- TELA DE LOGIN -->
+    <div id="tela-login">
+      <div class="login-box">
+        <img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" alt="Logo">
+        <h2>Acesso ao Sistema</h2>
+        <form id="form-login">
+          <div class="input-group">
+            <label>E-mail do Locutor</label>
+            <input type="email" id="login-email" required placeholder="locutor@radiacao.net">
+          </div>
+          <div class="input-group">
+            <label>Senha</label>
+            <input type="password" id="login-senha" required placeholder="••••••••">
+          </div>
+          <button type="submit" class="btn-login" id="btn-entrar">Autenticar</button>
+          <div id="msg-erro"><i class="fas fa-exclamation-triangle"></i> E-mail ou senha incorretos!</div>
+        </form>
+      </div>
+    </div>
+
+    <!-- TELA PRINCIPAL (DASHBOARD) -->
+    <div id="tela-dashboard">
+      
+      <!-- CABEÇALHO ESTILO DISCLOUD -->
+      <header class="top-header">
+        <div class="brand-area">
+          <img src="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png" id="painelCover" alt="Logo">
+          <div class="brand-titles">
+            <h1>Painel do Locutor 
+              <div class="status-badge" id="badgeStatus"><div class="dot red" id="dotStatus"></div> <span id="textStatus">Desconectado</span></div>
+            </h1>
+            <div class="brand-sub"><i class="fas fa-server"></i> radiacaonet / admin</div>
+          </div>
+        </div>
+        
+        <div class="actions-area">
+          <button class="btn-flat" id="btn-alertas" title="Clique para ativar alertas sonoros"><i class="fas fa-bell-slash"></i> Alertas</button>
+          <button class="btn-flat" id="btn-instalar-painel" style="display: none;"><i class="fas fa-download"></i> Instalar</button>
+          <button class="btn-flat" id="btn-logout"><i class="fas fa-power-off"></i> Sair</button>
+        </div>
+      </header>
+
+      <!-- CORPO DO PAINEL -->
+      <div class="dashboard-grid">
+        
+        <!-- COLUNA ESQUERDA -->
+        <div class="left-col">
+          
+          <!-- CARD DE STATUS -->
+          <div class="card">
+            <div class="card-header"><div class="card-title"><i class="fas fa-memory"></i> Status da Rádio</div></div>
+            <div class="status-info">
+              
+              <div class="info-block">
+                <div class="info-icon"><i class="fas fa-music"></i></div>
+                <div class="info-texts">
+                  <div class="info-value" id="painelLine1">A carregar...</div>
+                  <div class="info-label" id="painelLine2">Conectando ao servidor</div>
+                </div>
+              </div>
+
+              <div class="info-block">
+                <div class="info-icon"><i class="fas fa-users"></i></div>
+                <div class="info-texts">
+                  <div class="info-value" id="painelListeners">0</div>
+                  <div class="info-label" style="color: var(--text-muted);">Ouvintes Simultâneos</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- CARD DE ENQUETES -->
+          <div class="card">
+            <div class="card-header"><div class="card-title"><i class="fas fa-chart-bar"></i> Enquete Ativa</div></div>
+            <div id="enquete-container">
+              <div class="empty-state"><i class="fas fa-spinner fa-spin"></i> Carregando módulo...</div>
+            </div>
+          </div>
+          
+        </div>
+
+        <!-- COLUNA DIREITA (PEDIDOS) -->
+        <div class="right-col">
+          <div class="card" style="height: 100%;">
+            <div class="card-header"><div class="card-title"><i class="fas fa-stream"></i> Fila de Pedidos</div></div>
+            <div class="pedidos-list" id="container-pedidos">
+              <div class="empty-state"><i class="fas fa-spinner fa-spin"></i> Sincronizando fila...</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SCRIPTS DE AZURACAST E PWA -->
+    <script src="./painel.js?v=3.0"></script>
+    <script type="module" src="./painel-firebase.js?v=3.0"></script>
+  </body>
+</html>

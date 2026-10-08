@@ -1,0 +1,63 @@
+{
+  "id": "./",
+  "name": "Radiação.Net - A web rádio de todas as tribos",
+  "short_name": "Radiação.Net",
+  "description": "A web rádio de todas as tribos! Música, esporte, cultura e entretenimento.",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone"
+  ],
+  "orientation": "portrait-primary",
+  "background_color": "#121212",
+  "theme_color": "#f57520",
+  "categories": [
+    "music",
+    "entertainment"
+  ],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Programação",
+      "short_name": "Programação",
+      "url": "./#programacao",
+      "icons": [
+        {
+          "src": "https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Grupo WhatsApp",
+      "short_name": "WhatsApp",
+      "url": "https://chat.whatsapp.com/FKr00cdRZME68ppTR3gilZ",
+      "icons": [
+        {
+          "src": "https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
+}
