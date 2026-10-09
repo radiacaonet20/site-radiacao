@@ -10,7 +10,7 @@
   --bg-input: rgba(30, 30, 30, 0.8);
   --borda-clara: rgba(255, 255, 255, 0.1);
   --fonte-principal: 'Montserrat', sans-serif;
-  --bg-imagem: url('https://painel.radiacao.net.br/static/uploads/radiacaonet/background.1779332336.webp');
+  --bg-imagem: url('https://painel.radiacao.net.br/static/uploads/background.1791563172.webp');
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
