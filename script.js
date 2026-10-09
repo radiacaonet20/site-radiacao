@@ -75,7 +75,7 @@ function compartilharSite() {
 
 // --- SUAS IMAGENS DE FUNDO CUSTOMIZADAS ---
 const imagensFundo = {
-  "default": "url('https://painel.radiacao.net.br/static/uploads/radiacaonet/background.1779332336.webp')",
+  "default": "url('https://painel.radiacao.net.br/static/uploads/background.1791563172.webp')",
   "fred": "url('https://i.postimg.cc/pLR9yzgz/Cool-Reggae-Wallpaper.jpg')",
   "alessandro": "url('https://i.postimg.cc/1XmTfWrs/futuristic-city-5120x2880-15887.jpg')",
   "rafa": "url('https://i.postimg.cc/nVST4cHB/photo-1540747913346-19e32dc3e97e.jpg')",
