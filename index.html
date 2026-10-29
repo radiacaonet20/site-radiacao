@@ -12,7 +12,7 @@
     <link rel="apple-touch-icon" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="./style.css?v=11.0">
+    <link rel="stylesheet" href="./style.css?v=11.2">
   </head>
   <body>
     
@@ -222,12 +222,24 @@
     <button id="btn-enquete-flutuante" class="btn-enquete-flutuante" onclick="abrirModal('modal-enquete'); this.blur();"><i class="fas fa-poll blink" style="color: #fff;"></i> Enquete no Ar!</button>
     
     <div id="modal-enquete" class="modal-overlay" onclick="fecharModalFora(event, 'modal-enquete')"><div class="modal-content"><span class="close-btn" onclick="fecharModal('modal-enquete')">&times;</span><h2 class="modal-title" style="border-bottom: 2px solid #333; padding-bottom: 10px; color: #f4741f;"><i class="fas fa-broadcast-tower blink"></i> Batalha de Bandas</h2><p id="enquete-pergunta-texto" style="font-weight: 900; font-size: 1.2rem; text-align: center; margin-bottom: 20px;"></p><div id="enquete-opcoes" class="enquete-opcoes"><button class="btn-opcao-voto" id="btn-voto-op1" onclick="votarEnquete('op1')"></button><button class="btn-opcao-voto" id="btn-voto-op2" onclick="votarEnquete('op2')"></button></div><div id="enquete-resultados" class="enquete-resultados"><div class="stat-row"><div class="stat-labels"><span id="lbl-res-op1"></span> <span id="perc-res-op1"></span></div><div class="stat-bar-bg"><div class="stat-bar-fill" id="bar-res-op1"></div></div></div><div class="stat-row"><div class="stat-labels"><span id="lbl-res-op2"></span> <span id="perc-res-op2"></span></div><div class="stat-bar-bg"><div class="stat-bar-fill" id="bar-res-op2"></div></div></div><p style="text-align: center; color: #aaa; font-size: 0.8rem; margin-top: 15px;">Obrigado por votar! Resultados em tempo real.</p></div></div></div>
+    <div id="modal-noticia" class="modal-overlay news-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-noticia-titulo" onclick="fecharModalFora(event, 'modal-noticia')">
+      <article class="modal-content news-modal-content">
+        <button type="button" class="close-btn news-modal-close" aria-label="Fechar prévia da notícia" onclick="fecharModal('modal-noticia')">&times;</button>
+        <span id="modal-noticia-categoria" class="news-tag news-modal-tag">Atualidades</span>
+        <h2 id="modal-noticia-titulo" class="news-modal-title">Prévia da notícia</h2>
+        <div class="news-modal-meta"><span><i class="fas fa-newspaper" aria-hidden="true"></i> <span id="modal-noticia-fonte">Fonte</span></span><span><i class="far fa-calendar-alt" aria-hidden="true"></i> <span id="modal-noticia-data">Data</span></span></div>
+        <p id="modal-noticia-resumo" class="news-modal-summary"></p>
+        <p class="news-modal-note">Esta é uma prévia do Radar Radiação. A matéria completa está disponível no site da fonte indicada acima.</p>
+        <a id="modal-noticia-link" class="btn-enviar news-modal-link" href="#" target="_blank" rel="noopener noreferrer" hidden><i class="fas fa-external-link-alt" aria-hidden="true"></i> Ler matéria completa</a>
+      </article>
+    </div>
+
     <div id="modal-historico" class="modal-overlay" onclick="fecharModalFora(event, 'modal-historico')"><div class="modal-content"><span class="close-btn" onclick="fecharModal('modal-historico')">&times;</span><h2 class="modal-title" style="border-bottom: 2px solid #333; padding-bottom: 10px;">Últimas Tocadas</h2><ul class="info-list" id="lista-historico"><li style="text-align:center; color:#aaa;">Carregando histórico...</li></ul></div></div>
     <div id="modal-pedido" class="modal-overlay" onclick="fecharModalFora(event, 'modal-pedido')"><div class="modal-content"><span class="close-btn" onclick="fecharModal('modal-pedido')">&times;</span><h2 class="modal-title" style="border-bottom: 2px solid #333; padding-bottom: 10px;">Pedir Música</h2><form id="form-pedido" onsubmit="enviarPedido(event)"><div class="form-group"><label for="pedido-nome">Seu Nome</label><input type="text" id="pedido-nome" required placeholder="Ex: João Silva"></div><div class="form-group"><label for="pedido-musica">Música e Artista</label><input type="text" id="pedido-musica" required placeholder="Ex: Linkin Park - Numb"></div><div class="form-group"><label for="pedido-recado">Recado (Opcional)</label><textarea id="pedido-recado" rows="3" placeholder="Quer mandar um abraço?"></textarea></div><button type="submit" class="btn-enviar" id="btn-enviar-pedido">Enviar Pedido 🚀</button></form></div></div>
     <!-- Modal iOS antigo (agora integrado no fluxo) -->
     <div id="modal-ios" class="modal-overlay" onclick="fecharModalFora(event, 'modal-ios')"><div class="modal-content" style="text-align: center;"><span class="close-btn" onclick="fecharModal('modal-ios')">&times;</span><h2 class="modal-title">Instalar App 🍏</h2><p style="margin-bottom: 20px; color: #ccc; font-size: 0.9rem;">No Safari:</p><ul style="text-align: left; margin: 0 auto; max-width: 280px; color: #fff; line-height: 1.8; list-style: none; padding: 0;"><li style="margin-bottom: 10px;"><span style="color: #f4741f; font-weight: bold; margin-right: 5px;">1.</span> Toque em <b>Compartilhar</b> <i class="fas fa-share-square" style="color: #007aff;"></i>.</li><li style="margin-bottom: 10px;"><span style="color: #f4741f; font-weight: bold; margin-right: 5px;">2.</span> <b>"Adicionar à Tela de Início"</b> <i class="fas fa-plus-square" style="color: #fff;"></i>.</li><li><span style="color: #f4741f; font-weight: bold; margin-right: 5px;">3.</span> Toque em <b>Adicionar</b>.</li></ul><button class="btn-enviar" onclick="fecharModal('modal-ios')" style="margin-top: 25px;">Entendi!</button></div></div>
 
-    <script src="./script.js?v=11.0"></script>
+    <script src="./script.js?v=11.6"></script>
     <script type="module" src="./firebase-public.js?v=5.0"></script>
   </body>
 </html>

@@ -6,31 +6,6 @@ const canvasCtx = canvas ? canvas.getContext('2d') : null;
 
 const el = id => document.getElementById(id);
 
-const LOGO_PADRAO = 'https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png';
-
-// Aceita apenas URLs HTTP(S) para recursos externos, evitando protocolos executáveis.
-function obterUrlHttpSegura(valor, fallback = '') {
-  if (typeof valor !== 'string' || !valor.trim()) return fallback;
-
-  try {
-    const url = new URL(valor, window.location.href);
-    if (url.protocol === 'http:' || url.protocol === 'https:') return url.href;
-  } catch (error) {
-    // URL inválida: utiliza o fallback.
-  }
-
-  return fallback;
-}
-
-// Links de notícias podem ser âncoras internas ou URLs HTTP(S).
-function obterLinkNoticiaSeguro(valor) {
-  if (typeof valor === 'string' && valor.trim().startsWith('#')) {
-    return valor.trim();
-  }
-
-  return obterUrlHttpSegura(valor, '#noticias');
-}
-
 function iniciarEspectro() {
   if (!audioCtx && canvasCtx) {
     try {
@@ -203,23 +178,13 @@ const parceirosOficiais = {
 async function atualizarNowPlaying() {
   try {
     const response = await fetch('https://painel.radiacao.net.br/api/nowplaying_static/radiacaonet.json?_=' + new Date().getTime(), { cache: 'no-store' });
-    if (!response.ok) throw new Error(`Falha ao consultar a transmissão (HTTP ${response.status}).`);
-
     const data = await response.json();
-    if (!data || !data.live || !data.now_playing || !data.now_playing.song) {
-      throw new Error('A resposta da transmissão está incompleta.');
-    }
 
-    const isLive = Boolean(data.live.is_live);
-    const streamer = typeof data.live.streamer_name === 'string' ? data.live.streamer_name : '';
-    const song = data.now_playing.song;
-    const displayTitle = isLive
-      ? ((typeof song.text === 'string' ? song.text : '').split(' - ')[0] || 'Ao Vivo')
-      : (typeof song.title === 'string' && song.title ? song.title : 'Desconhecido');
-    const displayArtist = isLive
-      ? `🎙️ ${streamer || 'Locutor ao vivo'}`
-      : (typeof song.artist === 'string' && song.artist ? song.artist : 'Desconhecido');
-    const coverUrl = obterUrlHttpSegura(song.art, LOGO_PADRAO);
+    const isLive = data.live.is_live;
+    const streamer = data.live.streamer_name;
+    const displayTitle = isLive ? ((data.now_playing.song.text || "").split(' - ')[0] || "Ao Vivo") : (data.now_playing.song.title || "Desconhecido");
+    const displayArtist = isLive ? `🎙️ ${streamer}` : (data.now_playing.song.artist || "Desconhecido");
+    const coverUrl = data.now_playing.song.art || 'https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png';
 
     if(el('playerLine1')) el('playerLine1').innerText = displayTitle;
     if(el('playerLine2')) el('playerLine2').innerText = displayArtist;
@@ -228,37 +193,11 @@ async function atualizarNowPlaying() {
     if(el('heroLocutor')) el('heroLocutor').innerText = displayArtist;
 
     const historyList = el('lista-historico');
-    if (historyList && Array.isArray(data.song_history)) {
-      historyList.replaceChildren();
-
+    if (historyList && data.song_history && data.song_history.length > 0) {
+      historyList.innerHTML = '';
       data.song_history.slice(0, 5).forEach(item => {
-        const song = item && item.song ? item.song : {};
         const li = document.createElement('li');
-        const itemLeft = document.createElement('div');
-        const image = document.createElement('img');
-        const memberInfo = document.createElement('div');
-        const title = document.createElement('span');
-        const artist = document.createElement('span');
-
-        itemLeft.className = 'item-left';
-        image.className = 'thumb-img thumb-logo';
-        image.src = obterUrlHttpSegura(song.art, LOGO_PADRAO);
-        image.alt = '';
-        image.loading = 'lazy';
-
-        memberInfo.className = 'member-info';
-        title.className = 'member-name';
-        title.style.fontSize = '0.9rem';
-        title.textContent = typeof song.title === 'string' ? song.title : 'Música desconhecida';
-
-        artist.className = 'member-role';
-        artist.style.fontSize = '0.75rem';
-        artist.style.color = '#aaa';
-        artist.textContent = typeof song.artist === 'string' ? song.artist : 'Artista desconhecido';
-
-        memberInfo.append(title, artist);
-        itemLeft.append(image, memberInfo);
-        li.appendChild(itemLeft);
+        li.innerHTML = `<div class="item-left"><img src="${item.song.art || 'https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png'}" class="thumb-img thumb-logo"><div class="member-info"><span class="member-name" style="font-size: 0.9rem;">${item.song.title}</span><span class="member-role" style="font-size: 0.75rem; color: #aaa;">${item.song.artist}</span></div></div>`;
         historyList.appendChild(li);
       });
     }
@@ -356,208 +295,202 @@ window.addEventListener('resize', verificarExibicaoPwaMobile);
 // ============================================================================
 // MOTOR DE NOTÍCIAS RSS ULTRA-RÁPIDO (PARALELO + TIMEOUT DE 3 SEGUNDOS)
 // ============================================================================
-const noticiasFallback = [
-  {
-    titulo: "Rasta Flow: A força e a história do Reggae Roots",
-    link: "#programacao",
-    descricao: "Sintonize na Radiação.Net às terças-feiras às 21h com Fred Macêdo e curta as melhores pedras do reggae.",
-    categoria: "Música",
-    cor: "#eab308",
-    fonte: "Radiação.Net"
-  },
-  {
-    titulo: "Sem Clubismo: Os debates mais quentes do futebol",
-    link: "#programacao",
-    descricao: "Segundas e quartas às 21h30, Rafa Barros e Josiel Pereira trazem a análise completa da rodada.",
-    categoria: "Esporte",
-    cor: "#22c55e",
-    fonte: "Radiação.Net"
-  },
-  {
-    titulo: "Ouça a Radiação.Net em qualquer lugar pelo Web App",
-    link: "#home",
-    descricao: "A nossa plataforma conta com tecnologia PWA de última geração para ouvir a rádio de todas as tribos sem interrupções.",
-    categoria: "Tecnologia",
-    cor: "#3b82f6",
-    fonte: "Radiação.Net"
-  },
-  {
-    titulo: "Bastidores e decisões da política nacional em pauta",
-    link: "#noticias",
-    descricao: "Acompanhe as principais atualizações do cenário político e econômico ao longo da nossa programação.",
-    categoria: "Política",
-    cor: "#a855f7",
-    fonte: "Radar Radiação"
-  },
-  {
-    titulo: "Casa dos Clássicos e Território Maranhense em destaque",
-    link: "#programacao",
-    descricao: "Alessandro Neves comanda grandes viagens musicais valorizando os clássicos mundiais e a cultura local.",
-    categoria: "Atualidades",
-    cor: "#ef4444",
-    fonte: "Radiação.Net"
-  },
-  {
-    titulo: "LootCast: O seu programa geek na Radiação.Net",
-    link: "#equipe",
-    descricao: "Cultura pop, jogos e tecnologia em debate com a apresentação de BigT.",
-    categoria: "Tecnologia",
-    cor: "#3b82f6",
-    fonte: "Radiação.Net"
-  }
-];
+// O Radar exibe somente notícias reais retornadas pelo serviço RSS configurado.
 
-async function fetchComTimeout(url, timeoutMs = 3000) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
-  try {
-    const response = await fetch(url, { signal: controller.signal });
-    clearTimeout(timer);
-    return response;
-  } catch (err) {
-    clearTimeout(timer);
-    throw err;
-  }
-}
-
-async function buscarFeedRapido(feed) {
-  // Tenta via rss2json primeiro com limite estrito de 3 segundos
-  try {
-    const urlApi = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}`;
-    const res = await fetchComTimeout(urlApi, 3000);
-    if (res.ok) {
-      const data = await res.json();
-      if (data.status === 'ok' && data.items && data.items.length > 0) {
-        return data.items.slice(0, 2).map(item => ({
-          titulo: item.title,
-          link: item.link,
-          descricao: (item.description || "").replace(/<[^>]*>?/gm, '').trim().substring(0, 110) + '...',
-          data: item.pubDate ? new Date(item.pubDate).getTime() : Date.now(),
-          categoria: feed.categoria,
-          cor: feed.cor,
-          fonte: feed.fonte
-        }));
-      }
-    }
-  } catch (e) {}
-
-  // Plano B imediato via AllOrigins com limite de 3 segundos
-  const urlProxy = `https://api.allorigins.win/get?url=${encodeURIComponent(feed.url)}`;
-  const resProxy = await fetchComTimeout(urlProxy, 3000);
-  if (!resProxy.ok) throw new Error("Timeout ou erro no proxy");
-  const dataProxy = await resProxy.json();
-
-  const parser = new DOMParser();
-  const xml = parser.parseFromString(dataProxy.contents, "text/xml");
-  const items = Array.from(xml.querySelectorAll("item")).slice(0, 2);
-
-  return items.map(item => {
-    const rawDesc = item.querySelector("description")?.textContent || "";
-    const cleanDesc = rawDesc.replace(/<[^>]*>?/gm, '').trim().substring(0, 110) + '...';
-    const pubDateStr = item.querySelector("pubDate")?.textContent;
-    return {
-      titulo: item.querySelector("title")?.textContent || "Notícia",
-      link: item.querySelector("link")?.textContent || "#",
-      descricao: cleanDesc.length > 5 ? cleanDesc : "Clique para ler a matéria completa no portal.",
-      data: pubDateStr ? new Date(pubDateStr).getTime() : Date.now(),
-      categoria: feed.categoria,
-      cor: feed.cor,
-      fonte: feed.fonte
-    };
-  });
-}
+// URL do Cloudflare Worker. Após publicar worker.js, cole aqui a URL fornecida pela Cloudflare.
+// Exemplo: https://radiacao-rss.seu-nome.workers.dev
+const RADAR_RSS_API_URL = 'https://radacao-rss.fromacedo.workers.dev/';
 
 async function carregarNoticiasRSS() {
   const container = el('newsList');
-  if(!container) return;
+  if (!container) return;
 
-  const cacheKey = 'radiacao_news_v3';
-  const cacheTimeKey = 'radiacao_news_time_v3';
+  // Não reaproveita notícias antigas: a cada abertura, exibe apenas o retorno atual das fontes disponíveis.
   const agora = Date.now();
-  
-  // Categorias com cores padronizadas (incluindo Política, Esporte, Tecnologia, Música e Atualidades)
-  const feeds = [
-    { url: 'https://g1.globo.com/rss/g1/politica/', categoria: 'Política', cor: '#a855f7', fonte: 'G1 Política' },
-    { url: 'https://g1.globo.com/rss/g1/esporte/', categoria: 'Esporte', cor: '#22c55e', fonte: 'GE / Esporte' },
-    { url: 'https://g1.globo.com/rss/g1/tecnologia/', categoria: 'Tecnologia', cor: '#3b82f6', fonte: 'G1 Tech' },
-    { url: 'https://g1.globo.com/rss/g1/pop-arte/musica/', categoria: 'Música', cor: '#eab308', fonte: 'G1 Música' }
-  ];
 
-  // Se houver cache recente (menos de 30 min), exibe instantaneamente (0ms)
-  if (localStorage.getItem(cacheKey) && (agora - localStorage.getItem(cacheTimeKey) < 1800000)) {
-    try {
-      const cachedData = JSON.parse(localStorage.getItem(cacheKey));
-      if (cachedData && cachedData.length > 0) {
-        renderizarCardsDeNoticias(cachedData, container);
-        return;
-      }
-    } catch (e) {}
+  if (!RADAR_RSS_API_URL || RADAR_RSS_API_URL.includes('COLE_A_URL')) {
+    mostrarAvisoNoticias(container, 'O Radar está aguardando a configuração do serviço RSS. Depois de publicar o Cloudflare Worker, informe a URL dele no script.js.');
+    return;
   }
 
-  // Busca todos os feeds AO MESMO TEMPO (em paralelo, máximo de 3 segundos no total)
-  const resultados = await Promise.allSettled(feeds.map(feed => buscarFeedRapido(feed)));
-  let todasNoticias = [];
+  try {
+    const resposta = await fetchComTimeout(RADAR_RSS_API_URL.replace(/\/$/, '') + '/?limit=30', 12000);
+    if (!resposta.ok) throw new Error(`HTTP ${resposta.status}`);
+    const dados = await resposta.json();
+    if (!dados || !Array.isArray(dados.items)) throw new Error('Resposta RSS inválida.');
 
-  resultados.forEach(res => {
-    if (res.status === 'fulfilled' && Array.isArray(res.value)) {
-      todasNoticias = todasNoticias.concat(res.value);
+    const vistos = new Set();
+    const noticias = dados.items.filter(n => {
+      if (!n || !n.titulo) return false;
+      const link = urlNoticiaSegura(n.link);
+      if (!link || new URL(link).origin === window.location.origin) return false;
+      const chave = link.split('#')[0].replace(/\/$/, '').toLowerCase();
+      if (vistos.has(chave)) return false;
+      vistos.add(chave);
+      n.link = link;
+      return true;
+    }).map(n => ({
+      titulo: String(n.titulo).trim(),
+      link: n.link,
+      descricao: String(n.descricao || '').trim().slice(0, 240),
+      data: n.data ? new Date(n.data).getTime() : null,
+      categoria: n.categoria || 'Atualidades',
+      cor: n.cor || '#f4741f',
+      fonte: n.fonte || nomeFonteNoticia(n, n.link)
+    })).filter(n => n.titulo && n.link);
+
+    noticias.sort((a, b) => (b.data || 0) - (a.data || 0));
+    const selecionadas = noticias.slice(0, 9);
+    if (!selecionadas.length) {
+      mostrarAvisoNoticias(container, 'Nenhuma fonte RSS está disponível neste momento. Tente novamente em alguns minutos.');
+      return;
     }
-  });
 
-  if (todasNoticias.length > 0) {
-    todasNoticias.sort((a, b) => b.data - a.data);
-    const topNews = todasNoticias.slice(0, 6);
-    localStorage.setItem(cacheKey, JSON.stringify(topNews));
-    localStorage.setItem(cacheTimeKey, agora.toString());
-    renderizarCardsDeNoticias(topNews, container);
-  } else {
-    renderizarCardsDeNoticias(noticiasFallback, container);
+    renderizarCardsDeNoticias(selecionadas, container);
+  } catch (erro) {
+    console.warn('Radar Radiação: não foi possível carregar os feeds RSS.', erro);
+    mostrarAvisoNoticias(container, 'Não foi possível carregar notícias das fontes disponíveis agora. Tente novamente em alguns minutos.');
   }
+}
+
+function mostrarAvisoNoticias(container, mensagem) {
+  container.replaceChildren();
+  const aviso = document.createElement('p');
+  aviso.className = 'news-load-message';
+  aviso.setAttribute('role', 'status');
+  aviso.textContent = mensagem;
+  container.appendChild(aviso);
+}
+
+async function fetchComTimeout(url, timeoutMs = 12000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { signal: controller.signal, headers: { 'Accept': 'application/json' } });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+function urlNoticiaSegura(valor) {
+  try {
+    const url = new URL(String(valor || ''), window.location.href);
+    return ['http:', 'https:'].includes(url.protocol) ? url.href : '';
+  } catch (e) {
+    return '';
+  }
+}
+
+function nomeFonteNoticia(noticia, urlSegura) {
+  // Notícias internas da própria rádio mantêm a identificação Radiação.Net.
+  if (!urlSegura || new URL(urlSegura).origin === window.location.origin) {
+    return 'Radiação.Net';
+  }
+
+  try {
+    const host = new URL(urlSegura).hostname.toLowerCase().replace(/^www\./, '');
+    const nomesConhecidos = {
+      'g1.globo.com': 'G1',
+      'ge.globo.com': 'GE',
+      'oglobo.globo.com': 'O Globo',
+      'globo.com': 'Globo',
+      'uol.com.br': 'UOL',
+      'www.uol.com.br': 'UOL',
+      'cnn.com': 'CNN',
+      'cnnbrasil.com.br': 'CNN Brasil',
+      'bbc.com': 'BBC',
+      'bbc.co.uk': 'BBC',
+      'reuters.com': 'Reuters',
+      'agenciabrasil.ebc.com.br': 'Agência Brasil'
+    };
+    if (nomesConhecidos[host]) return nomesConhecidos[host];
+    const partes = host.split('.');
+    const nome = partes.length > 2 ? partes[partes.length - 3] : partes[0];
+    return nome ? nome.charAt(0).toUpperCase() + nome.slice(1) : 'Portal de notícias';
+  } catch (e) {
+    return noticia.fonte || 'Fonte não informada';
+  }
+}
+
+function abrirPreviaNoticia(noticia) {
+  const modal = el('modal-noticia');
+  if (!modal) return;
+
+  const titulo = el('modal-noticia-titulo');
+  const categoria = el('modal-noticia-categoria');
+  const fonte = el('modal-noticia-fonte');
+  const data = el('modal-noticia-data');
+  const resumo = el('modal-noticia-resumo');
+  const link = el('modal-noticia-link');
+  const url = urlNoticiaSegura(noticia.link);
+
+  titulo.textContent = noticia.titulo || 'Notícia';
+  categoria.textContent = noticia.categoria || 'Atualidades';
+  categoria.style.backgroundColor = /^#[0-9a-f]{3,8}$/i.test(noticia.cor || '') ? noticia.cor : '#f4741f';
+  fonte.textContent = nomeFonteNoticia(noticia, url);
+  resumo.textContent = noticia.descricao || 'Acesse a fonte original para conferir todos os detalhes desta notícia.';
+
+  const timestamp = noticia.data ? new Date(noticia.data).getTime() : NaN;
+  data.textContent = Number.isFinite(timestamp) && timestamp > 0
+    ? new Date(timestamp).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })
+    : 'Data não informada';
+
+  if (url && new URL(url).origin !== window.location.origin) {
+    link.href = url;
+    link.hidden = false;
+  } else {
+    link.removeAttribute('href');
+    link.hidden = true;
+  }
+  abrirModal('modal-noticia');
 }
 
 function renderizarCardsDeNoticias(noticias, container) {
   container.replaceChildren();
 
-  if (!Array.isArray(noticias)) return;
-
   noticias.forEach(noticia => {
-    if (!noticia || typeof noticia !== 'object') return;
+    const urlFonte = urlNoticiaSegura(noticia.link);
+    const nomeFonte = nomeFonteNoticia(noticia, urlFonte);
+    const card = document.createElement('article');
+    card.className = 'news-card-item news-card-clickable';
+    card.tabIndex = 0;
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-label', `Ver prévia: ${noticia.titulo || 'Notícia'}`);
 
-    const card = document.createElement('a');
-    const linkSeguro = obterLinkNoticiaSeguro(noticia.link);
     const tag = document.createElement('span');
-    const title = document.createElement('h4');
-    const description = document.createElement('p');
-    const source = document.createElement('span');
-    const sourceIcon = document.createElement('i');
-
-    card.href = linkSeguro;
-    if (/^https?:\/\//i.test(linkSeguro)) {
-      card.target = '_blank';
-      card.rel = 'noopener noreferrer';
-    }
-    card.className = 'news-card-item';
-
     tag.className = 'news-tag';
-    // A cor é limitada a valores hexadecimais válidos para impedir injeção de CSS.
-    tag.style.backgroundColor = /^#[0-9a-f]{3}(?:[0-9a-f]{3})?$/i.test(noticia.cor || '')
-      ? noticia.cor
-      : '#f4741f';
-    tag.textContent = typeof noticia.categoria === 'string' ? noticia.categoria : 'Notícias';
+    tag.textContent = noticia.categoria || 'Atualidades';
+    tag.style.backgroundColor = /^#[0-9a-f]{3,8}$/i.test(noticia.cor || '') ? noticia.cor : '#f4741f';
 
-    title.textContent = typeof noticia.titulo === 'string' ? noticia.titulo : 'Notícia';
-    description.textContent = typeof noticia.descricao === 'string' ? noticia.descricao : '';
-    source.className = 'news-source';
-    sourceIcon.className = 'fas fa-newspaper';
-    sourceIcon.setAttribute('aria-hidden', 'true');
-    source.append(sourceIcon, document.createTextNode(
-      ` ${typeof noticia.fonte === 'string' ? noticia.fonte : 'Fonte não informada'}`
-    ));
+    const titulo = document.createElement('h4');
+    titulo.textContent = noticia.titulo || 'Notícia';
+    const descricao = document.createElement('p');
+    descricao.textContent = noticia.descricao || 'Clique para conferir os detalhes na fonte original.';
+    const fonte = document.createElement('span');
+    fonte.className = 'news-source';
+    const icone = document.createElement('i');
+    icone.className = 'fas fa-newspaper';
+    icone.setAttribute('aria-hidden', 'true');
+    fonte.append(icone, document.createTextNode(` ${nomeFonte} · Ver prévia`));
 
-    card.append(tag, title, description, source);
+    card.append(tag, titulo, descricao, fonte);
+    card.addEventListener('click', () => abrirPreviaNoticia(noticia));
+    card.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        abrirPreviaNoticia(noticia);
+      }
+    });
     container.appendChild(card);
   });
 }
+
+// Permite fechar o modal de notícia com Esc, sem interferir nos demais modais.
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && el('modal-noticia')?.classList.contains('active')) {
+    fecharModal('modal-noticia');
+  }
+});
 
 function inicializarParceiros() {
   const track = el('partnersTrack');
