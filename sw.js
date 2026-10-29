@@ -1,11 +1,11 @@
-const CACHE_NAME = 'radiacaonet-v5.0';
+const CACHE_NAME = 'radiacaonet-v6.3';
 const APP_SHELL = [
   './',
   './index.html',
   './painel.html',
-  './style.css?v=5.0',
+  './style.css?v=11.1',
   './painel.css?v=3.0',
-  './script.js?v=5.1',
+  './script.js?v=11.3',
   './firebase-public.js?v=5.0',
   './painel.js?v=3.0',
   './painel-firebase.js?v=3.0',
@@ -28,13 +28,15 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// CORREÇÃO: Agora recebe e lê apenas Textos (Strings)
 function isLiveDataRequest(urlString) {
   return urlString.includes('/api/') ||
-    urlString.includes('firebaseio.com') ||
-    urlString.includes('/listen/') ||
-    urlString.endsWith('.mp3') ||
-    urlString.includes('radio.mp3');
+         urlString.includes('firebaseio.com') ||
+         urlString.includes('/listen/') ||
+         urlString.endsWith('.mp3') ||
+         urlString.includes('radio.mp3') ||
+         urlString.includes('rss2json.com') ||
+         urlString.includes('allorigins.win') ||
+         urlString.includes('globo.com');
 }
 
 function isSameOrigin(url) {
@@ -44,16 +46,11 @@ function isSameOrigin(url) {
 self.addEventListener('fetch', (event) => {
   const request = event.request;
   const url = new URL(request.url);
-  const urlString = request.url; // Pega o endereço em formato de texto
+  const urlString = request.url;
 
-  // Streaming, AzuraCast API e Firebase nunca entram no cache.
-  // CORREÇÃO: Passando o urlString para a função
   if (isLiveDataRequest(urlString)) return;
-
-  // Apenas GET pode ser atendido pelo Cache API.
   if (request.method !== 'GET') return;
 
-  // Navegação: sempre tenta a versão mais nova; offline, usa o shell correto.
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
@@ -73,7 +70,6 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Arquivos do próprio app: Network First, garantindo atualização sem perder o offline.
   if (isSameOrigin(url)) {
     event.respondWith(
       fetch(request)
@@ -89,7 +85,6 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Recursos externos (fontes/imagens): Cache First depois do primeiro acesso.
   event.respondWith(
     caches.match(request).then((cached) => {
       if (cached) return cached;
