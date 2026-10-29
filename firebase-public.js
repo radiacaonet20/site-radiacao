@@ -32,7 +32,7 @@ onValue(query(pedidosRef, limitToLast(5)), (snapshot) => {
     liveFeedText.innerText = recadosAprovados.join('   ✦   ');
   } else {
     if (liveFeedText) {
-      liveFeedText.innerText = "Aguardando os primeiros recados dos ouvintes... Peça sua música!";
+      liveFeedText.innerText = "Radiação.Net - A rádio de todas as tribos! Peça sua música e participe da programação!";
     }
   }
 });
