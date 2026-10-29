@@ -1,12 +1,12 @@
-const CACHE_NAME = 'radiacaonet-v3.0';
+const CACHE_NAME = 'radiacaonet-v5.0';
 const APP_SHELL = [
   './',
   './index.html',
   './painel.html',
-  './style.css?v=3.0',
+  './style.css?v=5.0',
   './painel.css?v=3.0',
-  './script.js?v=3.0',
-  './firebase-public.js?v=3.0',
+  './script.js?v=5.1',
+  './firebase-public.js?v=5.0',
   './painel.js?v=3.0',
   './painel-firebase.js?v=3.0',
   './manifest.json',
@@ -28,12 +28,13 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-function isLiveDataRequest(url) {
-  return url.includes('/api/') ||
-         url.includes('firebaseio.com') ||
-         url.includes('/listen/') ||
-         url.endsWith('.mp3') ||
-         url.includes('radio.mp3');
+// CORREÇÃO: Agora recebe e lê apenas Textos (Strings)
+function isLiveDataRequest(urlString) {
+  return urlString.includes('/api/') ||
+    urlString.includes('firebaseio.com') ||
+    urlString.includes('/listen/') ||
+    urlString.endsWith('.mp3') ||
+    urlString.includes('radio.mp3');
 }
 
 function isSameOrigin(url) {
@@ -43,9 +44,11 @@ function isSameOrigin(url) {
 self.addEventListener('fetch', (event) => {
   const request = event.request;
   const url = new URL(request.url);
+  const urlString = request.url; // Pega o endereço em formato de texto
 
   // Streaming, AzuraCast API e Firebase nunca entram no cache.
-  if (isLiveDataRequest(url)) return;
+  // CORREÇÃO: Passando o urlString para a função
+  if (isLiveDataRequest(urlString)) return;
 
   // Apenas GET pode ser atendido pelo Cache API.
   if (request.method !== 'GET') return;
