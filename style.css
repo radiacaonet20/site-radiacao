@@ -196,40 +196,69 @@ body {
 .stat-labels { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: bold; color: var(--cor-texto); }
 
 /* --- RESPONSIVIDADE MOBILE DO NOVO PLAYER HORIZONTAL --- */
+/* --- RESPONSIVIDADE MOBILE DO NOVO PLAYER HORIZONTAL --- */
 @media (max-width: 650px) {
-  body { padding-bottom: 110px; }
+  /* 1. Reduz os espaços gigantes (gap) e aproxima os elementos */
+  body { padding: 20px 15px 90px 15px; gap: 15px; }
+  
+  .title-wrapper { gap: 10px; margin-bottom: 0; }
+  .floating-title { font-size: 1.8rem; }
+  .logo-img { width: 40px; height: 40px; }
+
+  /* 2. O Segredo: Força o layout em linha no celular (Capa na esquerda, botões na direita) */
   .premium-dashboard { border-radius: 20px; }
-  .player-split-layout { flex-direction: column; padding: 25px 20px; gap: 20px; }
+  .player-split-layout { 
+    flex-direction: row; 
+    padding: 15px; 
+    gap: 12px; 
+    align-items: center; 
+  }
   
-  .player-cover-container { width: 140px; height: 140px; margin: 0 auto; }
-  .player-right { align-items: center; text-align: center; }
+  /* 3. Encolhe a capa do álbum e trava ela do lado esquerdo */
+  .player-left { flex: 0 0 75px; }
+  .player-cover-container { width: 75px; height: 75px; margin: 0; }
   
-  .song-title { font-size: 1.4rem; white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-  .premium-controls { flex-wrap: wrap; justify-content: center; width: 100%; }
+  /* 4. Textos e Gráfico de Áudio agrupados na direita */
+  .player-right { flex: 1; min-width: 0; align-items: flex-start; text-align: left; gap: 4px; }
+  .song-title { font-size: 1.1rem; white-space: nowrap; }
+  .song-artist { font-size: 0.85rem; }
+  .song-album { display: none; } /* Esconde o nome do álbum para poupar espaço vertical */
   
-  .volume-wrapper-mini { display: none; }
-  .btn-enquete-flutuante { top: 20px; right: 15px; }
+  .spectrum-canvas { height: 20px; margin-top: 2px; }
   
-  .menu-container { grid-template-columns: 1fr 1fr; display: grid; }
-  .btn-menu { padding: 10px; font-size: 0.8rem; justify-content: center;}
+  /* 5. Controles compactos alinhados com o texto */
+  .premium-controls { width: 100%; justify-content: space-between; margin-top: 5px; gap: 10px;}
+  .btn-play-pause { width: 42px; height: 42px; font-size: 1rem; }
+  .action-buttons { gap: 8px; }
+  .btn-action { width: 34px; height: 34px; font-size: 0.9rem; }
+  .btn-heart { padding: 0 10px; font-size: 0.75rem; }
+  
+  .live-feed-bar { padding: 8px 15px; font-size: 0.75rem; }
+
+  /* 6. Encolhe sutilmente os menus e parceiros para garantir que caibam na primeira tela */
+  .ui-elements-group { gap: 15px; }
+  .menu-container { grid-template-columns: 1fr 1fr; display: grid; gap: 8px;}
+  .btn-menu { padding: 10px; font-size: 0.75rem; justify-content: center;}
   
   .apps-container { flex-direction: row !important; flex-wrap: nowrap !important; gap: 10px !important; justify-content: center; width: 100%; }
   .app-card { flex: 0 1 auto; display: flex; justify-content: center; }
-  .app-card img { height: auto !important; max-height: 40px !important; max-width: 100% !important; object-fit: contain; }
+  .app-card img { height: auto !important; max-height: 35px !important; max-width: 100% !important; object-fit: contain; }
   
-  .floating-title { font-size: 2rem; }
-  .logo-img { width: 45px; height: 45px; }
+  .partners-section { margin-top: 0; }
+  .partners-title { font-size: 0.7rem; margin-bottom: 8px; }
+  .partner-card img { width: 110px; height: 50px; padding: 6px; }
   
-  /* Corrige tamanho dos cards na roleta no mobile */
-  .partner-card img { width: 130px; height: 65px; }
+  .volume-wrapper-mini { display: none; }
+  .btn-enquete-flutuante { top: 15px; right: 15px; padding: 8px 12px; font-size: 0.8rem;}
   
+  /* Modais mantidos idênticos */
   .modal-overlay { align-items: flex-end; }
-  .modal-content { width: 100%; max-width: 100%; height: 100dvh; max-height: 100dvh; border-radius: 0; padding: 60px 20px 20px 20px; }
+  .modal-content { width: 100%; max-width: 100%; height: 100dvh; max-height: 100dvh; border-radius: 0; padding: 50px 20px 20px 20px; }
   .modal-overlay.active .modal-content { animation: slideUpMobile 0.35s cubic-bezier(0.1, 0.9, 0.2, 1) forwards; }
   .modal-overlay.closing .modal-content { animation: slideDownMobile 0.35s cubic-bezier(0.1, 0.9, 0.2, 1) forwards; }
   @keyframes slideUpMobile { from { transform: translateY(100%); } to { transform: translateY(0); } }
   @keyframes slideDownMobile { from { transform: translateY(0); } to { transform: translateY(100%); } }
-  .close-btn { top: 15px; right: 20px; font-size: 2rem; }
+  .close-btn { top: 10px; right: 15px; font-size: 1.8rem; }
 }
 
 html { background: #121212; }
