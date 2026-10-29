@@ -6,6 +6,31 @@ const canvasCtx = canvas ? canvas.getContext('2d') : null;
 
 const el = id => document.getElementById(id);
 
+const LOGO_PADRAO = 'https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png';
+
+// Aceita apenas URLs HTTP(S) para recursos externos, evitando protocolos executáveis.
+function obterUrlHttpSegura(valor, fallback = '') {
+  if (typeof valor !== 'string' || !valor.trim()) return fallback;
+
+  try {
+    const url = new URL(valor, window.location.href);
+    if (url.protocol === 'http:' || url.protocol === 'https:') return url.href;
+  } catch (error) {
+    // URL inválida: utiliza o fallback.
+  }
+
+  return fallback;
+}
+
+// Links de notícias podem ser âncoras internas ou URLs HTTP(S).
+function obterLinkNoticiaSeguro(valor) {
+  if (typeof valor === 'string' && valor.trim().startsWith('#')) {
+    return valor.trim();
+  }
+
+  return obterUrlHttpSegura(valor, '#noticias');
+}
+
 function iniciarEspectro() {
   if (!audioCtx && canvasCtx) {
     try {
@@ -178,13 +203,23 @@ const parceirosOficiais = {
 async function atualizarNowPlaying() {
   try {
     const response = await fetch('https://painel.radiacao.net.br/api/nowplaying_static/radiacaonet.json?_=' + new Date().getTime(), { cache: 'no-store' });
-    const data = await response.json();
+    if (!response.ok) throw new Error(`Falha ao consultar a transmissão (HTTP ${response.status}).`);
 
-    const isLive = data.live.is_live;
-    const streamer = data.live.streamer_name;
-    const displayTitle = isLive ? ((data.now_playing.song.text || "").split(' - ')[0] || "Ao Vivo") : (data.now_playing.song.title || "Desconhecido");
-    const displayArtist = isLive ? `🎙️ ${streamer}` : (data.now_playing.song.artist || "Desconhecido");
-    const coverUrl = data.now_playing.song.art || 'https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png';
+    const data = await response.json();
+    if (!data || !data.live || !data.now_playing || !data.now_playing.song) {
+      throw new Error('A resposta da transmissão está incompleta.');
+    }
+
+    const isLive = Boolean(data.live.is_live);
+    const streamer = typeof data.live.streamer_name === 'string' ? data.live.streamer_name : '';
+    const song = data.now_playing.song;
+    const displayTitle = isLive
+      ? ((typeof song.text === 'string' ? song.text : '').split(' - ')[0] || 'Ao Vivo')
+      : (typeof song.title === 'string' && song.title ? song.title : 'Desconhecido');
+    const displayArtist = isLive
+      ? `🎙️ ${streamer || 'Locutor ao vivo'}`
+      : (typeof song.artist === 'string' && song.artist ? song.artist : 'Desconhecido');
+    const coverUrl = obterUrlHttpSegura(song.art, LOGO_PADRAO);
 
     if(el('playerLine1')) el('playerLine1').innerText = displayTitle;
     if(el('playerLine2')) el('playerLine2').innerText = displayArtist;
@@ -193,11 +228,37 @@ async function atualizarNowPlaying() {
     if(el('heroLocutor')) el('heroLocutor').innerText = displayArtist;
 
     const historyList = el('lista-historico');
-    if (historyList && data.song_history && data.song_history.length > 0) {
-      historyList.innerHTML = '';
+    if (historyList && Array.isArray(data.song_history)) {
+      historyList.replaceChildren();
+
       data.song_history.slice(0, 5).forEach(item => {
+        const song = item && item.song ? item.song : {};
         const li = document.createElement('li');
-        li.innerHTML = `<div class="item-left"><img src="${item.song.art || 'https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png'}" class="thumb-img thumb-logo"><div class="member-info"><span class="member-name" style="font-size: 0.9rem;">${item.song.title}</span><span class="member-role" style="font-size: 0.75rem; color: #aaa;">${item.song.artist}</span></div></div>`;
+        const itemLeft = document.createElement('div');
+        const image = document.createElement('img');
+        const memberInfo = document.createElement('div');
+        const title = document.createElement('span');
+        const artist = document.createElement('span');
+
+        itemLeft.className = 'item-left';
+        image.className = 'thumb-img thumb-logo';
+        image.src = obterUrlHttpSegura(song.art, LOGO_PADRAO);
+        image.alt = '';
+        image.loading = 'lazy';
+
+        memberInfo.className = 'member-info';
+        title.className = 'member-name';
+        title.style.fontSize = '0.9rem';
+        title.textContent = typeof song.title === 'string' ? song.title : 'Música desconhecida';
+
+        artist.className = 'member-role';
+        artist.style.fontSize = '0.75rem';
+        artist.style.color = '#aaa';
+        artist.textContent = typeof song.artist === 'string' ? song.artist : 'Artista desconhecido';
+
+        memberInfo.append(title, artist);
+        itemLeft.append(image, memberInfo);
+        li.appendChild(itemLeft);
         historyList.appendChild(li);
       });
     }
@@ -455,22 +516,45 @@ async function carregarNoticiasRSS() {
 }
 
 function renderizarCardsDeNoticias(noticias, container) {
-  container.innerHTML = ''; 
-  
+  container.replaceChildren();
+
+  if (!Array.isArray(noticias)) return;
+
   noticias.forEach(noticia => {
+    if (!noticia || typeof noticia !== 'object') return;
+
     const card = document.createElement('a');
-    card.href = noticia.link;
-    if (noticia.link.startsWith('http')) {
+    const linkSeguro = obterLinkNoticiaSeguro(noticia.link);
+    const tag = document.createElement('span');
+    const title = document.createElement('h4');
+    const description = document.createElement('p');
+    const source = document.createElement('span');
+    const sourceIcon = document.createElement('i');
+
+    card.href = linkSeguro;
+    if (/^https?:\/\//i.test(linkSeguro)) {
       card.target = '_blank';
       card.rel = 'noopener noreferrer';
     }
     card.className = 'news-card-item';
-    card.innerHTML = `
-      <span class="news-tag" style="background: ${noticia.cor};">${noticia.categoria}</span>
-      <h4>${noticia.titulo}</h4>
-      <p>${noticia.descricao}</p>
-      <span class="news-source"><i class="fas fa-newspaper"></i> ${noticia.fonte}</span>
-    `;
+
+    tag.className = 'news-tag';
+    // A cor é limitada a valores hexadecimais válidos para impedir injeção de CSS.
+    tag.style.backgroundColor = /^#[0-9a-f]{3}(?:[0-9a-f]{3})?$/i.test(noticia.cor || '')
+      ? noticia.cor
+      : '#f4741f';
+    tag.textContent = typeof noticia.categoria === 'string' ? noticia.categoria : 'Notícias';
+
+    title.textContent = typeof noticia.titulo === 'string' ? noticia.titulo : 'Notícia';
+    description.textContent = typeof noticia.descricao === 'string' ? noticia.descricao : '';
+    source.className = 'news-source';
+    sourceIcon.className = 'fas fa-newspaper';
+    sourceIcon.setAttribute('aria-hidden', 'true');
+    source.append(sourceIcon, document.createTextNode(
+      ` ${typeof noticia.fonte === 'string' ? noticia.fonte : 'Fonte não informada'}`
+    ));
+
+    card.append(tag, title, description, source);
     container.appendChild(card);
   });
 }
