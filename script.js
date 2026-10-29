@@ -299,7 +299,28 @@ window.addEventListener('resize', verificarExibicaoPwaMobile);
 
 // URL do Cloudflare Worker. Após publicar worker.js, cole aqui a URL fornecida pela Cloudflare.
 // Exemplo: https://radiacao-rss.seu-nome.workers.dev
-const RADAR_RSS_API_URL = 'https://radacao-rss.fromacedo.workers.dev/';
+const RADAR_RSS_API_URL = 'https://radacao-rss.fromacedo.workers.dev';
+
+function limparTextoRSS(valor) {
+  let texto = String(valor || '');
+  for (let i = 0; i < 3; i++) {
+    const decodificado = texto
+      .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/gi, '$1')
+      .replace(/&nbsp;|&#160;/gi, ' ')
+      .replace(/&amp;/gi, '&').replace(/&lt;/gi, '<').replace(/&gt;/gi, '>')
+      .replace(/&quot;/gi, '"').replace(/&apos;|&#39;/gi, "'");
+    if (decodificado === texto) break;
+    texto = decodificado;
+  }
+  return texto
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, ' ')
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style\s*>/gi, ' ')
+    .replace(/<!\[CDATA\[|\]\]>/gi, ' ')
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/&(?:nbsp|amp|lt|gt|quot|apos);/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
 
 async function carregarNoticiasRSS() {
   const container = el('newsList');
@@ -332,7 +353,7 @@ async function carregarNoticiasRSS() {
     }).map(n => ({
       titulo: String(n.titulo).trim(),
       link: n.link,
-      descricao: String(n.descricao || '').trim().slice(0, 240),
+      descricao: limparTextoRSS(n.descricao).slice(0, 240),
       data: n.data ? new Date(n.data).getTime() : null,
       categoria: n.categoria || 'Atualidades',
       cor: n.cor || '#f4741f',

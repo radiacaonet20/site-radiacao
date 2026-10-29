@@ -88,12 +88,12 @@ body {
 /* NOTÍCIAS (RSS GRID) */
 .news-loading { width: 100%; text-align: center; padding: 50px 0; color: var(--cor-primaria); font-size: 1.2rem; font-weight: 600; grid-column: 1 / -1;}
 .news-error { width: 100%; text-align: center; padding: 40px 0; color: #ff4c4c; font-weight: bold; grid-column: 1 / -1; background: rgba(255,76,76,0.1); border-radius: 12px; }
-.news-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
-.news-card-item { background: rgba(255,255,255,0.02); border: 1px solid var(--borda-clara); border-radius: 20px; padding: 30px; display: flex; flex-direction: column; gap: 12px; transition: 0.3s; text-decoration: none; }
+.news-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: 1fr; align-items: stretch; gap: 30px; }
+.news-card-item { background: rgba(255,255,255,0.02); border: 1px solid var(--borda-clara); border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 12px; transition: 0.3s; text-decoration: none; height: 100%; min-height: 300px; min-width: 0; }
 .news-card-item:hover { background: rgba(255,255,255,0.05); border-color: var(--cor-primaria); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
 .news-tag { align-self: flex-start; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 6px; color: #fff; text-transform: uppercase; letter-spacing: 1px;}
-.news-card-item h4 { font-size: 1.2rem; line-height: 1.3; color: var(--cor-texto); font-weight: 700; margin-top: 5px;}
-.news-card-item p { font-size: 0.9rem; color: var(--cor-texto-mutado); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 10px;}
+.news-card-item h4 { font-size: 1.1rem; line-height: 1.35; color: var(--cor-texto); font-weight: 700; margin-top: 5px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; min-height: calc(1.35em * 3); }
+.news-card-item p { font-size: 0.9rem; color: var(--cor-texto-mutado); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; min-height: calc(1.5em * 3); margin-bottom: 10px; }
 .news-source { margin-top: auto; font-size: 0.75rem; color: #777; display: flex; align-items: center; gap: 5px;}
 
 /* PROGRAMAÇÃO */
