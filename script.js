@@ -156,7 +156,7 @@ function setToday() {
   const targetBtn = document.querySelector(`.day-pill[data-target="${todayId}"]`);
   if(targetBtn) {
     targetBtn.classList.add('active');
-    targetBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    //targetBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
   }
 }
 
