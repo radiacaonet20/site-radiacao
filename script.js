@@ -203,6 +203,17 @@ async function atualizarNowPlaying() {
     }
 
     let bgChaveAtiva = "default";
+    const btnPedidos = el('btnRequestLive');
+    if (btnPedidos) {
+      const jaVisivel = btnPedidos.dataset.liveVisible === 'true';
+      btnPedidos.style.display = isLive ? 'flex' : 'none';
+      if (isLive && !jaVisivel) {
+        btnPedidos.classList.remove('is-entering');
+        void btnPedidos.offsetWidth;
+        btnPedidos.classList.add('is-entering');
+      }
+      btnPedidos.dataset.liveVisible = isLive ? 'true' : 'false';
+    }
     ['sponsorBadge', 'heroSponsorBadge', 'playerLiveBadge', 'heroLiveBadge', 'btnRequestLive'].forEach(id => { if(el(id)) el(id).style.display = 'none'; });
 
     if (isLive) {

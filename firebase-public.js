@@ -41,11 +41,21 @@ onValue(query(pedidosRef, limitToLast(5)), (snapshot) => {
 const reacoesRef = ref(db, 'reacoes');
 const contadorRef = ref(db, 'estatisticas/total_likes'); 
 let ultimoLike = 0;
+let minhaReacaoKey = null;
 
 onValue(contadorRef, (snapshot) => {
   const total = snapshot.val() || 0;
   const contador = document.getElementById('contador-likes');
-  if (contador) contador.innerText = formatarNumero(total);
+  if (contador) {
+    contador.innerText = formatarNumero(total);
+    const botao = document.getElementById('btnLike') || document.querySelector('.sp-btn-heart');
+    if (botao) {
+      botao.classList.remove('counter-bump');
+      void botao.offsetWidth;
+      botao.classList.add('counter-bump');
+      setTimeout(() => botao.classList.remove('counter-bump'), 450);
+    }
+  }
 });
 
 function formatarNumero(num) {
@@ -59,29 +69,98 @@ window.enviarReacao = function () {
   if (agora - ultimoLike < 1000) return;
   ultimoLike = agora;
 
-  criarCoracaoLocal();
-  push(reacoesRef, { timestamp: agora });
+  animarBotaoCurtida();
+  criarCoracaoLocal(true);
+  const novaReacao = push(reacoesRef, { timestamp: agora });
+  minhaReacaoKey = novaReacao.key;
 
   runTransaction(contadorRef, (votosAtuais) => {
     return (votosAtuais || 0) + 1;
   });
 };
 
-function criarCoracaoLocal() {
+function animarBotaoCurtida() {
+  const botao = document.getElementById('btnLike') || document.querySelector('.sp-btn-heart');
+  if (!botao) return;
+  botao.classList.remove('is-liked', 'counter-bump');
+  void botao.offsetWidth;
+  botao.classList.add('is-liked', 'counter-bump');
+  setTimeout(() => botao.classList.remove('is-liked', 'counter-bump'), 650);
+}
+
+function criarCoracaoLocal(comParticulas = true) {
   const container = document.getElementById('hearts-container');
   if (!container) return;
-  const heart = document.createElement('div');
-  heart.innerHTML = '<i class="fas fa-heart"></i>';
-  heart.className = 'heart-fly';
-  heart.style.left = (Math.random() * 60) + '%';
-  container.appendChild(heart);
-  setTimeout(() => heart.remove(), 2500);
+
+  // Um burst central, grande e visível — como pequenos fogos de artifício.
+  const burst = document.createElement('div');
+  burst.className = 'like-firework-burst';
+  burst.setAttribute('aria-hidden', 'true');
+
+  const principal = document.createElement('i');
+  principal.className = 'fas fa-heart firework-heart firework-heart-main';
+  principal.textContent = '';
+  burst.appendChild(principal);
+
+  // Camada complementar: corações maiores sobem suavemente após a explosão.
+  for (let i = 0; i < 5; i++) {
+    const rising = document.createElement('i');
+    rising.className = 'fas fa-heart firework-heart heart-rise';
+    rising.style.setProperty('--rise-x', `${Math.round(Math.random() * 170 - 85)}px`);
+    rising.style.setProperty('--rise-delay', `${180 + i * 95}ms`);
+    rising.style.setProperty('--rise-size', `${24 + Math.random() * 18}px`);
+    rising.style.color = Math.random() > 0.45 ? '#ff647b' : '#ff9a43';
+    burst.appendChild(rising);
+  }
+
+  const heartCount = 12;
+  for (let i = 0; i < heartCount; i++) {
+    const heart = document.createElement('i');
+    heart.className = 'fas fa-heart firework-heart firework-heart-piece';
+
+    const angle = (Math.PI * 2 * i / heartCount) + (Math.random() * 0.28);
+    const distance = 78 + Math.random() * 92;
+    const x = Math.cos(angle) * distance;
+    const y = Math.sin(angle) * distance - (20 + Math.random() * 35);
+
+    heart.style.setProperty('--burst-x', `${x}px`);
+    heart.style.setProperty('--burst-y', `${y}px`);
+    heart.style.setProperty('--burst-rotate', `${Math.round(Math.random() * 70 - 35)}deg`);
+    heart.style.setProperty('--burst-size', `${19 + Math.random() * 18}px`);
+    heart.style.setProperty('--burst-delay', `${Math.random() * 90}ms`);
+    heart.style.color = Math.random() > 0.45 ? '#ff536b' : '#ff8a35';
+    burst.appendChild(heart);
+  }
+
+  if (comParticulas) {
+    for (let i = 0; i < 22; i++) {
+      const spark = document.createElement('span');
+      spark.className = 'firework-spark';
+
+      const angle = Math.random() * Math.PI * 2;
+      const distance = 55 + Math.random() * 145;
+      spark.style.setProperty('--spark-x', `${Math.cos(angle) * distance}px`);
+      spark.style.setProperty('--spark-y', `${Math.sin(angle) * distance}px`);
+      spark.style.setProperty('--spark-delay', `${Math.random() * 120}ms`);
+      spark.style.setProperty('--spark-size', `${3 + Math.random() * 5}px`);
+      spark.style.setProperty('--spark-color', Math.random() > 0.5 ? '#ffb347' : '#ff536b');
+      burst.appendChild(spark);
+    }
+  }
+
+  container.appendChild(burst);
+  setTimeout(() => burst.remove(), 1450);
 }
 
 let primeiraCarga = true;
 onChildAdded(query(reacoesRef, limitToLast(1)), (snapshot) => {
   if (primeiraCarga) { primeiraCarga = false; return; }
-  if (Date.now() - snapshot.val().timestamp < 5000) { criarCoracaoLocal(); }
+  if (snapshot.key === minhaReacaoKey) {
+    minhaReacaoKey = null;
+    return;
+  }
+  const reacao = snapshot.val();
+  if (reacao && Date.now() - reacao.timestamp < 5000) criarCoracaoLocal(true);
 });
 
 // --- SISTEMA DE ENQUETES (OUVINTE) ---

@@ -309,3 +309,207 @@ body {
   background: rgba(244, 116, 31, 0.08);
   line-height: 1.6;
 }
+
+
+/* PLAYER — PEDIDOS AO VIVO E REAÇÃO DE CURTIDA */
+.sp-btn-request {
+  display: none;
+  color: #c7c7cc;
+  gap: 7px;
+  white-space: nowrap;
+  font-weight: 600;
+  letter-spacing: .1px;
+  transition: color .22s ease, transform .22s ease, opacity .22s ease;
+}
+.sp-btn-request i { color: var(--cor-primaria); font-size: 1.05em; }
+.sp-btn-request:hover { color: #fff; transform: translateY(-1px); }
+.sp-btn-request.is-entering { animation: requestAppear .38s ease both; }
+@keyframes requestAppear {
+  0% { opacity: 0; transform: translateY(5px) scale(.96); }
+  70% { opacity: 1; transform: translateY(-1px) scale(1.02); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.sp-btn-heart { position: relative; transform-origin: center; }
+.sp-btn-heart i { transition: color .2s ease, filter .2s ease; }
+.sp-btn-heart.is-liked { animation: heartPop .48s cubic-bezier(.18,.89,.32,1.45); }
+.sp-btn-heart.is-liked i {
+  color: #ff536b;
+  filter: drop-shadow(0 0 7px rgba(255,83,107,.55));
+}
+.sp-btn-heart.counter-bump span { display: inline-block; animation: likeCountBump .35s ease; }
+@keyframes heartPop {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.38) rotate(-8deg); }
+  65% { transform: scale(.92) rotate(5deg); }
+  100% { transform: scale(1); }
+}
+@keyframes likeCountBump {
+  0% { transform: translateY(5px) scale(.8); opacity: .45; }
+  65% { transform: translateY(-2px) scale(1.12); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+.heart-fly { will-change: transform, opacity; text-shadow: 0 0 12px rgba(255,76,100,.35); }
+.heart-fly i { display: block; }
+.heart-particle {
+  position: absolute; bottom: 0; left: 50%;
+  width: 7px; height: 7px; border-radius: 2px;
+  background: var(--cor-primaria); opacity: 0;
+  animation: heartParticle .78s ease-out forwards;
+}
+@keyframes heartParticle {
+  0% { opacity: 0; transform: translate(0,0) scale(.4) rotate(0); }
+  20% { opacity: .95; }
+  100% { opacity: 0; transform: translate(var(--particle-x), var(--particle-y)) scale(0) rotate(180deg); }
+}
+@media (max-width: 950px) {
+  .sp-btn-action.sp-btn-request {
+    display: none;
+    font-size: .88rem;
+    gap: 5px;
+    padding: 7px 2px;
+  }
+  .sp-btn-action.sp-btn-request[style*="display: flex"] { display: flex !important; }
+  .sp-btn-heart { display: flex; font-size: 1rem; }
+  .sp-controls { gap: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sp-btn-request.is-entering, .sp-btn-heart.is-liked,
+  .sp-btn-heart.counter-bump span, .heart-fly, .heart-particle {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+
+/* CURTIDAS — EXPLOSÃO DE CORAÇÕES NO CENTRO DO PLAYER */
+.hearts-container {
+  position: absolute;
+  left: 50%;
+  right: auto;
+  bottom: 92px;
+  width: 1px;
+  height: 1px;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 10020;
+}
+.like-firework-burst {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 1px;
+  height: 1px;
+  overflow: visible;
+  pointer-events: none;
+  animation: fireworkBurstFade 1.4s ease-out forwards;
+}
+.firework-heart {
+  position: absolute;
+  left: 0;
+  top: 0;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 3px 8px rgba(0,0,0,.45));
+}
+.firework-heart-main {
+  z-index: 2;
+  color: #ff536b;
+  font-size: 76px;
+  animation: mainHeartFirework 1.15s cubic-bezier(.16,.84,.32,1) forwards;
+  filter: drop-shadow(0 0 10px rgba(255,83,107,.85))
+          drop-shadow(0 0 28px rgba(255,138,53,.55));
+}
+.firework-heart-piece {
+  z-index: 1;
+  font-size: var(--burst-size);
+  opacity: 0;
+  animation: heartFireworkPiece 1.15s cubic-bezier(.12,.75,.28,1) var(--burst-delay) forwards;
+}
+.firework-spark {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  top: 0;
+  width: var(--spark-size);
+  height: var(--spark-size);
+  border-radius: 50%;
+  background: var(--spark-color);
+  box-shadow: 0 0 9px var(--spark-color), 0 0 17px rgba(255,180,71,.55);
+  opacity: 0;
+  animation: sparkFirework .9s ease-out var(--spark-delay) forwards;
+}
+@keyframes mainHeartFirework {
+  0% { opacity: 0; transform: translate(-50%,-50%) scale(.15) rotate(-18deg); }
+  18% { opacity: 1; transform: translate(-50%,-50%) scale(1.32) rotate(8deg); }
+  35% { transform: translate(-50%,-50%) scale(.92) rotate(-4deg); }
+  55% { opacity: 1; transform: translate(-50%,-50%) scale(1.08) rotate(0); }
+  100% { opacity: 0; transform: translate(-50%,-155%) scale(.72) rotate(12deg); }
+}
+@keyframes heartFireworkPiece {
+  0% { opacity: 0; transform: translate(-50%,-50%) scale(.15) rotate(0); }
+  16% { opacity: 1; }
+  72% { opacity: 1; }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--burst-x)), calc(-50% + var(--burst-y)))
+               scale(.55) rotate(var(--burst-rotate));
+  }
+}
+@keyframes sparkFirework {
+  0% { opacity: 0; transform: translate(-50%,-50%) scale(.2); }
+  18% { opacity: 1; }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--spark-x)), calc(-50% + var(--spark-y))) scale(.15);
+  }
+}
+@keyframes fireworkBurstFade {
+  0%, 72% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@media (max-width: 950px) {
+  .hearts-container { bottom: 86px; }
+  .firework-heart-main { font-size: 64px; }
+}
+@media (max-width: 520px) {
+  .hearts-container { bottom: 78px; }
+  .firework-heart-main { font-size: 58px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .like-firework-burst, .firework-heart, .firework-spark {
+    animation-duration: .35s !important;
+  }
+}
+
+
+/* CAMADA EXTRA — CORAÇÕES FLUTUANDO PARA CIMA */
+.heart-rise {
+  z-index: 4;
+  left: 0;
+  top: 0;
+  font-size: var(--rise-size);
+  opacity: 0;
+  animation: heartRiseUp 2.05s cubic-bezier(.18,.68,.25,1) var(--rise-delay) forwards;
+  filter: drop-shadow(0 0 9px rgba(255,83,107,.65));
+}
+@keyframes heartRiseUp {
+  0% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--rise-x)), -10px) scale(.45) rotate(-12deg);
+  }
+  14% {
+    opacity: 1;
+    transform: translate(calc(-50% + var(--rise-x)), -28px) scale(1.12) rotate(7deg);
+  }
+  72% {
+    opacity: .9;
+    transform: translate(calc(-50% + var(--rise-x) * 1.25), -185px) scale(.92) rotate(-8deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--rise-x) * 1.45), -270px) scale(.68) rotate(13deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .heart-rise { animation-duration: .35s !important; }
+}

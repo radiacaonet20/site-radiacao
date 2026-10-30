@@ -40,6 +40,8 @@ let quantidadePedidosAnterior = 0;
 let pedidosAtuais = {};
 let historicoAtual = {};
 let visualizacao = "pendentes";
+let idsNovosParaAnimar = new Set();
+let toastTimeout = null;
 let piscando = false;
 let intervaloPiscar = null;
 
@@ -148,6 +150,29 @@ function criarElemento(tag, classe, texto) {
   return el;
 }
 
+function mostrarAvisoNovoPedido(pedido) {
+  let toast = document.getElementById("novo-pedido-toast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "novo-pedido-toast";
+    toast.className = "novo-pedido-toast";
+    toast.setAttribute("role", "status");
+    toast.setAttribute("aria-live", "polite");
+    toast.innerHTML = '<div class="toast-icon"><i class="fas fa-music"></i></div><div><strong>Novo pedido recebido!</strong><span class="toast-detalhe"></span></div>';
+    document.body.appendChild(toast);
+  }
+  const detalhe = toast.querySelector(".toast-detalhe");
+  if (detalhe) detalhe.textContent = `${pedido?.nome || "Um ouvinte"} pediu ${pedido?.musica || "uma música"}`;
+  toast.classList.remove("saindo", "visivel");
+  void toast.offsetWidth;
+  toast.classList.add("visivel");
+  if (toastTimeout) clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => {
+    toast.classList.remove("visivel");
+    toast.classList.add("saindo");
+  }, 4200);
+}
+
 function renderizarPedidos() {
   if (!container) return;
   container.replaceChildren();
@@ -170,7 +195,14 @@ function renderizarPedidos() {
   }
 
   itens.forEach(([id, p]) => {
-    const row = criarElemento("article", "pedido-row");
+    const ehNovo = visualizacao === "pendentes" && idsNovosParaAnimar.has(id);
+    const row = criarElemento("article", ehNovo ? "pedido-row pedido-row-new" : "pedido-row");
+    if (ehNovo) {
+      row.addEventListener("animationend", () => {
+        idsNovosParaAnimar.delete(id);
+        row.classList.remove("pedido-row-new");
+      }, { once: true });
+    }
     const left = criarElemento("div", "pedido-left");
     const dot = criarElemento("span", "status-dot");
     const info = criarElemento("div", "pedido-info");
@@ -246,22 +278,32 @@ function iniciarLeituraPedidos() {
     const dados = snapshot.val() || {};
     const chaves = Object.keys(dados);
     const quantidadeAtual = chaves.length;
+    const idsAnteriores = new Set(Object.keys(pedidosAtuais));
+    const idsRealmenteNovos = cargaInicial ? [] : chaves.filter((id) => !idsAnteriores.has(id));
 
-    if (!cargaInicial && quantidadeAtual > quantidadePedidosAnterior) {
+    if (idsRealmenteNovos.length) {
+      idsRealmenteNovos.forEach((id) => idsNovosParaAnimar.add(id));
+      const primeiroNovo = dados[idsRealmenteNovos[idsRealmenteNovos.length - 1]];
       if (alertasAtivados) {
         notificationSound.currentTime = 0;
         notificationSound.play().catch(() => {});
       }
       notificarAba();
-      if ("Notification" in window && Notification.permission === "granted") {
-        const novo = chaves.map((id) => dados[id]).find((p) => !Object.values(pedidosAtuais).includes(p));
-        const pedido = novo || dados[chaves[chaves.length - 1]];
-        if (pedido) new Notification("Radiação.Net - Novo pedido!", {
-          body: `${pedido.nome || "Ouvinte"} pediu: ${pedido.musica || "uma música"}`,
+      mostrarAvisoNovoPedido(primeiroNovo);
+      const contadorBox = document.querySelector(".pending-stat");
+      if (contadorBox) {
+        contadorBox.classList.remove("pedido-chegou");
+        void contadorBox.offsetWidth;
+        contadorBox.classList.add("pedido-chegou");
+      }
+      if ("Notification" in window && Notification.permission === "granted" && primeiroNovo) {
+        new Notification("Radiação.Net - Novo pedido!", {
+          body: `${primeiroNovo.nome || "Ouvinte"} pediu: ${primeiroNovo.musica || "uma música"}`,
           icon: "https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png"
         });
       }
     }
+
     quantidadePedidosAnterior = quantidadeAtual;
     cargaInicial = false;
     pedidosAtuais = dados;
