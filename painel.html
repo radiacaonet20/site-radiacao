@@ -1,129 +1,101 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Painel do Locutor - Radiação.Net</title>
-    <link rel="icon" type="image/png" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
-    <link rel="apple-touch-icon" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
-    
-    <link rel="manifest" href="./manifest-painel.json">
-    <meta name="theme-color" content="#0b0d12">
-
-    <!-- Fontes e Ícones -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- CSS global -->
-    <link rel="stylesheet" href="./style.css?v=4.0">
-    <link rel="stylesheet" href="./painel.css?v=4.1">
-  </head>
-  <body>
-
-    <!-- TELA DE LOGIN -->
-    <div id="tela-login">
-      <div class="login-box">
-        <img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" alt="Logo">
-        <h2>Acesso ao Sistema</h2>
-        <form id="form-login">
-          <div class="input-group">
-            <label>E-mail do Locutor</label>
-            <input type="email" id="login-email" required placeholder="locutor@radiacao.net">
-          </div>
-          <div class="input-group">
-            <label>Senha</label>
-            <input type="password" id="login-senha" required placeholder="••••••••">
-          </div>
-          <button type="submit" class="btn-login" id="btn-entrar">Autenticar</button>
-          <div id="msg-erro"><i class="fas fa-exclamation-triangle"></i> E-mail ou senha incorretos!</div>
-        </form>
-      </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel do Locutor · Radiação.Net</title>
+  <link rel="icon" type="image/png" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
+  <link rel="apple-touch-icon" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
+  <link rel="manifest" href="./manifest-painel.json">
+  <meta name="theme-color" content="#090b0f">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="./style.css?v=3.0">
+  <link rel="stylesheet" href="./painel.css?v=7.0">
+</head>
+<body>
+  <div id="tela-login">
+    <div class="login-box">
+      <img src="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png" alt="Radiação.Net">
+      <span class="login-kicker">CENTRAL DE OPERAÇÕES</span>
+      <h2>Acesso do locutor</h2>
+      <p class="login-description">Entre para acompanhar a transmissão e a participação dos ouvintes.</p>
+      <form id="form-login">
+        <div class="input-group"><label for="login-email">E-mail do locutor</label><input type="email" id="login-email" required placeholder="locutor@radiacao.net"></div>
+        <div class="input-group"><label for="login-senha">Senha</label><input type="password" id="login-senha" required placeholder="Sua senha"></div>
+        <button type="submit" class="btn-login" id="btn-entrar"><i class="fas fa-arrow-right-to-bracket"></i> Entrar no painel</button>
+        <div id="msg-erro"><i class="fas fa-circle-exclamation"></i> E-mail ou senha incorretos!</div>
+      </form>
+      <div class="login-foot"><span class="signal-dot"></span> Ambiente protegido · Radiação.Net</div>
     </div>
+  </div>
 
-    <!-- TELA PRINCIPAL (DASHBOARD) -->
-    <div id="tela-dashboard">
-      
-      <!-- CABEÇALHO ESTILO DISCLOUD -->
-      <header class="top-header">
-        <div class="brand-area">
-          <img src="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png" id="painelCover" alt="Logo">
-          <div class="brand-titles">
-            <div class="brand-kicker">RADIAÇÃO.NET · CENTRAL DE OPERAÇÕES</div>
-            <h1>Painel do Locutor</h1>
-            <div class="brand-sub">A Rádio de todas as tribos!</div>
-          </div>
-          <div class="status-badge" id="badgeStatus"><div class="dot red" id="dotStatus"></div><span id="textStatus">Conectando...</span></div>
+  <main id="tela-dashboard">
+    <header class="app-header">
+      <div class="brand-lockup">
+        <div class="brand-logo"><img src="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png" alt="Logo oficial Radiação.Net"></div>
+        <div><div class="brand-overline">RADIAÇÃO.NET <span>/</span> ESTÚDIO DIGITAL</div><h1>Painel do Locutor</h1><p>A Rádio de todas as tribos!</p></div>
+      </div>
+      <div class="header-right">
+        <div class="status-badge" id="badgeStatus"><span class="dot red" id="dotStatus"></span><span id="textStatus">Conectando...</span></div>
+        <div class="header-actions">
+          <button class="btn-flat" id="btn-alertas" title="Ativar alertas sonoros"><i class="fa-regular fa-bell-slash"></i><span>Alertas</span></button>
+          <button class="btn-flat" id="btn-instalar-painel" style="display:none"><i class="fa-solid fa-download"></i><span>Instalar</span></button>
+          <button class="btn-flat btn-exit" id="btn-logout"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Sair</span></button>
         </div>
-        
-        <div class="actions-area">
-          <button class="btn-flat" id="btn-alertas" title="Clique para ativar alertas sonoros"><i class="fas fa-bell-slash"></i> Alertas</button>
-          <button class="btn-flat" id="btn-instalar-painel" style="display: none;"><i class="fas fa-download"></i> Instalar</button>
-          <button class="btn-flat" id="btn-logout"><i class="fas fa-power-off"></i> Sair</button>
-        </div>
-      </header>
+      </div>
+    </header>
 
-      <!-- CORPO DO PAINEL -->
-      <section class="welcome-strip">
-        <div><span class="eyebrow">ESTÚDIO DIGITAL</span><h2>Bom trabalho! A programação está nas suas mãos.</h2><p>Acompanhe a transmissão e gerencie a participação dos ouvintes em tempo real.</p></div>
-        <div class="welcome-mark"><i class="fas fa-tower-broadcast"></i></div>
+    
+    <section class="broadcast-panel" style="margin-top: 1.2em;">
+      <div class="broadcast-topline"><div class="section-label"><i class="fa-solid fa-tower-broadcast"></i> CENTRAL DE TRANSMISSÃO</div><div class="monitoring"><span></span> MONITORAMENTO ATIVO</div></div>
+      <div class="broadcast-main">
+        <div class="broadcast-art-wrap">
+          <img class="track-cover" id="painelTrackCover" src="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png" alt="Capa da programação">
+          <div class="info-icon" id="painelTrackIcon"><i class="fa-solid fa-music"></i></div>
+          <div class="art-corner"><i class="fa-solid fa-radio"></i></div>
+        </div>
+        <div class="broadcast-copy">
+          <div class="now-label"><span class="equalizer"><i></i><i></i><i></i><i></i></span> TOCANDO AGORA</div>
+          <div class="info-value" id="painelLine1">A carregar...</div>
+          <div class="info-label" id="painelLine2">Conectando ao servidor</div>
+          <div class="broadcast-meta"><span class="live-chip"><span class="dot green"></span> SINAL DA RÁDIO</span><span class="meta-divider"></span><span>Atualização automática</span></div>
+        </div>
+        <div class="audience-block"><div class="audience-icon"><i class="fa-solid fa-headphones"></i></div><div><div class="audience-number" id="painelListeners">0</div><div class="audience-caption">OUVINTES<br>SIMULTÂNEOS</div></div><div class="audience-wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+      </div>
+      <div class="broadcast-bottom"><span><i class="fa-solid fa-circle-check"></i> Conexão monitorada pelo AzuraCast</span><span class="broadcast-brand">RADIAÇÃO<span>.</span>NET</span></div>
+    </section>
+
+    <section class="work-grid">
+      <section class="card requests-card">
+        <div class="card-heading">
+          <div><div class="section-label"><i class="fa-solid fa-inbox"></i> PARTICIPAÇÃO DA AUDIÊNCIA</div><h3>Pedidos musicais</h3><p>Organize a fila e não deixe nenhum ouvinte esperando.</p></div>
+          <div class="pending-stat"><strong id="contador-pedidos">0</strong><span>PENDENTES</span></div>
+        </div>
+        <div class="request-toolbar">
+          <label class="search-box"><i class="fa-solid fa-magnifying-glass"></i><input type="search" id="busca-pedidos" placeholder="Buscar música ou ouvinte..."></label>
+          <div class="queue-tabs"><button type="button" class="queue-tab active" data-view="pendentes">Fila <span id="tab-pendentes">0</span></button><button type="button" class="queue-tab" data-view="historico">Histórico</button></div>
+        </div>
+        <div class="pedidos-list" id="container-pedidos"><div class="empty-state"><i class="fa-solid fa-inbox"></i><strong>Carregando pedidos</strong><span>Sincronizando com a programação...</span></div></div>
+        <div class="requests-footer"><span><i class="fa-solid fa-bolt"></i> Atualização em tempo real</span><span>RADIAÇÃO.NET · OUVINTES</span></div>
       </section>
 
-      <div class="dashboard-grid">
-        
-        <!-- COLUNA ESQUERDA -->
-        <div class="left-col">
-          
-          <!-- CARD DE STATUS -->
-          <div class="card radio-card">
-            <div class="card-header"><div class="card-title"><i class="fas fa-tower-broadcast"></i> Central de transmissão</div><span class="live-indicator"><span></span> MONITORAMENTO</span></div>
-            <div class="status-info">
-              
-              <div class="info-block track-block">
-                <img class="track-cover" id="painelTrackCover" src="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png" alt="Capa da música atual">
-                <div class="info-icon" id="painelTrackIcon"><i class="fas fa-music"></i></div>
-                <div class="info-texts">
-                  <div class="info-value" id="painelLine1">A carregar...</div>
-                  <div class="info-label" id="painelLine2">Conectando ao servidor</div>
-                </div>
-              </div>
+      <aside class="side-stack">
+        <section class="card poll-card">
+          <div class="side-card-heading"><div class="section-label"><i class="fa-solid fa-chart-simple"></i> INTERAÇÃO AO VIVO</div><span class="mini-tag">ENQUETE</span></div>
+          <h3>Voz dos ouvintes</h3><p class="side-description">Coloque uma pergunta no ar e deixe a audiência participar.</p>
+          <div id="enquete-container"><div class="empty-state compact"><i class="fa-solid fa-spinner fa-spin"></i><span>Carregando módulo...</span></div></div>
+        </section>
+        <section class="studio-note">
+          <div class="note-icon"><i class="fa-solid fa-headset"></i></div><div><strong>Estúdio conectado</strong><span>Você cuida da programação. A gente acompanha o sinal.</span></div>
+          <i class="fa-solid fa-wave-square note-wave"></i>
+        </section>
+      </aside>
+    </section>
+    <footer class="app-footer"><span>© Radiação.Net · A Rádio de todas as tribos!</span><span>PAINEL DO LOCUTOR <b>●</b></span></footer>
+  </main>
 
-              <div class="info-block">
-                <div class="info-icon"><i class="fas fa-users"></i></div>
-                <div class="info-texts">
-                  <div class="info-value" id="painelListeners">0</div>
-                  <div class="info-label" style="color: var(--text-muted);">Ouvintes Simultâneos</div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- CARD DE ENQUETES -->
-          <div class="card">
-            <div class="card-header"><div class="card-title"><i class="fas fa-chart-column"></i> Participação dos ouvintes</div></div>
-            <div id="enquete-container">
-              <div class="empty-state"><i class="fas fa-spinner fa-spin"></i> Carregando módulo...</div>
-            </div>
-          </div>
-          
-        </div>
-
-        <!-- COLUNA DIREITA (PEDIDOS) -->
-        <div class="right-col">
-          <div class="card requests-card">
-            <div class="card-header requests-heading"><div><div class="card-title"><i class="fas fa-headphones"></i> Pedidos musicais</div><div class="section-subtitle">Organize os pedidos recebidos dos ouvintes.</div></div><span class="count-pill" id="contador-pedidos">0 pendentes</span></div>
-            <div class="request-toolbar"><label class="search-box"><i class="fas fa-search"></i><input type="search" id="busca-pedidos" placeholder="Buscar música ou ouvinte..."></label><div class="queue-tabs"><button type="button" class="queue-tab active" data-view="pendentes">Fila <span id="tab-pendentes">0</span></button><button type="button" class="queue-tab" data-view="historico">Histórico</button></div></div>
-            <div class="pedidos-list" id="container-pedidos">
-              <div class="empty-state"><i class="fas fa-spinner fa-spin"></i> Sincronizando fila...</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- SCRIPTS DE AZURACAST E PWA -->
-    <script src="./painel.js?v=4.1"></script>
-    <script type="module" src="./painel-firebase.js?v=4.1"></script>
-  </body>
+  <script src="./painel.js?v=7.0"></script>
+  <script type="module" src="./painel-firebase.js?v=7.0"></script>
+</body>
 </html>

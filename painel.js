@@ -43,4 +43,5 @@ let deferredPromptPainel;
           }
         } catch (error) { console.error("Erro na rádio:", error); }
       }
+      atualizarInfoRadio();
       setInterval(atualizarInfoRadio, 5000);
