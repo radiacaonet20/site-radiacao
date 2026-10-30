@@ -21,10 +21,18 @@ let deferredPromptPainel;
           document.getElementById('painelLine2').innerText = data.now_playing.song.artist || "Desconhecido";
           document.getElementById('painelListeners').innerText = data.listeners.current || 0;
           
-          const coverUrl = data.now_playing.song.art || 'https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png';
-          document.getElementById('painelCover').src = coverUrl;
-
-          const isLive = data.live.is_live;
+          const artUrl = data.now_playing.song.art;
+          const cover = document.getElementById('painelTrackCover');
+          const isLive = Boolean(data.live && data.live.is_live);
+          const hasArt = Boolean(artUrl && artUrl.trim());
+          if (cover) {
+            cover.src = hasArt ? artUrl : '';
+            cover.hidden = !hasArt;
+            cover.alt = isLive ? 'Imagem do programa ao vivo' : 'Capa da música atual';
+          }
+          const trackIcon = document.getElementById('painelTrackIcon');
+          // A imagem identifica o programa ao vivo; sem imagem, mantém o ícone como fallback.
+          if (trackIcon) trackIcon.hidden = hasArt;
           const textStatus = document.getElementById('textStatus');
           const dotStatus = document.getElementById('dotStatus');
 
