@@ -24,7 +24,7 @@ onValue(query(pedidosRef, limitToLast(5)), (snapshot) => {
     const recadosAprovados = [];
     Object.values(dados).reverse().forEach(pedido => {
       if (pedido.recado && pedido.recado.trim() !== '') {
-        recadosAprovados.push(`💬 ${pedido.nome} mandou um recado: "${pedido.recado}"`);
+        recadosAprovados.push(`💬 ${pedido.nome} disse: "${pedido.recado}"`);
       } else {
         recadosAprovados.push(`🎵 ${pedido.nome} pediu a música: ${pedido.musica}`);
       }
