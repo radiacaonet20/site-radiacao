@@ -1,8 +1,8 @@
 {
   "id": "./painel.html",
-  "name": "Painel do Locutor - Radiação.Net",
-  "short_name": "Painel Locutor",
-  "description": "Painel de gestão de pedidos e enquetes da Radiação.Net",
+  "name": "Painel Administrativo - Radiação.Net",
+  "short_name": "Painel Admin",
+  "description": "Gestão da programação, equipe e operação da Radiação.Net",
   "lang": "pt-BR",
   "start_url": "./painel.html",
   "scope": "./",

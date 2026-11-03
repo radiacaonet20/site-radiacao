@@ -1,16 +1,11 @@
-const CACHE_NAME = 'radiacaonet-v8.0';
+const CACHE_NAME = 'radiacaonet-v9.1';
 const APP_SHELL = [
   './',
   './index.html',
-  './painel.html',
-  './style.css?v=13.0',
-  './painel.css?v=3.0',
-  './script.js?v=community-3.0',
-  './firebase-public.js?v=5.0',
-  './painel.js?v=3.0',
-  './painel-firebase.js?v=3.0',
-  './manifest.json',
-  './manifest-painel.json'
+  './style.css?v=13.2',
+  './script.js?v=community-3.3',
+  './firebase-public.js?v=5.5',
+  './site-dynamic.js?v=1.2'
 ];
 
 self.addEventListener('install', (event) => {
@@ -31,12 +26,14 @@ self.addEventListener('activate', (event) => {
 function isLiveDataRequest(urlString) {
   return urlString.includes('/api/') ||
          urlString.includes('firebaseio.com') ||
+         urlString.includes('firebasedatabase.app') ||
          urlString.includes('/listen/') ||
          urlString.endsWith('.mp3') ||
          urlString.includes('radio.mp3') ||
          urlString.includes('rss2json.com') ||
          urlString.includes('allorigins.win') ||
-         urlString.includes('globo.com');
+         urlString.includes('globo.com') ||
+         urlString.includes('workers.dev');
 }
 
 function isSameOrigin(url) {
@@ -64,7 +61,7 @@ self.addEventListener('fetch', (event) => {
         .catch(async () => {
           const cached = await caches.match(request);
           if (cached) return cached;
-          return caches.match(url.pathname.endsWith('/painel.html') ? './painel.html' : './index.html');
+          return caches.match('./index.html');
         })
     );
     return;

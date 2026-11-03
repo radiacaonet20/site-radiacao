@@ -1,5 +1,5 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded, query, orderByKey, limitToLast, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+import { getDatabase, ref, push, onChildAdded, query, limitToLast, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDLCYfYApZZt4ycMmr-f4Xq002ZBalYmdU",
@@ -11,14 +11,14 @@ const firebaseConfig = {
   appId: "1:1078838815128:web:20de30c5ad574a59dd23ed"
 };
 
-const app = initializeApp(firebaseConfig);
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 // --- MURAL DE RECADOS AO VIVO (LIVE FEED) ---
 const pedidosRef = ref(db, 'pedidos');
 const liveFeedText = document.getElementById('liveFeedText');
 
-onValue(query(pedidosRef, orderByKey(), limitToLast(5)), (snapshot) => {
+onValue(query(pedidosRef, limitToLast(5)), (snapshot) => {
   const dados = snapshot.val();
   if (dados) {
     const recadosAprovados = [];
@@ -153,7 +153,7 @@ function criarCoracaoLocal(comParticulas = true) {
 }
 
 let primeiraCarga = true;
-onChildAdded(query(reacoesRef, orderByKey(), limitToLast(1)), (snapshot) => {
+onChildAdded(query(reacoesRef, limitToLast(1)), (snapshot) => {
   if (primeiraCarga) { primeiraCarga = false; return; }
   if (snapshot.key === minhaReacaoKey) {
     minhaReacaoKey = null;

@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-import { getDatabase, ref, get, onValue, remove, set, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+import { getDatabase, ref, get, onValue, remove, set, update, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDLCYfYApZZt4ycMmr-f4Xq002ZBalYmdU",
@@ -68,19 +68,19 @@ function notificarAba() {
   piscando = true;
   let alternar = false;
   intervaloPiscar = setInterval(() => {
-    document.title = alternar ? "🔔 NOVO PEDIDO!" : "Painel do Locutor";
+    document.title = alternar ? "🔔 NOVO PEDIDO!" : "Painel Administrativo";
     alternar = !alternar;
   }, 1000);
   setTimeout(() => {
     clearInterval(intervaloPiscar);
-    document.title = "Painel do Locutor - Radiação.Net";
+    document.title = "Painel Administrativo - Radiação.Net";
     piscando = false;
   }, 15000);
 }
 window.addEventListener("focus", () => {
   if (piscando) {
     clearInterval(intervaloPiscar);
-    document.title = "Painel do Locutor - Radiação.Net";
+    document.title = "Painel Administrativo - Radiação.Net";
     piscando = false;
   }
 });
@@ -111,6 +111,7 @@ onAuthStateChanged(auth, async (user) => {
     iniciarLeituraPedidos();
     iniciarLeituraHistorico();
     iniciarControleEnquete();
+    iniciarModulosAdmin(perfil);
   } catch (error) {
     console.error("Não foi possível validar o acesso:", error);
     if (msgErro) {
@@ -403,5 +404,129 @@ function iniciarControleEnquete() {
           <button class="btn-primary" type="button" onclick="criarEnquete()">Colocar no Ar</button>
         </div>`;
     }
+  });
+}
+
+
+
+/* MÓDULOS ADMINISTRATIVOS — programação e equipe */
+const adminProgramacaoRef = ref(db, "programacao");
+const adminEquipeRef = ref(db, "equipe");
+let adminProgramacao = {};
+let adminEquipe = {};
+let adminBindingsIniciados = false;
+let perfilAtualPainel = null;
+const adminWorkspace = $("admin-workspace");
+const adminFeedback = $("admin-feedback");
+
+function avisoAdmin(mensagem, erro = false) {
+  if (!adminFeedback) return;
+  adminFeedback.textContent = mensagem;
+  adminFeedback.classList.toggle("error", erro);
+}
+function chaveDia(dia) {
+  return ({seg:"Segunda",ter:"Terça",qua:"Quarta",qui:"Quinta",sex:"Sexta",sab:"Sábado",dom:"Domingo"})[dia] || dia;
+}
+function abrirFormAdmin(tipo, registro = null, id = "") {
+  const card = $(`form-${tipo}-card`);
+  const form = $(`form-${tipo}`);
+  if (!card || !form) return;
+  form.reset();
+  if (tipo === "programa") {
+    $("programa-id").value = id;
+    $("programa-form-title").textContent = registro ? "Editar programa" : "Novo programa";
+    $("programa-nome").value = registro?.titulo || "";
+    $("programa-dia").value = registro?.dia || "seg";
+    $("programa-inicio").value = registro?.inicio || "20:00";
+    $("programa-fim").value = registro?.fim || "21:00";
+    $("programa-locutor").value = registro?.locutor || "";
+    $("programa-imagem").value = registro?.imagem || "";
+    $("programa-descricao").value = registro?.descricao || "";
+    $("programa-ordem").value = Number(registro?.ordem || 0);
+    $("programa-ativo").checked = registro?.ativo !== false;
+  } else {
+    $("equipe-id").value = id;
+    $("equipe-form-title").textContent = registro ? "Editar integrante" : "Novo integrante";
+    $("equipe-nome").value = registro?.nome || "";
+    $("equipe-funcao").value = registro?.funcao || "";
+    $("equipe-foto").value = registro?.foto || "";
+    $("equipe-ordem").value = Number(registro?.ordem || 0);
+    $("equipe-ativo").checked = registro?.ativo !== false;
+  }
+  card.hidden = false;
+  card.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function renderAdminLista(tipo, dados) {
+  const isPrograma = tipo === "programa";
+  const lista = $(isPrograma ? "lista-programas" : "lista-equipe");
+  const total = $(isPrograma ? "programas-total" : "equipe-total");
+  if (!lista) return;
+  const entradas = Object.entries(dados || {}).sort((a,b) => Number(a[1]?.ordem || 0)-Number(b[1]?.ordem || 0) || String(a[1]?.titulo || a[1]?.nome || "").localeCompare(String(b[1]?.titulo || b[1]?.nome || ""),"pt-BR"));
+  if (total) total.textContent = `${entradas.length} registro(s)`;
+  lista.replaceChildren();
+  if (!entradas.length) {
+    const vazio = document.createElement("div"); vazio.className="admin-empty";
+    vazio.textContent = isPrograma ? "Nenhum programa cadastrado. Use “Novo programa” para começar." : "Nenhum integrante cadastrado. Use “Novo integrante” para começar.";
+    lista.appendChild(vazio); return;
+  }
+  entradas.forEach(([id, item]) => {
+    const row=document.createElement("article"); row.className="admin-record";
+    const main=document.createElement("div"); main.className="admin-record-main";
+    const foto=item.imagem || item.foto;
+    if (foto) { const img=document.createElement("img"); img.className="admin-record-thumb"; img.src=foto; img.alt=""; img.loading="lazy"; img.onerror=()=>{img.remove();}; main.appendChild(img); }
+    else { const ico=document.createElement("div"); ico.className="admin-record-thumb placeholder"; ico.innerHTML=`<i class="fa-solid ${isPrograma?"fa-microphone-lines":"fa-user"}"></i>`; main.appendChild(ico); }
+    const copy=document.createElement("div"); copy.className="admin-record-copy";
+    const title=document.createElement("strong"); title.textContent=item.titulo || item.nome || "Sem título";
+    const detail=document.createElement("small");
+    detail.textContent=isPrograma ? `${chaveDia(item.dia)} · ${item.inicio || "—"}–${item.fim || "—"} · ${item.locutor || "Sem locutor"}${item.descricao ? " · "+item.descricao : ""}` : (item.funcao || "Integrante");
+    copy.append(title,detail);
+    const status=document.createElement("span"); status.className="admin-status"+(item.ativo===false?" off":""); status.textContent=item.ativo===false?"OCULTO":"PUBLICADO";
+    copy.appendChild(status); main.appendChild(copy);
+    const actions=document.createElement("div"); actions.className="admin-record-actions";
+    const edit=document.createElement("button"); edit.type="button"; edit.title="Editar"; edit.setAttribute("aria-label","Editar"); edit.innerHTML='<i class="fa-solid fa-pen"></i>';
+    edit.addEventListener("click",()=>abrirFormAdmin(tipo,item,id));
+    const del=document.createElement("button"); del.type="button"; del.className="delete"; del.title="Excluir"; del.setAttribute("aria-label","Excluir"); del.innerHTML='<i class="fa-solid fa-trash"></i>';
+    del.addEventListener("click",async()=>{ if(!confirm(`Excluir ${isPrograma?"o programa":"o integrante"} “${item.titulo||item.nome}”?`))return; try{await remove(ref(db,`${isPrograma?"programacao":"equipe"}/${id}`));avisoAdmin("Registro excluído com sucesso.");}catch(e){console.error(e);avisoAdmin("Não foi possível excluir. Verifique as permissões do Firebase.",true);} });
+    actions.append(edit,del); row.append(main,actions); lista.appendChild(row);
+  });
+}
+async function proximoIdentificador(tipo) {
+  const ehPrograma = tipo === "programacao";
+  const prefixo = ehPrograma ? "prog" : "memb";
+  const registros = ehPrograma ? adminProgramacao : adminEquipe;
+  const maiorExistente = Object.keys(registros || {}).reduce((maior, chave) => {
+    const match = chave.match(new RegExp("^" + prefixo + "(\\d+)$"));
+    return match ? Math.max(maior, Number(match[1])) : maior;
+  }, 0);
+  const contadorRef = ref(db, `sequencias/${tipo}`);
+  const resultado = await runTransaction(contadorRef, atual => Math.max(Number(atual || 0), maiorExistente) + 1);
+  if (!resultado.committed) throw new Error("Não foi possível reservar o próximo identificador.");
+  return `${prefixo}${resultado.snapshot.val()}`;
+}
+
+function iniciarModulosAdmin(perfil) {
+  perfilAtualPainel=perfil;
+  const isAdmin=perfil?.perfil==="admin" && perfil?.ativo===true;
+  if (adminWorkspace) adminWorkspace.hidden=!isAdmin;
+  if (!isAdmin || adminBindingsIniciados) return;
+  adminBindingsIniciados = true;
+  onValue(adminProgramacaoRef,s=>{adminProgramacao=s.val()||{};renderAdminLista("programa",adminProgramacao);},e=>avisoAdmin("Falha ao carregar programação: "+e.message,true));
+  onValue(adminEquipeRef,s=>{adminEquipe=s.val()||{};renderAdminLista("equipe",adminEquipe);},e=>avisoAdmin("Falha ao carregar equipe: "+e.message,true));
+  document.querySelectorAll("[data-admin-tab]").forEach(btn=>btn.addEventListener("click",()=>{
+    document.querySelectorAll("[data-admin-tab]").forEach(b=>b.classList.toggle("active",b===btn));
+    document.querySelectorAll(".admin-module").forEach(m=>{const active=m.id===`admin-module-${btn.dataset.adminTab}`;m.hidden=!active;m.classList.toggle("active",active);});
+  }));
+  $("btn-novo-programa")?.addEventListener("click",()=>abrirFormAdmin("programa"));
+  $("btn-novo-integrante")?.addEventListener("click",()=>abrirFormAdmin("equipe"));
+  document.querySelectorAll("[data-close-form]").forEach(b=>b.addEventListener("click",()=>{const t=b.dataset.closeForm; $(`form-${t}-card`).hidden=true;}));
+  $("form-programa")?.addEventListener("submit",async e=>{
+    e.preventDefault(); const id=$("programa-id").value||await proximoIdentificador("programacao");
+    const item={titulo:$("programa-nome").value.trim(),dia:$("programa-dia").value,inicio:$("programa-inicio").value,fim:$("programa-fim").value,locutor:$("programa-locutor").value.trim(),imagem:$("programa-imagem").value.trim(),descricao:$("programa-descricao").value.trim(),ordem:Number($("programa-ordem").value||0),ativo:$("programa-ativo").checked,atualizado_em:Date.now()};
+    try{await set(ref(db,`programacao/${id}`),item);await set(ref(db,"programacao_config/gerenciada"),true);$("form-programa-card").hidden=true;avisoAdmin("Programa salvo. O site será atualizado automaticamente.");}catch(err){console.error(err);avisoAdmin("Falha ao salvar programa. Confira as regras do Firebase.",true);}
+  });
+  $("form-equipe")?.addEventListener("submit",async e=>{
+    e.preventDefault(); const id=$("equipe-id").value||await proximoIdentificador("equipe");
+    const item={nome:$("equipe-nome").value.trim(),funcao:$("equipe-funcao").value.trim(),foto:$("equipe-foto").value.trim(),ordem:Number($("equipe-ordem").value||0),ativo:$("equipe-ativo").checked,atualizado_em:Date.now()};
+    try{await set(ref(db,`equipe/${id}`),item);await set(ref(db,"equipe_config/gerenciada"),true);$("form-equipe-card").hidden=true;avisoAdmin("Integrante salvo. O site será atualizado automaticamente.");}catch(err){console.error(err);avisoAdmin("Falha ao salvar integrante. Confira as regras do Firebase.",true);}
   });
 }

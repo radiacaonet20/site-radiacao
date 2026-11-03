@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Painel do Locutor · Radiação.Net</title>
+  <title>Painel Administrativo · Radiação.Net</title>
   <link rel="icon" type="image/png" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
   <link rel="apple-touch-icon" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
   <link rel="manifest" href="./manifest-painel.json">
@@ -11,15 +11,15 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="./style.css?v=3.0">
-  <link rel="stylesheet" href="./painel.css?v=9.0">
+  <link rel="stylesheet" href="./painel.css?v=10.0">
 </head>
 <body>
   <div id="tela-login">
     <div class="login-box">
       <img src="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png" alt="Radiação.Net">
       <span class="login-kicker">CENTRAL DE OPERAÇÕES</span>
-      <h2>Acesso do locutor</h2>
-      <p class="login-description">Entre para acompanhar a transmissão e a participação dos ouvintes.</p>
+      <h2>Acesso da equipe</h2>
+      <p class="login-description">Entre para acessar as ferramentas de operação e administração da rádio.</p>
       <form id="form-login">
         <div class="input-group"><label for="login-email">E-mail do locutor</label><input type="email" id="login-email" required placeholder="locutor@radiacao.net"></div>
         <div class="input-group"><label for="login-senha">Senha</label><input type="password" id="login-senha" required placeholder="Sua senha"></div>
@@ -34,7 +34,7 @@
     <header class="app-header">
       <div class="brand-lockup">
         <div class="brand-logo"><img src="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png" alt="Logo oficial Radiação.Net"></div>
-        <div><div class="brand-overline">RADIAÇÃO.NET <span>/</span> ESTÚDIO DIGITAL</div><h1>Painel do Locutor</h1><p>A Rádio de todas as tribos!</p></div>
+        <div><div class="brand-overline">RADIAÇÃO.NET <span>/</span> ESTÚDIO DIGITAL</div><h1>Painel Administrativo</h1><p>A Rádio de todas as tribos!</p></div>
       </div>
       <div class="header-right">
         <div class="status-badge" id="badgeStatus"><span class="dot red" id="dotStatus"></span><span id="textStatus">Conectando...</span></div>
@@ -45,6 +45,57 @@
         </div>
       </div>
     </header>
+
+
+    <section id="admin-workspace" class="admin-workspace" hidden>
+      <div class="admin-welcome">
+        <div><span class="admin-kicker">GESTÃO DA EMISSORA</span><h2>Painel Administrativo</h2><p>Programação e equipe organizadas em um só lugar.</p></div>
+        <span class="admin-live-tag"><i class="fa-solid fa-shield-halved"></i> ACESSO ADMINISTRADOR</span>
+      </div>
+      <div class="admin-tabs" role="tablist" aria-label="Módulos administrativos">
+        <button type="button" class="admin-tab active" data-admin-tab="programacao"><i class="fa-regular fa-calendar-days"></i> Programação</button>
+        <button type="button" class="admin-tab" data-admin-tab="equipe"><i class="fa-solid fa-users"></i> Equipe</button>
+      </div>
+      <section class="admin-module active" id="admin-module-programacao">
+        <div class="admin-module-heading"><div><span class="admin-kicker">GRADE DA RÁDIO</span><h3>Gerenciar programação</h3><p>Cadastre, edite, ative ou remova programas sem alterar o HTML do site.</p></div><button class="admin-action" id="btn-novo-programa"><i class="fa-solid fa-plus"></i> Novo programa</button></div>
+        <div class="admin-form-card" id="form-programa-card" hidden>
+          <div class="admin-form-title"><strong id="programa-form-title">Novo programa</strong><button type="button" class="admin-close" data-close-form="programa" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button></div>
+          <form id="form-programa" class="admin-form-grid">
+            <input type="hidden" id="programa-id">
+            <label>Nome do programa<input id="programa-nome" maxlength="90" required placeholder="Ex.: Rasta Flow"></label>
+            <label>Dia da semana<select id="programa-dia" required><option value="seg">Segunda-feira</option><option value="ter">Terça-feira</option><option value="qua">Quarta-feira</option><option value="qui">Quinta-feira</option><option value="sex">Sexta-feira</option><option value="sab">Sábado</option><option value="dom">Domingo</option></select></label>
+            <label>Início<input id="programa-inicio" type="time" required></label>
+            <label>Término<input id="programa-fim" type="time"></label>
+            <label>Locutor / responsável<input id="programa-locutor" maxlength="90" placeholder="Nome do locutor"></label>
+            <label>Imagem (URL)<input id="programa-imagem" type="url" placeholder="https://..."></label>
+            <label class="admin-field-wide">Descrição<textarea id="programa-descricao" rows="2" maxlength="280" placeholder="Conte um pouco sobre o programa"></textarea></label>
+            <label>Ordem de exibição<input id="programa-ordem" type="number" min="0" step="1" value="0"></label>
+            <label class="admin-check"><input id="programa-ativo" type="checkbox" checked> Programa publicado no site</label>
+            <div class="admin-form-actions"><button type="button" class="admin-ghost" data-close-form="programa">Cancelar</button><button class="admin-action" type="submit"><i class="fa-solid fa-floppy-disk"></i> Salvar programa</button></div>
+          </form>
+        </div>
+        <div class="admin-list-head"><strong>Programas cadastrados</strong><span id="programas-total">Carregando...</span></div>
+        <div class="admin-record-list" id="lista-programas"><div class="admin-empty"><i class="fa-solid fa-circle-notch fa-spin"></i> Carregando programação...</div></div>
+      </section>
+      <section class="admin-module" id="admin-module-equipe" hidden>
+        <div class="admin-module-heading"><div><span class="admin-kicker">QUEM FAZ A RÁDIO</span><h3>Gerenciar equipe</h3><p>Atualize os integrantes exibidos na seção Nossa Equipe.</p></div><button class="admin-action" id="btn-novo-integrante"><i class="fa-solid fa-plus"></i> Novo integrante</button></div>
+        <div class="admin-form-card" id="form-equipe-card" hidden>
+          <div class="admin-form-title"><strong id="equipe-form-title">Novo integrante</strong><button type="button" class="admin-close" data-close-form="equipe" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button></div>
+          <form id="form-equipe" class="admin-form-grid">
+            <input type="hidden" id="equipe-id">
+            <label>Nome<input id="equipe-nome" maxlength="90" required placeholder="Nome do integrante"></label>
+            <label>Função / cargo<input id="equipe-funcao" maxlength="120" required placeholder="Ex.: Locutor, Redator"></label>
+            <label class="admin-field-wide">Foto (URL)<input id="equipe-foto" type="url" placeholder="https://..."></label>
+            <label>Ordem de exibição<input id="equipe-ordem" type="number" min="0" step="1" value="0"></label>
+            <label class="admin-check"><input id="equipe-ativo" type="checkbox" checked> Exibir no site</label>
+            <div class="admin-form-actions"><button type="button" class="admin-ghost" data-close-form="equipe">Cancelar</button><button class="admin-action" type="submit"><i class="fa-solid fa-floppy-disk"></i> Salvar integrante</button></div>
+          </form>
+        </div>
+        <div class="admin-list-head"><strong>Integrantes cadastrados</strong><span id="equipe-total">Carregando...</span></div>
+        <div class="admin-record-list" id="lista-equipe"><div class="admin-empty"><i class="fa-solid fa-circle-notch fa-spin"></i> Carregando equipe...</div></div>
+      </section>
+      <div class="admin-feedback" id="admin-feedback" role="status" aria-live="polite"></div>
+    </section>
 
     <section class="broadcast-panel" style="margin-top: 1.2em;">
       <div class="broadcast-topline"><div class="section-label"><i class="fa-solid fa-tower-broadcast"></i> CENTRAL DE TRANSMISSÃO</div><div class="monitoring"><span></span> MONITORAMENTO ATIVO</div></div>
@@ -94,7 +145,7 @@
     <footer class="app-footer"><span>© Radiação.Net · A Rádio de todas as tribos!</span><span>PAINEL DO LOCUTOR <b>●</b></span></footer>
   </main>
 
-  <script src="./painel.js?v=9.0"></script>
-  <script type="module" src="./painel-firebase.js?v=9.0"></script>
+  <script src="./painel.js?v=10.0"></script>
+  <script type="module" src="./painel-firebase.js?v=10.0"></script>
 </body>
 </html>
