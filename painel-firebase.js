@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-import { getDatabase, ref, onValue, remove, set, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+import { getDatabase, ref, get, onValue, remove, set, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDLCYfYApZZt4ycMmr-f4Xq002ZBalYmdU",
@@ -85,16 +85,39 @@ window.addEventListener("focus", () => {
   }
 });
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    telaLogin.style.display = "flex";
+    telaDashboard.style.display = "none";
+    return;
+  }
+
+  try {
+    const perfilSnapshot = await get(ref(db, `usuarios/${user.uid}`));
+    const perfil = perfilSnapshot.val();
+    const autorizado = perfil && perfil.ativo === true && ["admin", "locutor"].includes(perfil.perfil);
+
+    if (!autorizado) {
+      if (msgErro) {
+        msgErro.textContent = "Conta sem autorização ou desativada. Procure um administrador.";
+        msgErro.style.display = "block";
+      }
+      await signOut(auth);
+      return;
+    }
+
     telaLogin.style.display = "none";
     telaDashboard.style.display = "flex";
     iniciarLeituraPedidos();
     iniciarLeituraHistorico();
     iniciarControleEnquete();
-  } else {
-    telaLogin.style.display = "flex";
-    telaDashboard.style.display = "none";
+  } catch (error) {
+    console.error("Não foi possível validar o acesso:", error);
+    if (msgErro) {
+      msgErro.textContent = "Não foi possível validar sua autorização. Tente novamente.";
+      msgErro.style.display = "block";
+    }
+    await signOut(auth);
   }
 });
 

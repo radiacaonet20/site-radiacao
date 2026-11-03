@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded, query, limitToLast, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+import { getDatabase, ref, push, onChildAdded, query, orderByKey, limitToLast, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDLCYfYApZZt4ycMmr-f4Xq002ZBalYmdU",
@@ -18,7 +18,7 @@ const db = getDatabase(app);
 const pedidosRef = ref(db, 'pedidos');
 const liveFeedText = document.getElementById('liveFeedText');
 
-onValue(query(pedidosRef, limitToLast(5)), (snapshot) => {
+onValue(query(pedidosRef, orderByKey(), limitToLast(5)), (snapshot) => {
   const dados = snapshot.val();
   if (dados) {
     const recadosAprovados = [];
@@ -153,7 +153,7 @@ function criarCoracaoLocal(comParticulas = true) {
 }
 
 let primeiraCarga = true;
-onChildAdded(query(reacoesRef, limitToLast(1)), (snapshot) => {
+onChildAdded(query(reacoesRef, orderByKey(), limitToLast(1)), (snapshot) => {
   if (primeiraCarga) { primeiraCarga = false; return; }
   if (snapshot.key === minhaReacaoKey) {
     minhaReacaoKey = null;
