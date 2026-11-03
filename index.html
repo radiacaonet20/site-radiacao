@@ -12,7 +12,7 @@
     <link rel="apple-touch-icon" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="./style.css?v=menu-1.1">
+    <link rel="stylesheet" href="./style.css?v=hero-2.0">
   </head>
   <body>
     
@@ -70,23 +70,54 @@
     <!-- CORPO DO PORTAL -->
     <main class="portal-layout">
       
-      <!-- SEÇÃO 1: HERO -->
-      <section id="home" class="hero-section">
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
+      <!-- SEÇÃO 1: HERO CINEMATOGRÁFICO -->
+      <section id="home" class="hero-section hero-cinematic">
+        <div class="hero-overlay" aria-hidden="true"></div>
+        <div class="hero-atmosphere" aria-hidden="true">
+          <span class="hero-orbit hero-orbit-one"></span>
+          <span class="hero-orbit hero-orbit-two"></span>
+          <span class="hero-orbit hero-orbit-three"></span>
+          <span class="hero-light hero-light-left"></span>
+          <span class="hero-light hero-light-right"></span>
+          <div class="hero-equalizer" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="hero-soundwave">
+            <svg viewBox="0 0 1200 220" role="presentation" focusable="false">
+              <path class="soundwave-line soundwave-line-back" d="M0 110 C90 110 90 65 160 65 S235 155 300 110 390 25 455 110 540 190 610 110 700 48 765 110 850 165 920 110 1010 55 1070 110 1135 110 1200 110"/>
+              <path class="soundwave-line soundwave-line-front" d="M0 110 C90 110 90 85 160 85 S235 135 300 110 390 55 455 110 540 165 610 110 700 75 765 110 850 145 920 110 1010 80 1070 110 1135 110 1200 110"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="hero-content hero-content-cinematic">
+          <div class="hero-kicker"><span></span> SINTONIZE · CONECTE-SE · DESCUBRA <span></span></div>
           <div class="live-badge" id="heroLiveBadge" style="display: none;">
             <span class="pulse-dot"></span> NO AR AGORA
           </div>
-          <h1 class="hero-title" id="heroShowName">Radiação.Net</h1>
-          <p class="hero-subtitle" id="heroLocutor">A web rádio de todas as tribos!</p>
+          <h1 class="hero-title hero-brand-title">Radiação<span>.Net</span></h1>
+          <p class="hero-subtitle hero-tagline">A Rádio de todas as tribos!</p>
+
+          <div class="hero-now-playing" aria-live="polite">
+            <span class="hero-now-label"><i class="fas fa-wave-square"></i> TOCANDO AGORA</span>
+            <strong class="hero-track-title" id="heroShowName">Carregando transmissão...</strong>
+            <span class="hero-track-artist" id="heroLocutor">Sintonize com a Radiação.Net</span>
+          </div>
+
           <div class="hero-sponsor" id="heroSponsorBadge" style="display: none;">
             <span>Apoio:</span>
-            <img id="heroSponsorImg" src="" alt="Sponsor">
+            <img id="heroSponsorImg" src="" alt="Patrocinador">
           </div>
-          <button class="btn-hero-play" onclick="togglePlay(); this.blur();">
+          <button class="btn-hero-play" onclick="togglePlay(); this.blur();" aria-label="Ouvir a Radiação.Net agora">
             <i class="fas fa-play" id="heroPlayIcon"></i> <span>Ouça Agora</span>
           </button>
+          <span class="hero-supporting-text"><i class="fas fa-headphones-alt"></i> Sua trilha sonora, onde você estiver.</span>
         </div>
+        <div class="hero-bottom-fade" aria-hidden="true"></div>
       </section>
 
       <!-- SEÇÃO 2: QUICK MENUS -->
@@ -253,7 +284,7 @@
     <!-- Modal iOS antigo (agora integrado no fluxo) -->
     <div id="modal-ios" class="modal-overlay" onclick="fecharModalFora(event, 'modal-ios')"><div class="modal-content" style="text-align: center;"><span class="close-btn" onclick="fecharModal('modal-ios')">&times;</span><h2 class="modal-title">Instalar App 🍏</h2><p style="margin-bottom: 20px; color: #ccc; font-size: 0.9rem;">No Safari:</p><ul style="text-align: left; margin: 0 auto; max-width: 280px; color: #fff; line-height: 1.8; list-style: none; padding: 0;"><li style="margin-bottom: 10px;"><span style="color: #f4741f; font-weight: bold; margin-right: 5px;">1.</span> Toque em <b>Compartilhar</b> <i class="fas fa-share-square" style="color: #007aff;"></i>.</li><li style="margin-bottom: 10px;"><span style="color: #f4741f; font-weight: bold; margin-right: 5px;">2.</span> <b>"Adicionar à Tela de Início"</b> <i class="fas fa-plus-square" style="color: #fff;"></i>.</li><li><span style="color: #f4741f; font-weight: bold; margin-right: 5px;">3.</span> Toque em <b>Adicionar</b>.</li></ul><button class="btn-enviar" onclick="fecharModal('modal-ios')" style="margin-top: 25px;">Entendi!</button></div></div>
 
-    <script src="./script.js?v=12.1"></script>
+    <script src="./script.js?v=hero-2.0"></script>
     <script type="module" src="./firebase-public.js?v=5.3"></script>
   </body>
 </html>

@@ -62,19 +62,22 @@ function togglePlay() {
     if(iconHero) iconHero.className = "fas fa-spinner fa-spin";
     audio.load();
     audio.play().then(() => {
-      isPlaying = true; 
+      isPlaying = true;
+      document.body.classList.add('radio-playing');
       if(iconSticky) iconSticky.className = "fas fa-pause";
       if(iconHero) iconHero.className = "fas fa-pause";
       if(cover) cover.classList.add('playing');
       iniciarEspectro();
     }).catch(error => { 
-      console.error(error); 
+      console.error(error);
+      document.body.classList.remove('radio-playing');
       if(iconSticky) iconSticky.className = "fas fa-play";
       if(iconHero) iconHero.className = "fas fa-play";
       alert("Verifique sua conexão e tente novamente."); 
     });
   } else {
-    audio.pause(); isPlaying = false; 
+    audio.pause(); isPlaying = false;
+    document.body.classList.remove('radio-playing');
     if(iconSticky) iconSticky.className = "fas fa-play";
     if(iconHero) iconHero.className = "fas fa-play";
     if(cover) cover.classList.remove('playing');
@@ -293,7 +296,8 @@ async function atualizarNowPlaying() {
     const data = await response.json();
 
     const isLive = data.live.is_live;
-    const streamer = data.live.streamer_name;
+    const streamer = data.live.streamer_name || '';
+    document.body.classList.toggle('radio-live', Boolean(isLive));
     const displayTitle = isLive ? ((data.now_playing.song.text || "").split(' - ')[0] || "Ao Vivo") : (data.now_playing.song.title || "Desconhecido");
     const displayArtist = isLive ? `🎙️ ${streamer}` : (data.now_playing.song.artist || "Desconhecido");
     const coverUrl = data.now_playing.song.art || 'https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png';
