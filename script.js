@@ -132,9 +132,121 @@ function compartilharSite() {
   }
 }
 
-function toggleMobileMenu() {
+function toggleMobileMenu(forceState) {
   const menu = el('navMenu');
-  if(menu) menu.classList.toggle('active');
+  const backdrop = el('navDrawerBackdrop');
+  const button = document.querySelector('.mobile-menu-btn');
+  if (!menu || !backdrop) return;
+
+  const shouldOpen = typeof forceState === 'boolean'
+    ? forceState
+    : !menu.classList.contains('active');
+
+  if (shouldOpen) {
+    menu.classList.add('active');
+    backdrop.classList.add('active');
+    menu.setAttribute('aria-hidden', 'false');
+    if (button) button.setAttribute('aria-expanded', 'true');
+    document.body.classList.add('nav-drawer-open');
+    menu.querySelector('.nav-drawer-close')?.focus();
+  } else {
+    // Remove o foco do menu antes de aplicar aria-hidden.
+    if (menu.contains(document.activeElement)) button?.focus();
+    menu.classList.remove('active');
+    backdrop.classList.remove('active');
+    menu.setAttribute('aria-hidden', 'true');
+    if (button) button.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('nav-drawer-open');
+  }
+}
+
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') toggleMobileMenu(false);
+});
+
+/* Navegação principal: rolagem suave e identificação confiável da seção ativa. */
+function inicializarNavegacaoAtiva() {
+  const menu = document.getElementById('navMenu');
+  if (!menu) return;
+
+  // Ignora âncoras vazias (como href="#" do botão de instalação do app)
+  // e considera somente links que apontam para seções realmente existentes.
+  const navigation = Array.from(menu.querySelectorAll('a[href^="#"]'))
+    .map(link => ({ link, id: link.getAttribute('href').slice(1) }))
+    .filter(item => item.id && document.getElementById(item.id));
+
+  const links = navigation.map(item => item.link);
+  const sections = navigation.map(item => document.getElementById(item.id));
+  if (!links.length || !sections.length) return;
+
+  function atualizarLinkAtivo() {
+    const navbarHeight = document.querySelector('.portal-navbar')?.offsetHeight || 0;
+    const referencia = navbarHeight + 35;
+    let secaoAtual = sections[0];
+
+    sections.forEach(section => {
+      if (section.getBoundingClientRect().top <= referencia) {
+        secaoAtual = section;
+      }
+    });
+
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
+      secaoAtual = sections[sections.length - 1];
+    }
+
+    links.forEach(link => {
+      const ativo = link.getAttribute('href') === `#${secaoAtual.id}`;
+      link.classList.toggle('active', ativo);
+      if (ativo) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    });
+  }
+
+  let agendado = false;
+  function solicitarAtualizacao() {
+    if (agendado) return;
+    agendado = true;
+    window.requestAnimationFrame(() => {
+      atualizarLinkAtivo();
+      agendado = false;
+    });
+  }
+
+  links.forEach(link => {
+    link.addEventListener('click', event => {
+      const destino = document.querySelector(link.getAttribute('href'));
+      if (!destino) return;
+
+      event.preventDefault();
+      toggleMobileMenu(false);
+
+      const navbarHeight = document.querySelector('.portal-navbar')?.offsetHeight || 0;
+      const destinoY = destino.getBoundingClientRect().top + window.pageYOffset - navbarHeight - 12;
+
+      window.scrollTo({
+        top: Math.max(0, destinoY),
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+      });
+
+      links.forEach(item => {
+        const ativo = item === link;
+        item.classList.toggle('active', ativo);
+        if (ativo) item.setAttribute('aria-current', 'location');
+        else item.removeAttribute('aria-current');
+      });
+    });
+  });
+
+  window.addEventListener('scroll', solicitarAtualizacao, { passive: true });
+  window.addEventListener('resize', solicitarAtualizacao);
+  window.addEventListener('load', atualizarLinkAtivo, { once: true });
+  atualizarLinkAtivo();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', inicializarNavegacaoAtiva, { once: true });
+} else {
+  inicializarNavegacaoAtiva();
 }
 
 function changeDay(event, targetId) {

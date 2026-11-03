@@ -1,11 +1,11 @@
-const CACHE_NAME = 'radiacaonet-v6.7';
+const CACHE_NAME = 'radiacaonet-v7.0';
 const APP_SHELL = [
   './',
   './index.html',
   './painel.html',
-  './style.css?v=11.3',
+  './style.css?v=menu-1.1',
   './painel.css?v=3.0',
-  './script.js?v=11.7',
+  './script.js?v=12.0',
   './firebase-public.js?v=5.0',
   './painel.js?v=3.0',
   './painel-firebase.js?v=3.0',
