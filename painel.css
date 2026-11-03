@@ -818,3 +818,220 @@ body.modo-administracao #admin-workspace:before{content:"";position:absolute;top
   .app-footer{margin-top:10px}
 }
 @media(prefers-reduced-motion:reduce){.monitoring span{animation:none}}
+
+
+/* ======================================================================
+   SIGNAL NOIR SIGNATURE — ADMIN EDITION / v14.1
+   Integra a gestão à linguagem visual do console de transmissão.
+   Camada exclusivamente visual: preserva DOM, IDs e comportamentos.
+   ====================================================================== */
+body.modo-administracao #admin-workspace{
+  overflow:hidden;
+  isolation:isolate;
+  border:1px solid rgba(255,255,255,.105);
+  border-radius:21px;
+  background:
+    radial-gradient(ellipse at 100% 0%,rgba(255,126,43,.14),transparent 34%),
+    radial-gradient(ellipse at 0% 100%,rgba(255,126,43,.045),transparent 38%),
+    linear-gradient(145deg,rgba(22,28,37,.985),rgba(10,14,20,.99));
+  box-shadow:0 22px 60px rgba(0,0,0,.34),inset 0 1px rgba(255,255,255,.055);
+}
+body.modo-administracao #admin-workspace:after{
+  content:"RADIAÇÃO.NET  /  BROADCAST MANAGEMENT";
+  position:absolute;right:20px;bottom:12px;z-index:-1;
+  color:rgba(255,255,255,.026);font:800 clamp(1.1rem,3vw,2.1rem) "Space Grotesk",sans-serif;
+  letter-spacing:.12em;white-space:nowrap;pointer-events:none;
+}
+.admin-welcome{
+  position:relative;align-items:center;min-height:82px;padding:3px 0 18px 2px;
+  border-bottom:1px solid rgba(255,255,255,.085);
+}
+.admin-welcome>div:first-child{position:relative;padding-left:17px}
+.admin-welcome>div:first-child:before{
+  content:"";position:absolute;left:0;top:5px;bottom:5px;width:3px;border-radius:4px;
+  background:linear-gradient(180deg,#ffb16f,#ff6b24 72%,transparent);box-shadow:0 0 15px rgba(255,126,43,.4)
+}
+.admin-kicker{color:#ffad70;font-size:.59rem;letter-spacing:.22em}
+.admin-welcome h2{font-size:clamp(1.5rem,2.5vw,2.05rem);line-height:1.05;letter-spacing:-.06em;text-shadow:0 5px 24px rgba(0,0,0,.25)}
+.admin-welcome p{margin-top:6px;color:#8995a4;font-size:.73rem}
+.admin-welcome-actions{gap:9px}
+.admin-live-tag{
+  padding:7px 11px;border:1px solid rgba(56,222,165,.2);border-radius:7px;
+  background:linear-gradient(110deg,rgba(39,217,154,.11),rgba(39,217,154,.035));
+  color:#a0ebce;font-size:.55rem;letter-spacing:.12em;
+}
+.admin-close-panel{width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,.035);border-color:rgba(255,255,255,.09)}
+.admin-tabs{
+  position:relative;display:flex;gap:6px;width:100%;margin:15px 0 19px;padding:5px;
+  border:1px solid rgba(255,255,255,.075);border-radius:11px;
+  background:linear-gradient(90deg,rgba(5,9,14,.9),rgba(14,19,26,.8));
+  box-shadow:inset 0 1px rgba(255,255,255,.025);
+}
+.admin-tab{
+  position:relative;flex:0 1 170px;min-height:38px;justify-content:center;gap:9px;
+  padding:8px 13px;border:1px solid transparent;border-radius:8px;
+  color:#8e9aaa;font-size:.7rem;font-weight:800;letter-spacing:.015em;
+}
+.admin-tab i{color:#ff9d5d;font-size:.82rem}
+.admin-tab.active{
+  color:#fff;border-color:rgba(255,151,83,.24);
+  background:linear-gradient(110deg,rgba(255,116,31,.2),rgba(255,116,31,.075));
+  box-shadow:inset 0 1px rgba(255,255,255,.075),0 4px 14px rgba(0,0,0,.18);
+}
+.admin-tab.active:after{left:22%;right:22%;bottom:-6px;height:2px;background:linear-gradient(90deg,transparent,#ffad70,transparent);box-shadow:0 0 12px rgba(255,126,43,.55)}
+.admin-module{position:relative;padding:15px 16px 13px;border:1px solid rgba(255,255,255,.065);border-radius:14px;background:linear-gradient(145deg,rgba(255,255,255,.026),rgba(255,255,255,.008));box-shadow:inset 0 1px rgba(255,255,255,.025)}
+.admin-module-heading{margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid rgba(255,255,255,.075)}
+.admin-module-heading>div{padding-left:2px}
+.admin-module-heading h3{font-size:1.25rem;letter-spacing:-.045em;margin:5px 0 4px}
+.admin-module-heading p{font-size:.69rem;color:#8793a2}
+.admin-action{min-height:37px;padding:0 13px;border-radius:9px;font-size:.68rem;box-shadow:0 6px 17px rgba(255,105,25,.17),inset 0 1px rgba(255,255,255,.2)}
+.admin-action:hover{transform:translateY(-1px)}
+.admin-form-card{margin:0 0 13px;padding:15px;border:1px solid rgba(255,151,83,.24);border-radius:12px;background:linear-gradient(135deg,rgba(255,126,43,.09),rgba(9,14,21,.94) 58%);box-shadow:0 10px 25px rgba(0,0,0,.17),inset 0 1px rgba(255,255,255,.04)}
+.admin-form-title{margin-bottom:12px;font-size:.9rem;color:#fff}
+.admin-form-title strong{display:flex;align-items:center;gap:8px}
+.admin-form-title strong:before{content:"";width:6px;height:6px;border-radius:50%;background:#ff9b54;box-shadow:0 0 10px rgba(255,126,43,.65)}
+.admin-form-grid{gap:11px}
+.admin-form-grid label{gap:5px;color:#aeb9c7;font-size:.65rem;font-weight:800}
+.admin-form-grid input:not([type=checkbox]),.admin-form-grid select,.admin-form-grid textarea{min-height:37px;padding:8px 10px;border-radius:8px;background:rgba(5,9,14,.8);border-color:rgba(255,255,255,.105);font-size:.72rem}
+.admin-form-grid textarea{min-height:58px}
+.admin-form-grid input:focus,.admin-form-grid select:focus,.admin-form-grid textarea:focus{border-color:rgba(255,158,91,.78);box-shadow:0 0 0 3px rgba(255,126,43,.1)}
+.admin-form-actions{padding-top:3px}
+.admin-ghost{min-height:36px;border-radius:8px;font-size:.67rem}
+.admin-list-head{position:relative;margin-top:3px;padding:12px 2px 10px;border-top:1px solid rgba(255,255,255,.065);color:#e9edf3;font-size:.73rem}
+.admin-list-head strong{display:flex;align-items:center;gap:8px}
+.admin-list-head strong:before{content:"";width:5px;height:5px;border-radius:2px;background:#ff914d;box-shadow:0 0 9px rgba(255,126,43,.4)}
+.admin-list-head span{padding:4px 8px;border:1px solid rgba(255,255,255,.075);border-radius:6px;background:rgba(255,255,255,.035);color:#a2adba;font-size:.59rem;font-variant-numeric:tabular-nums}
+.admin-record-list{gap:7px}
+.admin-record{
+  position:relative;grid-template-columns:minmax(0,1fr) auto;gap:10px;padding:9px 11px;
+  border:1px solid rgba(255,255,255,.07);border-radius:10px;
+  background:linear-gradient(100deg,rgba(7,11,17,.78),rgba(19,25,34,.72));
+  box-shadow:inset 0 1px rgba(255,255,255,.018);transition:background .18s,border-color .18s,transform .18s;
+}
+.admin-record:before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:2px;border-radius:2px;background:linear-gradient(180deg,rgba(255,153,83,.65),rgba(255,107,36,.08));opacity:.75}
+.admin-record:hover{transform:translateX(2px);border-color:rgba(255,151,83,.24);background:linear-gradient(100deg,rgba(18,23,31,.96),rgba(25,32,42,.9))}
+.admin-record-thumb{width:42px;height:42px;flex-basis:42px;border:1px solid rgba(255,255,255,.11);border-radius:9px;background:linear-gradient(145deg,#252e39,#10151d);box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.admin-record-copy strong{font-size:.77rem;letter-spacing:-.02em}
+.admin-record-copy small{margin-top:3px;color:#8995a4;font-size:.62rem}
+.admin-record-actions{gap:5px}
+.admin-record-actions button{width:31px;height:31px;border-radius:8px;border-color:rgba(255,255,255,.09);background:rgba(255,255,255,.035);color:#bdc7d3}
+.admin-record-actions button:hover{border-color:rgba(255,158,91,.42);background:rgba(255,126,43,.12);color:#fff}
+.admin-record-actions .delete{color:#ff9ca2;border-color:rgba(239,98,107,.2)}
+.admin-status{padding:4px 7px;border:1px solid rgba(53,226,164,.15);border-radius:5px;background:rgba(39,217,154,.07);font-size:.51rem;letter-spacing:.08em}
+.admin-status.off{border-color:rgba(239,98,107,.18);background:rgba(239,98,107,.07)}
+.admin-empty{padding:24px 12px;border:1px dashed rgba(255,255,255,.085);border-radius:10px;background:rgba(255,255,255,.012);color:#8491a1;font-size:.7rem}
+.admin-feedback{margin-top:9px;padding:0 2px;font-size:.67rem}
+@media(max-width:760px){
+  body.modo-administracao #admin-workspace{padding:15px 12px;border-radius:16px}
+  .admin-welcome{min-height:0;padding-bottom:14px;align-items:flex-start}
+  .admin-welcome h2{font-size:1.45rem}
+  .admin-module{padding:12px 10px 10px;border-radius:11px}
+  .admin-module-heading{gap:10px}
+  .admin-module-heading h3{font-size:1.12rem}
+  .admin-module-heading p{font-size:.65rem}
+  .admin-action{min-height:35px;padding:0 10px;font-size:.64rem}
+  .admin-record{padding:8px 9px}
+}
+@media(max-width:520px){
+  .admin-welcome{gap:9px}
+  .admin-live-tag{padding:6px 8px;font-size:.48rem}
+  .admin-close-panel{width:31px;height:31px}
+  .admin-tabs{gap:3px;margin:12px 0 14px;padding:4px}
+  .admin-tab{flex:1;min-width:0;min-height:36px;gap:5px;padding:7px 4px;font-size:.59rem}
+  .admin-tab i{font-size:.7rem}
+  .admin-module-heading{align-items:stretch;flex-direction:column}
+  .admin-module-heading>.admin-action{width:100%}
+  .admin-form-card{padding:11px}
+  .admin-form-grid{gap:9px}
+  .admin-record-main{gap:8px}
+  .admin-record-thumb{width:36px;height:36px;flex-basis:36px}
+  .admin-record-copy strong{font-size:.72rem}
+  .admin-record-copy small{font-size:.58rem}
+  .admin-record-actions button{width:29px;height:29px}
+}
+
+/* ======================================================================
+   SIGNAL NOIR SIGNATURE — ADMIN COMPACT / v14.2
+   Unifica a densidade da Administração com a Central do Locutor.
+   Camada visual: não altera estrutura, IDs ou comportamentos.
+   ====================================================================== */
+body.modo-administracao #admin-workspace{
+  margin:12px 0 14px;
+  padding:14px 15px 13px;
+  border-radius:16px;
+  box-shadow:0 14px 36px rgba(0,0,0,.25),inset 0 1px rgba(255,255,255,.045);
+  background:
+    radial-gradient(ellipse at 100% 0%,rgba(255,126,43,.105),transparent 31%),
+    linear-gradient(145deg,rgba(20,26,35,.985),rgba(10,14,20,.99));
+}
+.admin-welcome{
+  min-height:0;
+  padding:0 0 10px 1px;
+  gap:12px;
+}
+.admin-welcome>div:first-child{padding-left:13px}
+.admin-welcome>div:first-child:before{top:3px;bottom:3px;width:2px}
+.admin-kicker{font-size:.54rem;letter-spacing:.18em}
+.admin-welcome h2{font-size:clamp(1.25rem,2vw,1.65rem);line-height:1.08;margin:4px 0 2px;letter-spacing:-.05em}
+.admin-welcome p{margin-top:3px;font-size:.65rem;line-height:1.35}
+.admin-welcome-actions{gap:7px}
+.admin-live-tag{padding:5px 8px;font-size:.49rem;letter-spacing:.09em}
+.admin-close-panel{width:29px;height:29px;border-radius:7px}
+.admin-tabs{
+  gap:4px;margin:10px 0 12px;padding:4px;border-radius:9px;
+  background:linear-gradient(90deg,rgba(5,9,14,.88),rgba(14,19,26,.76));
+}
+.admin-tab{flex:0 1 145px;min-height:32px;gap:7px;padding:6px 10px;border-radius:7px;font-size:.64rem}
+.admin-tab i{font-size:.74rem}
+.admin-tab.active:after{bottom:-5px}
+.admin-module{padding:11px 12px 10px;border-radius:11px;background:linear-gradient(145deg,rgba(255,255,255,.022),rgba(255,255,255,.006));box-shadow:inset 0 1px rgba(255,255,255,.02)}
+.admin-module-heading{margin:0 0 8px;padding:0 0 8px;gap:12px}
+.admin-module-heading>div{padding-left:1px}
+.admin-module-heading h3{font-size:1.08rem;line-height:1.15;margin:3px 0 2px;letter-spacing:-.04em}
+.admin-module-heading p{font-size:.62rem;line-height:1.35}
+.admin-action{min-height:32px;padding:0 10px;border-radius:7px;font-size:.62rem}
+.admin-form-card{margin-bottom:9px;padding:11px;border-radius:9px}
+.admin-form-title{margin-bottom:8px;font-size:.8rem}
+.admin-form-grid{gap:8px}
+.admin-form-grid label{gap:4px;font-size:.61rem}
+.admin-form-grid input:not([type=checkbox]),.admin-form-grid select,.admin-form-grid textarea{min-height:33px;padding:6px 8px;border-radius:7px;font-size:.68rem}
+.admin-form-grid textarea{min-height:48px}
+.admin-ghost{min-height:31px;font-size:.62rem}
+.admin-list-head{margin-top:2px;padding:8px 1px 7px;font-size:.67rem}
+.admin-list-head span{padding:3px 6px;font-size:.55rem}
+.admin-record-list{gap:5px}
+.admin-record{gap:8px;padding:7px 9px;border-radius:8px}
+.admin-record:before{top:8px;bottom:8px}
+.admin-record-thumb{width:36px;height:36px;flex-basis:36px;border-radius:7px}
+.admin-record-copy strong{font-size:.7rem}
+.admin-record-copy small{margin-top:2px;font-size:.57rem;line-height:1.3}
+.admin-record-actions{gap:4px}
+.admin-record-actions button{width:27px;height:27px;border-radius:7px}
+.admin-status{padding:3px 6px;font-size:.47rem}
+.admin-empty{padding:17px 10px;font-size:.64rem}
+.admin-feedback{margin-top:6px;font-size:.62rem}
+@media(max-width:760px){
+  body.modo-administracao #admin-workspace{padding:12px 10px;margin:10px 0 12px;border-radius:13px}
+  .admin-welcome{padding-bottom:9px}
+  .admin-module{padding:10px 9px 9px}
+  .admin-module-heading{margin-bottom:7px;padding-bottom:7px}
+  .admin-record{padding:7px 8px}
+}
+@media(max-width:520px){
+  .admin-welcome{gap:7px}
+  .admin-welcome h2{font-size:1.25rem}
+  .admin-tabs{margin:8px 0 10px}
+  .admin-tab{min-height:31px;padding:6px 3px;font-size:.57rem}
+  .admin-tab i{font-size:.65rem}
+  .admin-module-heading{gap:8px}
+  .admin-module-heading h3{font-size:1rem}
+  .admin-module-heading p{font-size:.59rem}
+  .admin-module-heading>.admin-action{width:auto;align-self:flex-start}
+  .admin-form-card{padding:9px}
+  .admin-form-grid{gap:7px}
+  .admin-record-main{gap:7px}
+  .admin-record-thumb{width:32px;height:32px;flex-basis:32px}
+  .admin-record-copy strong{font-size:.67rem}
+  .admin-record-copy small{font-size:.55rem}
+  .admin-record-actions button{width:26px;height:26px}
+}
