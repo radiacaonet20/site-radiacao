@@ -99,6 +99,57 @@ function renderizarEquipe(dados){
     card.appendChild(info);grid.appendChild(card);
   });
 }
+
+// PARCEIROS — leitura dinâmica do Realtime Database.
+function renderizarParceiros(dados){
+  const track=document.getElementById("partnersTrack");
+  const secao=document.getElementById("parceiros");
+  if(!track || !secao)return;
+
+  // Uma leitura bem-sucedida torna o Firebase a fonte oficial.
+  // Se o nó estiver vazio ou todos estiverem inativos, a seção fica oculta.
+  const entradas=Object.entries(dados||{}).filter(([,p])=>p && typeof p==="object");
+
+  const parceiros=entradas
+    .filter(([,p])=>p.ativo===true)
+    .sort((a,b)=>Number(a[1].ordem||0)-Number(b[1].ordem||0)
+      ||String(a[1].nome||"").localeCompare(String(b[1].nome||""),"pt-BR"));
+
+  track.replaceChildren();
+
+  parceiros.forEach(([chave,p])=>{
+    const link=imagemSegura(p.link);
+    const imagem=imagemSegura(p.imagem);
+    const nome=String(p.nome||"Parceiro").trim()||"Parceiro";
+
+    // Sem URL de destino válida, o cartão não vira um link inseguro.
+    const card=link?criar("a","partner-card"):criar("div","partner-card");
+    if(link){
+      card.href=link;
+      card.target="_blank";
+      card.rel="noopener noreferrer";
+      card.setAttribute("aria-label",`Visitar ${nome}`);
+    }
+
+    if(imagem){
+      const img=criar("img");
+      img.src=imagem;
+      img.alt=nome;
+      img.loading="lazy";
+      img.decoding="async";
+      card.appendChild(img);
+    }else{
+      card.appendChild(criar("span","partner-name",nome));
+    }
+
+    track.appendChild(card);
+  });
+
+  // Sem parceiros ativos, a seção não ocupa espaço na Home.
+  secao.hidden=parceiros.length===0;
+}
+
+
 onValue(ref(db,"programacao"),snap=>{
   dadosProgramacaoAtuais=snap.val()||{};
   programacaoCarregada=true;
@@ -114,3 +165,4 @@ onValue(ref(db,"programacao_config/gerenciada"),snap=>{
   renderizarProgramacao(dadosProgramacaoAtuais);
 });
 onValue(ref(db,"equipe"),snap=>renderizarEquipe(snap.val()||{}),err=>console.error("Equipe dinâmica:",err));
+onValue(ref(db,"parceiros"),snap=>renderizarParceiros(snap.val()||{}),err=>console.error("Parceiros dinâmicos — mantendo conteúdo atual da Home:",err));

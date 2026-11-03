@@ -1,11 +1,11 @@
-const CACHE_NAME = 'radiacaonet-v9.1';
+const CACHE_NAME = 'radiacaonet-v9.2';
 const APP_SHELL = [
   './',
   './index.html',
   './style.css?v=13.2',
   './script.js?v=community-3.3',
   './firebase-public.js?v=5.5',
-  './site-dynamic.js?v=1.2'
+  './site-dynamic.js?v=1.3'
 ];
 
 self.addEventListener('install', (event) => {

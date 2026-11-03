@@ -409,11 +409,13 @@ function iniciarControleEnquete() {
 
 
 
-/* MÓDULOS ADMINISTRATIVOS — programação e equipe */
+/* MÓDULOS ADMINISTRATIVOS — programação, equipe e parceiros */
 const adminProgramacaoRef = ref(db, "programacao");
 const adminEquipeRef = ref(db, "equipe");
+const adminParceirosRef = ref(db, "parceiros");
 let adminProgramacao = {};
 let adminEquipe = {};
+let adminParceiros = {};
 let adminBindingsIniciados = false;
 let perfilAtualPainel = null;
 const adminWorkspace = $("admin-workspace");
@@ -444,7 +446,7 @@ function abrirFormAdmin(tipo, registro = null, id = "") {
     $("programa-descricao").value = registro?.descricao || "";
     $("programa-ordem").value = Number(registro?.ordem || 0);
     $("programa-ativo").checked = registro?.ativo !== false;
-  } else {
+  } else if (tipo === "equipe") {
     $("equipe-id").value = id;
     $("equipe-form-title").textContent = registro ? "Editar integrante" : "Novo integrante";
     $("equipe-nome").value = registro?.nome || "";
@@ -452,33 +454,46 @@ function abrirFormAdmin(tipo, registro = null, id = "") {
     $("equipe-foto").value = registro?.foto || "";
     $("equipe-ordem").value = Number(registro?.ordem || 0);
     $("equipe-ativo").checked = registro?.ativo !== false;
+  } else if (tipo === "parceiro") {
+    $("parceiro-chave").value = id;
+    $("parceiro-form-title").textContent = registro ? "Editar parceiro" : "Novo parceiro";
+    $("parceiro-nome").value = registro?.nome || "";
+    $("parceiro-imagem").value = registro?.imagem || "";
+    $("parceiro-link").value = registro?.link || "";
+    $("parceiro-ordem").value = Number(registro?.ordem || 0);
+    $("parceiro-ativo").checked = registro?.ativo !== false;
   }
   card.hidden = false;
   card.scrollIntoView({behavior:"smooth",block:"nearest"});
 }
 function renderAdminLista(tipo, dados) {
-  const isPrograma = tipo === "programa";
-  const lista = $(isPrograma ? "lista-programas" : "lista-equipe");
-  const total = $(isPrograma ? "programas-total" : "equipe-total");
+  const config = tipo === "programa"
+    ? {lista:"lista-programas",total:"programas-total",vazio:"Nenhum programa cadastrado. Use “Novo programa” para começar."}
+    : tipo === "equipe"
+      ? {lista:"lista-equipe",total:"equipe-total",vazio:"Nenhum integrante cadastrado. Use “Novo integrante” para começar."}
+      : {lista:"lista-parceiros",total:"parceiros-total",vazio:"Nenhum parceiro cadastrado. Use “Novo parceiro” para começar."};
+  const lista = $(config.lista);
+  const total = $(config.total);
   if (!lista) return;
   const entradas = Object.entries(dados || {}).sort((a,b) => Number(a[1]?.ordem || 0)-Number(b[1]?.ordem || 0) || String(a[1]?.titulo || a[1]?.nome || "").localeCompare(String(b[1]?.titulo || b[1]?.nome || ""),"pt-BR"));
   if (total) total.textContent = `${entradas.length} registro(s)`;
   lista.replaceChildren();
   if (!entradas.length) {
-    const vazio = document.createElement("div"); vazio.className="admin-empty";
-    vazio.textContent = isPrograma ? "Nenhum programa cadastrado. Use “Novo programa” para começar." : "Nenhum integrante cadastrado. Use “Novo integrante” para começar.";
+    const vazio = document.createElement("div"); vazio.className="admin-empty"; vazio.textContent=config.vazio;
     lista.appendChild(vazio); return;
   }
   entradas.forEach(([id, item]) => {
     const row=document.createElement("article"); row.className="admin-record";
     const main=document.createElement("div"); main.className="admin-record-main";
-    const foto=item.imagem || item.foto;
+    const foto = tipo === "equipe" ? (item.foto || "") : (item.imagem || "");
     if (foto) { const img=document.createElement("img"); img.className="admin-record-thumb"; img.src=foto; img.alt=""; img.loading="lazy"; img.onerror=()=>{img.remove();}; main.appendChild(img); }
-    else { const ico=document.createElement("div"); ico.className="admin-record-thumb placeholder"; ico.innerHTML=`<i class="fa-solid ${isPrograma?"fa-microphone-lines":"fa-user"}"></i>`; main.appendChild(ico); }
+    else { const ico=document.createElement("div"); ico.className="admin-record-thumb placeholder"; ico.innerHTML=`<i class="fa-solid ${tipo==="programa"?"fa-microphone-lines":tipo==="equipe"?"fa-user":"fa-handshake"}"></i>`; main.appendChild(ico); }
     const copy=document.createElement("div"); copy.className="admin-record-copy";
     const title=document.createElement("strong"); title.textContent=item.titulo || item.nome || "Sem título";
     const detail=document.createElement("small");
-    detail.textContent=isPrograma ? `${chaveDia(item.dia)} · ${item.inicio || "—"}–${item.fim || "—"} · ${item.locutor || "Sem locutor"}${item.descricao ? " · "+item.descricao : ""}` : (item.funcao || "Integrante");
+    detail.textContent = tipo === "programa"
+      ? `${chaveDia(item.dia)} · ${item.inicio || "—"}–${item.fim || "—"} · ${item.locutor || "Sem locutor"}${item.descricao ? " · "+item.descricao : ""}`
+      : tipo === "equipe" ? (item.funcao || "Integrante") : (item.link || "Sem link de destino");
     copy.append(title,detail);
     const status=document.createElement("span"); status.className="admin-status"+(item.ativo===false?" off":""); status.textContent=item.ativo===false?"OCULTO":"PUBLICADO";
     copy.appendChild(status); main.appendChild(copy);
@@ -486,22 +501,25 @@ function renderAdminLista(tipo, dados) {
     const edit=document.createElement("button"); edit.type="button"; edit.title="Editar"; edit.setAttribute("aria-label","Editar"); edit.innerHTML='<i class="fa-solid fa-pen"></i>';
     edit.addEventListener("click",()=>abrirFormAdmin(tipo,item,id));
     const del=document.createElement("button"); del.type="button"; del.className="delete"; del.title="Excluir"; del.setAttribute("aria-label","Excluir"); del.innerHTML='<i class="fa-solid fa-trash"></i>';
-    del.addEventListener("click",async()=>{ if(!confirm(`Excluir ${isPrograma?"o programa":"o integrante"} “${item.titulo||item.nome}”?`))return; try{await remove(ref(db,`${isPrograma?"programacao":"equipe"}/${id}`));avisoAdmin("Registro excluído com sucesso.");}catch(e){console.error(e);avisoAdmin("Não foi possível excluir. Verifique as permissões do Firebase.",true);} });
+    del.addEventListener("click",async()=>{ const nome=tipo==="programa"?"o programa":tipo==="equipe"?"o integrante":"o parceiro"; if(!confirm(`Excluir ${nome} “${item.titulo||item.nome}”?`))return; try{await remove(ref(db,`${tipo==="programa"?"programacao":tipo==="equipe"?"equipe":"parceiros"}/${id}`));avisoAdmin("Registro excluído com sucesso.");}catch(e){console.error(e);avisoAdmin("Não foi possível excluir. Verifique as permissões do Firebase.",true);} });
     actions.append(edit,del); row.append(main,actions); lista.appendChild(row);
   });
 }
 async function proximoIdentificador(tipo) {
-  const ehPrograma = tipo === "programacao";
-  const prefixo = ehPrograma ? "prog" : "memb";
-  const registros = ehPrograma ? adminProgramacao : adminEquipe;
-  const maiorExistente = Object.keys(registros || {}).reduce((maior, chave) => {
-    const match = chave.match(new RegExp("^" + prefixo + "(\\d+)$"));
+  const config = {
+    programacao:{prefixo:"prog",registros:adminProgramacao},
+    equipe:{prefixo:"memb",registros:adminEquipe},
+    parceiros:{prefixo:"parc",registros:adminParceiros}
+  }[tipo];
+  if (!config) throw new Error("Módulo inválido para gerar identificador.");
+  const maiorExistente = Object.keys(config.registros || {}).reduce((maior, chave) => {
+    const match = chave.match(new RegExp("^" + config.prefixo + "(\\d+)$"));
     return match ? Math.max(maior, Number(match[1])) : maior;
   }, 0);
   const contadorRef = ref(db, `sequencias/${tipo}`);
   const resultado = await runTransaction(contadorRef, atual => Math.max(Number(atual || 0), maiorExistente) + 1);
   if (!resultado.committed) throw new Error("Não foi possível reservar o próximo identificador.");
-  return `${prefixo}${resultado.snapshot.val()}`;
+  return `${config.prefixo}${resultado.snapshot.val()}`;
 }
 
 function iniciarModulosAdmin(perfil) {
@@ -512,12 +530,14 @@ function iniciarModulosAdmin(perfil) {
   adminBindingsIniciados = true;
   onValue(adminProgramacaoRef,s=>{adminProgramacao=s.val()||{};renderAdminLista("programa",adminProgramacao);},e=>avisoAdmin("Falha ao carregar programação: "+e.message,true));
   onValue(adminEquipeRef,s=>{adminEquipe=s.val()||{};renderAdminLista("equipe",adminEquipe);},e=>avisoAdmin("Falha ao carregar equipe: "+e.message,true));
+  onValue(adminParceirosRef,s=>{adminParceiros=s.val()||{};renderAdminLista("parceiro",adminParceiros);},e=>avisoAdmin("Falha ao carregar parceiros: "+e.message,true));
   document.querySelectorAll("[data-admin-tab]").forEach(btn=>btn.addEventListener("click",()=>{
     document.querySelectorAll("[data-admin-tab]").forEach(b=>b.classList.toggle("active",b===btn));
     document.querySelectorAll(".admin-module").forEach(m=>{const active=m.id===`admin-module-${btn.dataset.adminTab}`;m.hidden=!active;m.classList.toggle("active",active);});
   }));
   $("btn-novo-programa")?.addEventListener("click",()=>abrirFormAdmin("programa"));
   $("btn-novo-integrante")?.addEventListener("click",()=>abrirFormAdmin("equipe"));
+  $("btn-novo-parceiro")?.addEventListener("click",()=>abrirFormAdmin("parceiro"));
   document.querySelectorAll("[data-close-form]").forEach(b=>b.addEventListener("click",()=>{const t=b.dataset.closeForm; $(`form-${t}-card`).hidden=true;}));
   $("form-programa")?.addEventListener("submit",async e=>{
     e.preventDefault(); const id=$("programa-id").value||await proximoIdentificador("programacao");
@@ -528,5 +548,15 @@ function iniciarModulosAdmin(perfil) {
     e.preventDefault(); const id=$("equipe-id").value||await proximoIdentificador("equipe");
     const item={nome:$("equipe-nome").value.trim(),funcao:$("equipe-funcao").value.trim(),foto:$("equipe-foto").value.trim(),ordem:Number($("equipe-ordem").value||0),ativo:$("equipe-ativo").checked,atualizado_em:Date.now()};
     try{await set(ref(db,`equipe/${id}`),item);await set(ref(db,"equipe_config/gerenciada"),true);$("form-equipe-card").hidden=true;avisoAdmin("Integrante salvo. O site será atualizado automaticamente.");}catch(err){console.error(err);avisoAdmin("Falha ao salvar integrante. Confira as regras do Firebase.",true);}
+  });
+  $("form-parceiro")?.addEventListener("submit",async e=>{
+    e.preventDefault();
+    try {
+      const id=$("parceiro-chave").value||await proximoIdentificador("parceiros");
+      const item={nome:$("parceiro-nome").value.trim(),imagem:$("parceiro-imagem").value.trim(),link:$("parceiro-link").value.trim(),ordem:Number($("parceiro-ordem").value||0),ativo:$("parceiro-ativo").checked};
+      await set(ref(db,`parceiros/${id}`),item);
+      $("form-parceiro-card").hidden=true;
+      avisoAdmin("Parceiro salvo com sucesso.");
+    } catch(err) { console.error(err); avisoAdmin("Falha ao salvar parceiro. Confira as regras do Firebase.",true); }
   });
 }

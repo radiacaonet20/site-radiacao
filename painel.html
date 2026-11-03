@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="./style.css?v=3.0">
-  <link rel="stylesheet" href="./painel.css?v=10.0">
+  <link rel="stylesheet" href="./painel.css?v=10.1">
 </head>
 <body>
   <div id="tela-login">
@@ -49,12 +49,13 @@
 
     <section id="admin-workspace" class="admin-workspace" hidden>
       <div class="admin-welcome">
-        <div><span class="admin-kicker">GESTÃO DA EMISSORA</span><h2>Painel Administrativo</h2><p>Programação e equipe organizadas em um só lugar.</p></div>
+        <div><span class="admin-kicker">GESTÃO DA EMISSORA</span><h2>Painel Administrativo</h2><p>Programação, equipe e parceiros organizados em um só lugar.</p></div>
         <span class="admin-live-tag"><i class="fa-solid fa-shield-halved"></i> ACESSO ADMINISTRADOR</span>
       </div>
       <div class="admin-tabs" role="tablist" aria-label="Módulos administrativos">
         <button type="button" class="admin-tab active" data-admin-tab="programacao"><i class="fa-regular fa-calendar-days"></i> Programação</button>
         <button type="button" class="admin-tab" data-admin-tab="equipe"><i class="fa-solid fa-users"></i> Equipe</button>
+        <button type="button" class="admin-tab" data-admin-tab="parceiros"><i class="fa-solid fa-handshake"></i> Parceiros</button>
       </div>
       <section class="admin-module active" id="admin-module-programacao">
         <div class="admin-module-heading"><div><span class="admin-kicker">GRADE DA RÁDIO</span><h3>Gerenciar programação</h3><p>Cadastre, edite, ative ou remova programas sem alterar o HTML do site.</p></div><button class="admin-action" id="btn-novo-programa"><i class="fa-solid fa-plus"></i> Novo programa</button></div>
@@ -93,6 +94,24 @@
         </div>
         <div class="admin-list-head"><strong>Integrantes cadastrados</strong><span id="equipe-total">Carregando...</span></div>
         <div class="admin-record-list" id="lista-equipe"><div class="admin-empty"><i class="fa-solid fa-circle-notch fa-spin"></i> Carregando equipe...</div></div>
+      </section>
+      <section class="admin-module" id="admin-module-parceiros" hidden>
+        <div class="admin-module-heading"><div><span class="admin-kicker">MARCAS QUE APOIAM A RÁDIO</span><h3>Gerenciar parceiros</h3><p>Cadastre e organize os parceiros exibidos na seção Nossos Parceiros.</p></div><button class="admin-action" id="btn-novo-parceiro"><i class="fa-solid fa-plus"></i> Novo parceiro</button></div>
+        <div class="admin-form-card" id="form-parceiro-card" hidden>
+          <div class="admin-form-title"><strong id="parceiro-form-title">Novo parceiro</strong><button type="button" class="admin-close" data-close-form="parceiro" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button></div>
+          <form id="form-parceiro" class="admin-form-grid">
+            <!-- Chave interna do registro Firebase (parc1, parc2...). Não é um campo salvo no parceiro. -->
+            <input type="hidden" id="parceiro-chave">
+            <label>Nome<input id="parceiro-nome" maxlength="100" required placeholder="Nome da empresa"></label>
+            <label>Ordem de exibição<input id="parceiro-ordem" type="number" min="0" step="1" value="0"></label>
+            <label class="admin-field-wide">Imagem / logotipo (URL)<input id="parceiro-imagem" type="url" required maxlength="500" placeholder="https://..."></label>
+            <label class="admin-field-wide">Link de destino<input id="parceiro-link" type="url" required maxlength="500" placeholder="https://..."></label>
+            <label class="admin-check"><input id="parceiro-ativo" type="checkbox" checked> Exibir no site</label>
+            <div class="admin-form-actions"><button type="button" class="admin-ghost" data-close-form="parceiro">Cancelar</button><button class="admin-action" type="submit"><i class="fa-solid fa-floppy-disk"></i> Salvar parceiro</button></div>
+          </form>
+        </div>
+        <div class="admin-list-head"><strong>Parceiros cadastrados</strong><span id="parceiros-total">Carregando...</span></div>
+        <div class="admin-record-list" id="lista-parceiros"><div class="admin-empty"><i class="fa-solid fa-circle-notch fa-spin"></i> Carregando parceiros...</div></div>
       </section>
       <div class="admin-feedback" id="admin-feedback" role="status" aria-live="polite"></div>
     </section>
@@ -146,6 +165,6 @@
   </main>
 
   <script src="./painel.js?v=10.0"></script>
-  <script type="module" src="./painel-firebase.js?v=10.0"></script>
+  <script type="module" src="./painel-firebase.js?v=10.2"></script>
 </body>
 </html>
