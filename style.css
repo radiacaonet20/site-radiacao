@@ -678,7 +678,17 @@ html { scroll-behavior: smooth; }
 .hero-now-playing { display:flex; flex-direction:column; align-items:center; gap:4px; min-width:min(100%,440px); max-width:620px; margin:0 0 26px; padding:15px 28px 17px; border:1px solid rgba(255,255,255,.13); border-radius:16px; background:rgba(8,8,10,.48); box-shadow:0 15px 55px rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.06); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); }
 .hero-now-label { display:flex; align-items:center; gap:8px; color:#f5a36c; font-size:.66rem; font-weight:900; letter-spacing:2px; }
 .hero-now-label i { font-size:.8rem; }
-.hero-track-title { max-width:100%; color:#fff; font-size:clamp(1.1rem,2.5vw,1.55rem); font-weight:800; line-height:1.3; text-shadow:0 2px 12px #000; overflow-wrap:anywhere; }
+.hero-track-viewport { display:block; width:100%; max-width:100%; min-width:0; overflow:hidden; }
+.hero-track-title { display:block; max-width:100%; color:#fff; font-size:clamp(1.1rem,2.5vw,1.55rem); font-weight:800; line-height:1.3; text-shadow:0 2px 12px #000; overflow-wrap:anywhere; transition:font-size .25s ease; }
+/* Tipografia adaptativa: reduz gradualmente sem cortar o nome da faixa. */
+.hero-now-playing.title-medium .hero-track-title { font-size:clamp(1rem,2.1vw,1.3rem); }
+.hero-now-playing.title-compact .hero-track-title { font-size:clamp(.92rem,1.8vw,1.12rem); line-height:1.35; }
+/* Marquee reservado para títulos excepcionalmente extensos. */
+.hero-now-playing.title-marquee .hero-track-viewport { -webkit-mask-image:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent); mask-image:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent); }
+.hero-now-playing.title-marquee .hero-track-title { display:inline-block; width:max-content; max-width:none; white-space:nowrap; overflow-wrap:normal; padding-right:3rem; animation:heroTitleMarquee var(--hero-marquee-duration,22s) linear infinite; will-change:transform; }
+.hero-now-playing.title-marquee .hero-track-title::after { content:attr(data-marquee); padding-left:3rem; }
+.hero-now-playing.title-marquee:hover .hero-track-title { animation-play-state:paused; }
+@keyframes heroTitleMarquee { from { transform:translateX(0); } to { transform:translateX(-50%); } }
 .hero-track-artist { color:#c4c0bd; font-size:.88rem; font-weight:500; }
 .hero-cinematic .live-badge { margin:0 0 18px; background:rgba(210,48,48,.88); box-shadow:0 0 26px rgba(255,76,76,.24); }
 .hero-cinematic .hero-sponsor { margin:0 0 22px; background:rgba(8,8,10,.68); backdrop-filter:blur(10px); }
@@ -710,6 +720,8 @@ html { scroll-behavior: smooth; }
   .hero-brand-title { font-size:clamp(3.1rem,15vw,4.2rem); }
   .hero-tagline { margin:13px 0 23px; }
   .hero-track-title { font-size:1.12rem; }
+  .hero-now-playing.title-medium .hero-track-title { font-size:1rem; }
+  .hero-now-playing.title-compact .hero-track-title { font-size:.9rem; }
   .hero-track-artist { font-size:.8rem; }
   .hero-equalizer { height:55px; bottom:10%; gap:3px; }
   .hero-supporting-text { font-size:.68rem; }
@@ -717,6 +729,8 @@ html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion:reduce) {
   .hero-orbit,.hero-light,.soundwave-line,.hero-equalizer span,.hero-cinematic .btn-hero-play::before { animation:none !important; }
   .hero-cinematic .btn-hero-play { transition:none; }
+  .hero-now-playing.title-marquee .hero-track-title { animation:none !important; white-space:normal; width:auto; overflow-wrap:anywhere; }
+  .hero-now-playing.title-marquee .hero-track-title::after { content:none; }
 }
 
 .hero-equalizer span:nth-child(odd) { background:linear-gradient(180deg,#ffd0ad,#f4741f); }

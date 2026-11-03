@@ -290,6 +290,28 @@ const parceirosOficiais = {
   "alex": "https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/parceiro_petmaisvida.jpg?raw=true"
 };
 
+function ajustarTituloHero(titulo) {
+  const titleElement = el('heroShowName');
+  const card = titleElement?.closest('.hero-now-playing');
+  if (!titleElement || !card) return;
+
+  const texto = String(titulo || '').trim();
+  const quantidade = Array.from(texto).length;
+  card.classList.remove('title-medium', 'title-compact', 'title-marquee');
+  titleElement.removeAttribute('data-marquee');
+  titleElement.style.removeProperty('--hero-marquee-duration');
+
+  if (quantidade > 34) card.classList.add('title-medium');
+  if (quantidade > 62) card.classList.add('title-compact');
+
+  // Só ativa o letreiro para nomes muito extensos, evitando movimento desnecessário.
+  if (quantidade > 92) {
+    card.classList.add('title-marquee');
+    titleElement.setAttribute('data-marquee', texto);
+    titleElement.style.setProperty('--hero-marquee-duration', `${Math.min(34, Math.max(18, quantidade * 0.22))}s`);
+  }
+}
+
 async function atualizarNowPlaying() {
   try {
     const response = await fetch('https://painel.radiacao.net.br/api/nowplaying_static/radiacaonet.json?_=' + new Date().getTime(), { cache: 'no-store' });
@@ -305,7 +327,7 @@ async function atualizarNowPlaying() {
     if(el('playerLine1')) el('playerLine1').innerText = displayTitle;
     if(el('playerLine2')) el('playerLine2').innerText = displayArtist;
     if(el('playerCover')) el('playerCover').src = coverUrl;
-    if(el('heroShowName')) el('heroShowName').innerText = displayTitle;
+    if(el('heroShowName')) { el('heroShowName').innerText = displayTitle; ajustarTituloHero(displayTitle); }
     if(el('heroLocutor')) el('heroLocutor').innerText = displayArtist;
 
     const historyList = el('lista-historico');
