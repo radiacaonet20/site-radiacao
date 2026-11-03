@@ -216,8 +216,20 @@
             <p>Selecione o dia e acompanhe nossos programas.</p>
           </div>
           
-          <div class="modern-schedule">
-            <div class="days-slider">
+          <div class="modern-schedule" id="modernSchedule">
+            <div class="schedule-overview">
+              <div class="schedule-overview-copy">
+                <span class="schedule-eyebrow"><i class="fas fa-broadcast-tower" aria-hidden="true"></i> PROGRAMAÇÃO DA RÁDIO</span>
+                <h3 id="scheduleDayHeading">Hoje na Radiação.Net</h3>
+                <p id="scheduleDateLabel">Confira a programação do dia.</p>
+              </div>
+              <button class="schedule-week-toggle" id="scheduleWeekToggle" type="button" aria-expanded="false">
+                <i class="fas fa-calendar-week" aria-hidden="true"></i>
+                <span>Ver semana completa</span>
+                <i class="fas fa-chevron-down schedule-toggle-chevron" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="days-slider" aria-label="Escolha o dia da programação">
               <button class="day-pill" data-target="prog-seg" onclick="changeDay(event, 'prog-seg')">Segunda</button>
               <button class="day-pill" data-target="prog-ter" onclick="changeDay(event, 'prog-ter')">Terça</button>
               <button class="day-pill" data-target="prog-qua" onclick="changeDay(event, 'prog-qua')">Quarta</button>
@@ -228,13 +240,13 @@
             </div>
 
             <!-- Cartões de Programas -->
-            <div class="prog-content" id="prog-seg"><div class="prog-card"><img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/SemClubismo300.jpg?raw=true" alt="Sem Clubismo"><div class="prog-details"><span class="prog-time"><i class="fas fa-clock"></i> 21:00</span><h4>Sem Clubismo</h4><p>O debate esportivo mais quente do rádio com Rafa Barros.</p></div></div></div>
-            <div class="prog-content" id="prog-ter"><div class="prog-card"><img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/RastaFlow.jpg?raw=true" alt="Rasta Flow"><div class="prog-details"><span class="prog-time"><i class="fas fa-clock"></i> 21:00</span><h4>Rasta Flow</h4><p>O melhor do Reggae Roots com Fred Macêdo.</p></div></div></div>
-            <div class="prog-content" id="prog-qua"><div class="prog-card auto-dj"><img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" alt="AutoDJ"><div class="prog-details"><span class="prog-time"><i class="fas fa-compact-disc"></i> 24 Horas</span><h4>Playlist Radiação</h4><p>A melhor seleção musical rolando sem parar.</p></div></div></div>
-            <div class="prog-content" id="prog-qui"><div class="prog-card"><img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/CasaDosClassicos.jpg?raw=true" alt="Casa dos Clássicos"><div class="prog-details"><span class="prog-time"><i class="fas fa-clock"></i> 21:00</span><h4>Casa dos Clássicos</h4><p>Uma viagem no tempo com os maiores hits da história.</p></div></div></div>
-            <div class="prog-content" id="prog-sex"><div class="prog-card"><img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/DanceTime.jpg?raw=true" alt="Dance Time"><div class="prog-details"><span class="prog-time"><i class="fas fa-clock"></i> 21:00</span><h4>Dance Time</h4><p>As batidas eletrônicas que agitam a sua sexta-feira.</p></div></div></div>
-            <div class="prog-content" id="prog-sab"><div class="prog-card auto-dj"><img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" alt="AutoDJ"><div class="prog-details"><span class="prog-time"><i class="fas fa-compact-disc"></i> 24 Horas</span><h4>Playlist Radiação</h4><p>A melhor seleção musical rolando sem parar.</p></div></div></div>
-            <div class="prog-content active" id="prog-dom"><div class="prog-card auto-dj"><img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" alt="AutoDJ"><div class="prog-details"><span class="prog-time"><i class="fas fa-compact-disc"></i> 24 Horas</span><h4>Playlist Radiação</h4><p>A melhor seleção musical rolando sem parar.</p></div></div></div>
+            <div class="prog-content" id="prog-seg" data-day="SEGUNDA"><div class="prog-card"><img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/SemClubismo300.jpg?raw=true" alt="Sem Clubismo"><div class="prog-details"><span class="prog-time"><i class="fas fa-clock"></i> 21:00</span><h4>Sem Clubismo</h4><p>O debate esportivo mais quente do rádio com Rafa Barros.</p></div></div></div>
+            <div class="prog-content" id="prog-ter" data-day="TERÇA"><div class="prog-card"><img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/RastaFlow.jpg?raw=true" alt="Rasta Flow"><div class="prog-details"><span class="prog-time"><i class="fas fa-clock"></i> 21:00</span><h4>Rasta Flow</h4><p>O melhor do Reggae Roots com Fred Macêdo.</p></div></div></div>
+            <div class="prog-content" id="prog-qua" data-day="QUARTA"><div class="prog-card auto-dj"><img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" alt="AutoDJ"><div class="prog-details"><span class="prog-time"><i class="fas fa-compact-disc"></i> 24 Horas</span><h4>Playlist Radiação</h4><p>A melhor seleção musical rolando sem parar.</p></div></div></div>
+            <div class="prog-content" id="prog-qui" data-day="QUINTA"><div class="prog-card"><img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/CasaDosClassicos.jpg?raw=true" alt="Casa dos Clássicos"><div class="prog-details"><span class="prog-time"><i class="fas fa-clock"></i> 21:00</span><h4>Casa dos Clássicos</h4><p>Uma viagem no tempo com os maiores hits da história.</p></div></div></div>
+            <div class="prog-content" id="prog-sex" data-day="SEXTA"><div class="prog-card"><img src="https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/DanceTime.jpg?raw=true" alt="Dance Time"><div class="prog-details"><span class="prog-time"><i class="fas fa-clock"></i> 21:00</span><h4>Dance Time</h4><p>As batidas eletrônicas que agitam a sua sexta-feira.</p></div></div></div>
+            <div class="prog-content" id="prog-sab" data-day="SÁBADO"><div class="prog-card auto-dj"><img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" alt="AutoDJ"><div class="prog-details"><span class="prog-time"><i class="fas fa-compact-disc"></i> 24 Horas</span><h4>Playlist Radiação</h4><p>A melhor seleção musical rolando sem parar.</p></div></div></div>
+            <div class="prog-content active" id="prog-dom" data-day="DOMINGO"><div class="prog-card auto-dj"><img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" alt="AutoDJ"><div class="prog-details"><span class="prog-time"><i class="fas fa-compact-disc"></i> 24 Horas</span><h4>Playlist Radiação</h4><p>A melhor seleção musical rolando sem parar.</p></div></div></div>
           </div>
         </div>
       </section>

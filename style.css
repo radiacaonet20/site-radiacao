@@ -1050,3 +1050,113 @@ html { scroll-behavior: smooth; }
 #noticias .section-header p {
   margin-bottom: 0;
 }
+
+
+/* Etapa 5 — Nossa Programação: visualização híbrida */
+.schedule-overview {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding:20px 22px;
+  border:1px solid rgba(244,116,31,.24);
+  border-radius:18px;
+  background:radial-gradient(ellipse at 0% 50%,rgba(244,116,31,.13),transparent 55%),linear-gradient(120deg,rgba(255,255,255,.055),rgba(255,255,255,.018));
+}
+.schedule-overview-copy { display:flex; flex-direction:column; gap:5px; }
+.schedule-eyebrow {
+  color:var(--cor-primaria);
+  font-size:.7rem;
+  font-weight:900;
+  letter-spacing:1.5px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.schedule-overview-copy h3 { color:#fff; font-size:1.35rem; line-height:1.2; font-weight:900; }
+.schedule-overview-copy p { color:var(--cor-texto-mutado); font-size:.88rem; }
+.schedule-week-toggle {
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  min-height:44px;
+  padding:10px 15px;
+  border:1px solid rgba(244,116,31,.38);
+  border-radius:12px;
+  color:#fff;
+  background:rgba(244,116,31,.10);
+  font:800 .82rem var(--fonte-principal);
+  cursor:pointer;
+  transition:background .2s ease,border-color .2s ease,transform .2s ease;
+}
+.schedule-week-toggle:hover { background:rgba(244,116,31,.2); border-color:var(--cor-primaria); transform:translateY(-1px); }
+.schedule-week-toggle > i:first-child { color:var(--cor-primaria); }
+.schedule-toggle-chevron { color:var(--cor-texto-mutado); transition:transform .2s ease; }
+.schedule-toggle-chevron.rotated { transform:rotate(180deg); }
+.modern-schedule:not(.week-expanded) .prog-content.active .prog-card {
+  border-color:rgba(244,116,31,.38);
+  background:linear-gradient(115deg,rgba(244,116,31,.075),rgba(0,0,0,.28));
+  box-shadow:0 12px 30px rgba(0,0,0,.16);
+}
+.modern-schedule.week-expanded .prog-content {
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  padding:14px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:17px;
+  background:rgba(255,255,255,.025);
+  animation:fadeUp .3s ease;
+}
+.modern-schedule.week-expanded .prog-content::before {
+  content:attr(data-day);
+  color:var(--cor-primaria);
+  font-size:.7rem;
+  font-weight:900;
+  letter-spacing:1.3px;
+}
+.modern-schedule.week-expanded .prog-card {
+  padding:15px;
+  gap:15px;
+  border-radius:13px;
+}
+.modern-schedule.week-expanded .prog-card img { width:68px; height:68px; border-radius:12px; }
+.modern-schedule.week-expanded .prog-details h4 { font-size:1rem; }
+.modern-schedule.week-expanded .prog-details p { font-size:.82rem; }
+.modern-schedule.week-expanded .prog-time { font-size:.76rem; }
+.modern-schedule.week-expanded {
+  display:flex;
+  flex-direction:column;
+}
+.modern-schedule.week-expanded .prog-content.active { display:flex; }
+.modern-schedule.week-expanded .prog-content:not(.active) { display:flex; }
+@media(min-width:760px) {
+  .modern-schedule.week-expanded { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+  .modern-schedule.week-expanded .schedule-overview,
+  .modern-schedule.week-expanded .days-slider { grid-column:1/-1; }
+}
+@media(max-width:600px) {
+  .schedule-overview { align-items:flex-start; flex-direction:column; padding:17px; gap:14px; }
+  .schedule-week-toggle { width:100%; }
+  .modern-schedule.week-expanded .prog-content { padding:11px; }
+  .modern-schedule.week-expanded .prog-card { padding:12px; gap:11px; }
+  .modern-schedule.week-expanded .prog-card img { width:58px; height:58px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .schedule-week-toggle,.schedule-toggle-chevron { transition:none; }
+  .schedule-week-toggle:hover { transform:none; }
+}
+
+
+/* Etapa 5.1 — aproxima o subtítulo do bloco de programação */
+#programacao .section-container {
+  gap: 16px;
+}
+#programacao .section-header {
+  margin-bottom: 0;
+}
+#programacao .section-header p {
+  margin-bottom: 0;
+}

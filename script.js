@@ -257,22 +257,53 @@ function changeDay(event, targetId) {
   document.querySelectorAll('.day-pill').forEach(e => e.classList.remove('active'));
   const content = el(targetId);
   if(content) content.classList.add('active');
-  event.currentTarget.classList.add('active');
+  if (event && event.currentTarget) event.currentTarget.classList.add('active');
+  atualizarCabecalhoProgramacao(targetId);
+}
+
+function atualizarCabecalhoProgramacao(targetId) {
+  const nomes = {
+    'prog-dom':'Domingo','prog-seg':'Segunda-feira','prog-ter':'Terça-feira',
+    'prog-qua':'Quarta-feira','prog-qui':'Quinta-feira','prog-sex':'Sexta-feira','prog-sab':'Sábado'
+  };
+  const heading = el('scheduleDayHeading');
+  const dateLabel = el('scheduleDateLabel');
+  if (heading) heading.textContent = targetId === diasProgramacaoHoje() ? 'Hoje na Radiação.Net' : 'Programação de ' + (nomes[targetId] || 'hoje');
+  if (dateLabel) {
+    const hoje = new Date();
+    const data = targetId === diasProgramacaoHoje()
+      ? hoje
+      : new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate() + ((Object.keys(nomes).indexOf(targetId) - hoje.getDay() + 7) % 7));
+    dateLabel.textContent = data.toLocaleDateString('pt-BR', { day:'2-digit', month:'long' });
+  }
+}
+
+function diasProgramacaoHoje() {
+  return ['prog-dom','prog-seg','prog-ter','prog-qua','prog-qui','prog-sex','prog-sab'][new Date().getDay()];
 }
 
 function setToday() {
-  const days = ['prog-dom', 'prog-seg', 'prog-ter', 'prog-qua', 'prog-qui', 'prog-sex', 'prog-sab'];
-  const today = new Date().getDay();
-  const todayId = days[today];
+  const todayId = diasProgramacaoHoje();
   document.querySelectorAll('.prog-content').forEach(e => e.classList.remove('active'));
   document.querySelectorAll('.day-pill').forEach(e => e.classList.remove('active'));
   const targetContent = el(todayId);
   if(targetContent) targetContent.classList.add('active');
   const targetBtn = document.querySelector(`.day-pill[data-target="${todayId}"]`);
-  if(targetBtn) {
-    targetBtn.classList.add('active');
-    //targetBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-  }
+  if(targetBtn) targetBtn.classList.add('active');
+  atualizarCabecalhoProgramacao(todayId);
+}
+
+function inicializarVisaoSemanal() {
+  const schedule = el('modernSchedule');
+  const toggle = el('scheduleWeekToggle');
+  if (!schedule || !toggle) return;
+  toggle.addEventListener('click', () => {
+    const expanded = schedule.classList.toggle('week-expanded');
+    toggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    toggle.querySelector('span').textContent = expanded ? 'Mostrar somente o dia' : 'Ver semana completa';
+    const icon = toggle.querySelector('.schedule-toggle-chevron');
+    if (icon) icon.classList.toggle('rotated', expanded);
+  });
 }
 
 const imagensFundo = {
@@ -707,7 +738,8 @@ document.addEventListener('DOMContentLoaded', () => {
   inicializarParceiros(); 
   atualizarNowPlaying(); 
   setInterval(atualizarNowPlaying, 5000); 
-  setToday(); 
+  setToday();
+  inicializarVisaoSemanal();
   carregarNoticiasRSS(); 
   setTimeout(verificarExibicaoPwaMobile, 1500); // Exibe o card PWA no mobile após 1.5s
   if ('mediaSession' in navigator) { navigator.mediaSession.setActionHandler('play', togglePlay); navigator.mediaSession.setActionHandler('pause', togglePlay); }
