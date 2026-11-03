@@ -12,7 +12,7 @@
     <link rel="apple-touch-icon" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="./style.css?v=hero-2.1">
+    <link rel="stylesheet" href="./style.css?v=13.0">
   </head>
   <body>
     
@@ -39,7 +39,6 @@
         <a href="#programacao" onclick="toggleMobileMenu(false)"><i class="far fa-calendar-alt" aria-hidden="true"></i> Programação</a>
         <a href="#equipe" onclick="toggleMobileMenu(false)"><i class="fas fa-users" aria-hidden="true"></i> Equipe</a>
         <a href="#parceiros" onclick="toggleMobileMenu(false)"><i class="fas fa-handshake" aria-hidden="true"></i> Parceiros</a>
-        <a href="https://chat.whatsapp.com/EyNcr9BayVvIjXBSeHiaMr?s=em&p=a&iam=2" target="_blank" rel="noopener noreferrer" class="nav-drawer-whatsapp"><i class="fab fa-whatsapp" aria-hidden="true"></i> WhatsApp</a>
 
         <!-- Instalação PWA: mantida para o fluxo já existente -->
         <a href="#" id="menuInstallApp" class="nav-install-app" style="display:none;"><i class="fas fa-download" aria-hidden="true"></i> Instalar App</a>
@@ -88,8 +87,10 @@
           </div>
           <div class="hero-soundwave">
             <svg viewBox="0 0 1200 220" role="presentation" focusable="false">
-              <path class="soundwave-line soundwave-line-back" d="M0 110 C90 110 90 65 160 65 S235 155 300 110 390 25 455 110 540 190 610 110 700 48 765 110 850 165 920 110 1010 55 1070 110 1135 110 1200 110"/>
+              <path class="soundwave-line soundwave-line-back" d="M0 110 C90 110 90 35 160 35 S235 185 300 110 390 8 455 110 540 212 610 110 700 30 765 110 850 190 920 110 1010 25 1070 110 1135 110 1200 110"/>
+              <path class="soundwave-line soundwave-line-mid" d="M0 110 C75 110 100 72 160 72 S235 148 300 110 390 42 455 110 540 178 610 110 700 58 765 110 850 162 920 110 1010 48 1070 110 1135 110 1200 110"/>
               <path class="soundwave-line soundwave-line-front" d="M0 110 C90 110 90 85 160 85 S235 135 300 110 390 55 455 110 540 165 610 110 700 75 765 110 850 145 920 110 1010 80 1070 110 1135 110 1200 110"/>
+              <path class="soundwave-line soundwave-line-highlight" d="M0 110 C90 110 90 52 160 52 S235 168 300 110 390 28 455 110 540 192 610 110 700 45 765 110 850 172 920 110 1010 38 1070 110 1135 110 1200 110"/>
             </svg>
           </div>
         </div>
@@ -120,17 +121,72 @@
         <div class="hero-bottom-fade" aria-hidden="true"></div>
       </section>
 
-      <!-- SEÇÃO 2: QUICK MENUS -->
-      <section class="menus-section">
-        <div class="menu-container">
-          <button class="btn-menu" onclick="document.getElementById('programacao').scrollIntoView({behavior: 'smooth'}); this.blur();"><i class="far fa-calendar-alt"></i>&nbsp; Programação</button>
-          <button class="btn-menu" onclick="document.getElementById('equipe').scrollIntoView({behavior: 'smooth'}); this.blur();"><i class="fas fa-users"></i>&nbsp; Equipe</button>
-          <button class="btn-menu" onclick="window.open('https://chat.whatsapp.com/FKr00cdRZME68ppTR3gilZ', '_blank'); this.blur();"><i class="fab fa-whatsapp"></i>&nbsp; WhatsApp</button>
-          <button class="btn-menu" onclick="compartilharSite(); this.blur();"><i class="fas fa-share-alt"></i>&nbsp; Compartilhar</button>
+      <!-- SEÇÃO 2: CONEXÃO COM A COMUNIDADE -->
+      <section class="community-section" id="comunidade" aria-labelledby="communityTitle">
+        <div class="community-heading">
+          <span class="community-eyebrow">MAIS PERTO DE VOCÊ</span>
+          <h2 id="communityTitle">Conexão com a <span>Comunidade</span></h2>
+          <p>Acompanhe, compartilhe e leve a Radiação.Net com você — onde a sua tribo estiver.</p>
         </div>
-        <div class="apps-container">
-          <a href="https://play.google.com/store/apps/details?id=br.com.radios.radiosmobile.radiosnet" target="_blank" class="app-card"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"></a>
-          <a href="https://apps.apple.com/br/app/radiosnet/id1089302078" target="_blank" class="app-card"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg"></a>
+
+        <div class="community-grid">
+          <!-- 1. WhatsApp -->
+          <a class="community-card community-whatsapp" href="https://chat.whatsapp.com/FKr00cdRZME68ppTR3gilZ" target="_blank" rel="noopener noreferrer">
+            <span class="community-card-header">
+              <span class="community-card-icon"><i class="fab fa-whatsapp" aria-hidden="true"></i></span>
+              <span class="community-card-heading"><strong>Entre no grupo</strong><span>Faça parte você também.</span></span>
+            </span>
+            <span class="community-card-copy">Fique por dentro das novidades e conecte-se com a galera da rádio.</span>
+            <span class="community-card-link">Entrar no grupo <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+          </a>
+
+          <!-- 2. Compartilhar -->
+          <button class="community-card community-share" type="button" onclick="compartilharSite(); this.blur();">
+            <span class="community-card-header">
+              <span class="community-card-icon"><i class="fas fa-share-nodes" aria-hidden="true"></i></span>
+              <span class="community-card-heading"><strong>Compartilhe a rádio</strong><span>Espalhe essa sintonia.</span></span>
+            </span>
+            <span class="community-card-copy">Convide seus amigos para descobrir a trilha sonora de todas as tribos.</span>
+            <span class="community-card-link">Compartilhar agora <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+          </button>
+
+          <!-- 3. Aplicativos -->
+          <div class="community-card community-apps">
+            <span class="community-card-header">
+              <span class="community-card-icon"><i class="fas fa-mobile-screen-button" aria-hidden="true"></i></span>
+              <span class="community-card-heading"><strong>Aplicativos</strong><span>Sua rádio no bolso.</span></span>
+            </span>
+            <div class="community-store-links">
+              <a href="https://play.google.com/store/apps/details?id=br.com.radios.radiosmobile.radiosnet" target="_blank" rel="noopener noreferrer" aria-label="Baixar na Google Play"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Disponível no Google Play"></a>
+              <a href="https://apps.apple.com/br/app/radiosnet/id1089302078" target="_blank" rel="noopener noreferrer" aria-label="Baixar na App Store"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Baixe na App Store"></a>
+            </div>
+            <button class="community-install" id="communityInstallApp" type="button"><i class="fas fa-download" aria-hidden="true"></i> Instalar versão web</button>
+          </div>
+
+          <!-- 4. Bot oficial do Discord -->
+          <article class="community-discord">
+            <div class="discord-card-top">
+              <span class="discord-brand-icon"><i class="fab fa-discord" aria-hidden="true"></i></span>
+              <span class="discord-status"><span></span> ONLINE 24/7</span>
+            </div>
+            <div class="discord-card-content">
+              <span class="community-card-kicker">RADIAÇÃO.NET PARA DISCORD</span>
+              <h3>Seu servidor também merece uma trilha sonora!</h3>
+              <p>Leve nossa programação para os canais de voz do seu servidor. Música, AutoDJ, programas ao vivo e recursos interativos para toda a comunidade.</p>
+              <div class="discord-feature-list">
+                <span><i class="fas fa-headphones" aria-hidden="true"></i> Transmissão 24/7 em 96 kbps</span>
+                <span><i class="fas fa-sliders" aria-hidden="true"></i> AutoDJ e programas ao vivo</span>
+                <span><i class="fas fa-compact-disc" aria-hidden="true"></i> Painel interativo /tocando</span>
+                <span><i class="fas fa-bell" aria-hidden="true"></i> Alerta quando o locutor entra ao vivo</span>
+                <span><i class="fas fa-rotate" aria-hidden="true"></i> Reconexão automática</span>
+              </div>
+              <a class="discord-invite-button" href="https://discord.com/oauth2/authorize?client_id=1492002755320221796&permissions=8&integration_type=0&scope=bot+applications.commands" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-discord" aria-hidden="true"></i> Adicionar ao meu servidor
+                <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i>
+              </a>
+              <small class="discord-permission-note"><i class="fas fa-shield-halved" aria-hidden="true"></i> O convite solicita a permissão de Administrador no servidor.</small>
+            </div>
+          </article>
         </div>
       </section>
 
@@ -139,7 +195,7 @@
         <div class="section-container">
           <div class="section-header">
             <h2><i class="fas fa-newspaper"></i> Radar Radiação</h2>
-            <p>Notícias de música, esportes, tecnologia e atualidades.</p>
+            <p>As notícias que movimentam a música, os esportes, a tecnologia e o mundo.</p>
           </div>
           
           <!-- O GRID DE NOTÍCIAS (Será preenchido pelo JavaScript) -->
@@ -284,7 +340,7 @@
     <!-- Modal iOS antigo (agora integrado no fluxo) -->
     <div id="modal-ios" class="modal-overlay" onclick="fecharModalFora(event, 'modal-ios')"><div class="modal-content" style="text-align: center;"><span class="close-btn" onclick="fecharModal('modal-ios')">&times;</span><h2 class="modal-title">Instalar App 🍏</h2><p style="margin-bottom: 20px; color: #ccc; font-size: 0.9rem;">No Safari:</p><ul style="text-align: left; margin: 0 auto; max-width: 280px; color: #fff; line-height: 1.8; list-style: none; padding: 0;"><li style="margin-bottom: 10px;"><span style="color: #f4741f; font-weight: bold; margin-right: 5px;">1.</span> Toque em <b>Compartilhar</b> <i class="fas fa-share-square" style="color: #007aff;"></i>.</li><li style="margin-bottom: 10px;"><span style="color: #f4741f; font-weight: bold; margin-right: 5px;">2.</span> <b>"Adicionar à Tela de Início"</b> <i class="fas fa-plus-square" style="color: #fff;"></i>.</li><li><span style="color: #f4741f; font-weight: bold; margin-right: 5px;">3.</span> Toque em <b>Adicionar</b>.</li></ul><button class="btn-enviar" onclick="fecharModal('modal-ios')" style="margin-top: 25px;">Entendi!</button></div></div>
 
-    <script src="./script.js?v=hero-2.1"></script>
+    <script src="./script.js?v=community-3.2"></script>
     <script type="module" src="./firebase-public.js?v=5.3"></script>
   </body>
 </html>

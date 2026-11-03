@@ -383,6 +383,7 @@ const btnInstallNav = el('btnInstallNav');
 const menuInstallApp = el('menuInstallApp');
 const pwaBanner = el('pwaBanner');
 const btnInstallBanner = el('btnInstallBanner');
+const communityInstallApp = el('communityInstallApp');
 
 let eventoInstalacao = null;
 
@@ -439,6 +440,7 @@ const acionarInstalacaoPwa = async (event) => {
 if(btnInstallNav) btnInstallNav.addEventListener('click', acionarInstalacaoPwa);
 if(menuInstallApp) menuInstallApp.addEventListener('click', acionarInstalacaoPwa);
 if(btnInstallBanner) btnInstallBanner.addEventListener('click', acionarInstalacaoPwa);
+if(communityInstallApp) communityInstallApp.addEventListener('click', acionarInstalacaoPwa);
 window.addEventListener('resize', verificarExibicaoPwaMobile);
 
 // ============================================================================
@@ -641,7 +643,10 @@ function renderizarCardsDeNoticias(noticias, container) {
     const icone = document.createElement('i');
     icone.className = 'fas fa-newspaper';
     icone.setAttribute('aria-hidden', 'true');
-    fonte.append(icone, document.createTextNode(` ${nomeFonte} · Ver prévia`));
+    const dataFormatada = Number.isFinite(noticia.data) && noticia.data > 0
+      ? new Date(noticia.data).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })
+      : '';
+    fonte.append(icone, document.createTextNode(` ${nomeFonte}${dataFormatada ? ` · ${dataFormatada}` : ''} · Ver prévia`));
 
     card.append(tag, titulo, descricao, fonte);
     card.addEventListener('click', () => abrirPreviaNoticia(noticia));
