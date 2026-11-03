@@ -678,3 +678,143 @@ body.modo-administracao #admin-workspace{margin:14px 0 20px;padding:18px;border-
 @media(prefers-reduced-motion:reduce){
   *,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+
+/* ======================================================================
+   RADIAÇÃO.NET · SIGNAL NOIR SIGNATURE — v14.0
+   Direção visual: console de transmissão premium, compacto e legível.
+   Camada exclusivamente visual; não altera estrutura, IDs ou integrações.
+   ====================================================================== */
+:root{
+  --sn-amber:#ff9b45;
+  --sn-hot:#ff6b24;
+  --sn-glass:rgba(18,22,29,.82);
+  --sn-edge:rgba(255,255,255,.075);
+  --sn-glow:rgba(255,126,43,.18);
+}
+html{background:#080a0e}
+body{
+  background:
+    radial-gradient(ellipse at 12% -8%,rgba(255,119,37,.13),transparent 34%),
+    radial-gradient(ellipse at 92% 18%,rgba(255,155,69,.055),transparent 28%),
+    linear-gradient(135deg,#080a0e 0%,#0b0f15 48%,#090c11 100%);
+  background-attachment:fixed;
+}
+#tela-dashboard{position:relative;isolation:isolate}
+#tela-dashboard:before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.17;
+  background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+  background-size:34px 34px;
+  mask-image:linear-gradient(to bottom,black,transparent 78%);
+}
+.app-header{
+  position:relative;border-bottom-color:rgba(255,255,255,.085);
+}
+.app-header:after{
+  content:"";position:absolute;bottom:-1px;left:0;width:min(230px,35%);height:1px;
+  background:linear-gradient(90deg,var(--sn-hot),rgba(255,155,69,.12),transparent);
+  box-shadow:0 0 13px rgba(255,111,36,.32);
+}
+.brand-logo{position:relative;filter:drop-shadow(0 0 13px rgba(255,123,43,.13))}
+.brand-overline{color:#ffad69}
+.brand-lockup h1{letter-spacing:-.035em}
+.status-badge{
+  border:1px solid rgba(255,255,255,.09);
+  background:linear-gradient(115deg,rgba(25,31,40,.9),rgba(13,17,23,.82));
+  box-shadow:inset 0 1px rgba(255,255,255,.035),0 5px 18px rgba(0,0,0,.14);
+}
+.btn-flat{
+  border:1px solid rgba(255,255,255,.085);
+  background:linear-gradient(180deg,rgba(35,42,52,.88),rgba(19,24,32,.94));
+  transition:transform .18s ease,border-color .18s ease,background .18s ease,box-shadow .18s ease;
+}
+.btn-flat:hover{transform:translateY(-1px);border-color:rgba(255,155,69,.4);box-shadow:0 5px 18px rgba(0,0,0,.22),0 0 15px rgba(255,126,43,.07)}
+.btn-flat.admin-menu-trigger{border-color:rgba(255,143,67,.28);background:linear-gradient(110deg,rgba(255,126,43,.16),rgba(25,29,36,.95))}
+.broadcast-panel{
+  position:relative;overflow:hidden;isolation:isolate;
+  border:1px solid rgba(255,255,255,.095);
+  background:linear-gradient(118deg,rgba(25,31,40,.97),rgba(14,19,26,.97) 58%,rgba(20,22,27,.98));
+  box-shadow:0 18px 48px rgba(0,0,0,.27),inset 0 1px rgba(255,255,255,.055);
+}
+.broadcast-panel:before{
+  content:"";position:absolute;z-index:-1;right:-100px;top:-155px;width:390px;height:390px;border-radius:50%;
+  border:1px solid rgba(255,151,77,.075);box-shadow:0 0 0 24px rgba(255,151,77,.018),0 0 0 52px rgba(255,151,77,.012);
+  pointer-events:none;
+}
+.broadcast-panel:after{
+  content:"";position:absolute;top:0;left:18px;right:18px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,161,91,.58),rgba(255,255,255,.12),transparent);
+  pointer-events:none;
+}
+.broadcast-topline{position:relative;z-index:1}
+.monitoring{letter-spacing:.12em}
+.monitoring span,.live-chip .dot{box-shadow:0 0 0 3px rgba(39,217,154,.09),0 0 12px rgba(39,217,154,.45)}
+.broadcast-main{position:relative;z-index:1}
+.broadcast-art-wrap{
+  position:relative;border:1px solid rgba(255,255,255,.13);
+  background:linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.015));
+  box-shadow:0 9px 26px rgba(0,0,0,.35),0 0 0 4px rgba(255,255,255,.018);
+}
+.broadcast-art-wrap:after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,.12),transparent 42%)}
+.track-cover{filter:saturate(.94) contrast(1.04)}
+.broadcast-copy .info-value{text-wrap:balance;letter-spacing:-.035em;text-shadow:0 2px 18px rgba(0,0,0,.22)}
+.now-label{color:#ffb276;letter-spacing:.16em}
+.equalizer i{box-shadow:0 0 7px rgba(255,139,63,.35)}
+.broadcast-stats .audience-block{
+  position:relative;overflow:hidden;
+  border:1px solid rgba(255,255,255,.085);
+  background:linear-gradient(145deg,rgba(35,43,54,.92),rgba(18,23,30,.96));
+  box-shadow:inset 0 1px rgba(255,255,255,.04),0 8px 20px rgba(0,0,0,.14);
+}
+.broadcast-stats .audience-block:before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:2px;background:linear-gradient(180deg,var(--sn-amber),rgba(255,107,36,.08));border-radius:2px}
+.broadcast-stats .audience-icon{background:rgba(255,137,62,.12);border:1px solid rgba(255,151,77,.13);color:#ffad70}
+.broadcast-stats .audience-number{font-family:"Space Grotesk",sans-serif;letter-spacing:-.055em;font-variant-numeric:tabular-nums}
+.broadcast-bottom{position:relative;z-index:1;border-top-color:rgba(255,255,255,.075)}
+.work-grid{align-items:start}
+.requests-card,.poll-card{
+  border:1px solid rgba(255,255,255,.085);
+  background:linear-gradient(145deg,rgba(23,29,38,.97),rgba(14,18,25,.98));
+  box-shadow:0 14px 36px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.035);
+}
+.requests-card{position:relative;overflow:hidden}
+.requests-card:before,.poll-card:before{content:"";display:block;position:absolute;top:0;left:16px;width:78px;height:1px;background:linear-gradient(90deg,var(--sn-hot),transparent);opacity:.8}
+.card-heading h3,.poll-card h3{letter-spacing:-.035em}
+.pending-stat{border:1px solid rgba(255,145,68,.2);background:linear-gradient(145deg,rgba(255,133,54,.14),rgba(255,133,54,.045));box-shadow:inset 0 1px rgba(255,255,255,.045)}
+.pending-stat strong{font-family:"Space Grotesk",sans-serif;color:#ffad70}
+.search-box{border:1px solid rgba(255,255,255,.085);background:rgba(7,10,15,.48)}
+.queue-tab{transition:background .18s ease,color .18s ease,border-color .18s ease}
+.pedido-row{border-color:rgba(255,255,255,.065);background:rgba(255,255,255,.018);transition:background .18s ease,border-color .18s ease,transform .18s ease}
+.pedido-row:hover{background:rgba(255,255,255,.04);border-color:rgba(255,155,69,.2);transform:translateX(2px)}
+.studio-note{
+  position:relative;overflow:hidden;border:1px solid rgba(39,217,154,.13);
+  background:linear-gradient(115deg,rgba(17,42,39,.76),rgba(17,24,29,.96));
+  box-shadow:inset 0 1px rgba(255,255,255,.035),0 10px 26px rgba(0,0,0,.16);
+}
+.studio-note:after{content:"";position:absolute;right:-28px;bottom:-55px;width:130px;height:130px;border:1px solid rgba(39,217,154,.1);border-radius:50%;box-shadow:0 0 0 14px rgba(39,217,154,.025),0 0 0 29px rgba(39,217,154,.018)}
+.note-icon{box-shadow:0 0 0 4px rgba(39,217,154,.055)}
+/* Área administrativa com a mesma linguagem do console, sem crescer em altura. */
+body.modo-administracao #admin-workspace{
+  position:relative;border:1px solid rgba(255,255,255,.095);
+  background:linear-gradient(145deg,rgba(24,30,39,.98),rgba(12,16,22,.985));
+  box-shadow:0 18px 48px rgba(0,0,0,.28),inset 0 1px rgba(255,255,255,.045);
+}
+body.modo-administracao #admin-workspace:before{content:"";position:absolute;top:0;left:18px;width:110px;height:1px;background:linear-gradient(90deg,var(--sn-hot),transparent)}
+.admin-tab{transition:background .18s ease,border-color .18s ease,color .18s ease}
+.admin-tab.active{box-shadow:inset 0 1px rgba(255,255,255,.07),0 4px 15px rgba(0,0,0,.14)}
+.admin-form-card,.admin-record{border-color:rgba(255,255,255,.085);background:rgba(255,255,255,.025)}
+.admin-action{box-shadow:0 7px 18px rgba(255,112,37,.14)}
+.app-footer{border-top:1px solid rgba(255,255,255,.055);margin-top:15px}
+/* Movimento de ambiente muito sutil; respeita a preferência por movimento reduzido. */
+@keyframes signaturePulse{0%,100%{opacity:.72}50%{opacity:1}}
+.monitoring span{animation:signaturePulse 2.8s ease-in-out infinite}
+@media(max-width:900px){
+  .broadcast-panel:before{right:-190px;top:-190px}
+  .broadcast-stats .audience-block:before{top:9px;bottom:9px}
+}
+@media(max-width:620px){
+  #tela-dashboard:before{background-size:26px 26px;opacity:.12}
+  .broadcast-panel:before{width:260px;height:260px;right:-150px;top:-125px}
+  .broadcast-art-wrap{box-shadow:0 6px 17px rgba(0,0,0,.3),0 0 0 3px rgba(255,255,255,.018)}
+  .pedido-row:hover{transform:none}
+  .app-footer{margin-top:10px}
+}
+@media(prefers-reduced-motion:reduce){.monitoring span{animation:none}}
