@@ -253,3 +253,50 @@ button,input{font:inherit}button{cursor:pointer}img{max-width:100%}
 .admin-feedback{min-height:18px;margin-top:10px;color:#9be6c9;font-size:.68rem}
 .admin-feedback.error{color:#ff9ca2}
 @media(max-width:650px){.admin-workspace{padding:16px 13px;margin:16px 0}.admin-welcome,.admin-module-heading{align-items:flex-start;flex-direction:column}.admin-live-tag{white-space:normal}.admin-tabs{width:100%}.admin-tab{flex:1;justify-content:center;padding:10px 8px}.admin-form-grid{grid-template-columns:1fr}.admin-field-wide,.admin-form-actions{grid-column:auto}.admin-record{grid-template-columns:1fr}.admin-record-actions{justify-content:flex-end}.admin-module-heading>.admin-action{width:100%}}
+
+/* CENTRAL OPERACIONAL — indicadores compactos e administração recolhível */
+.broadcast-main{grid-template-columns:124px minmax(0,1fr) 365px}
+.broadcast-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;min-width:0}
+.broadcast-stats .audience-block{min-width:0;min-height:82px;padding:12px;gap:9px}
+.broadcast-stats .audience-icon{width:34px;height:34px;flex:0 0 34px}
+.broadcast-stats .audience-number{font-size:1.55rem}
+.broadcast-stats .audience-caption{font-size:.49rem;letter-spacing:.08em}
+.admin-workspace[hidden],.admin-menu-trigger[hidden]{display:none!important}
+.admin-workspace{position:relative;margin:14px 0 18px;padding:20px;border-color:#f4772145;box-shadow:0 18px 48px #0008;animation:adminReveal .18s ease-out}
+@keyframes adminReveal{from{opacity:0;transform:translateY(-7px)}to{opacity:1;transform:translateY(0)}}
+.admin-welcome-actions{display:flex;align-items:center;gap:10px}
+.admin-close-panel{width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--line2);border-radius:9px;background:#ffffff08;color:#cbd2dc}
+.admin-close-panel:hover{border-color:#f4772166;color:#fff}
+.admin-tab[hidden]{display:none!important}
+@media(max-width:1000px){.broadcast-main{grid-template-columns:105px minmax(0,1fr) 310px}.broadcast-stats .audience-block{padding:10px;gap:7px}}
+@media(max-width:760px){.broadcast-main{grid-template-columns:88px minmax(0,1fr)}.broadcast-stats{grid-column:1/-1;grid-template-columns:repeat(2,minmax(0,1fr))}.broadcast-stats .audience-block{min-height:68px}.admin-workspace{padding:16px 13px}.admin-welcome-actions{width:100%;justify-content:space-between}}
+@media(max-width:520px){.broadcast-main{grid-template-columns:72px minmax(0,1fr)}.broadcast-stats .audience-block{padding:10px;min-height:64px}.broadcast-stats .audience-number{font-size:1.35rem}.broadcast-stats .audience-caption{font-size:.45rem}.admin-menu-trigger span{display:inline}.header-actions{flex-wrap:wrap}.header-actions .btn-flat{flex:1 1 auto}}
+
+
+/* MODO EXCLUSIVO: LOCUTOR / ADMINISTRAÇÃO */
+body.modo-administracao .broadcast-panel,
+body.modo-administracao .work-grid,
+body.modo-administracao .app-footer {
+  display: none !important;
+}
+body.modo-administracao #admin-workspace {
+  display: block !important;
+  margin-top: 18px;
+  min-height: min(70vh, 760px);
+  animation: adminModeIn .2s ease-out;
+}
+body:not(.modo-administracao) #admin-workspace {
+  display: none !important;
+}
+.admin-menu-trigger[aria-expanded="true"] {
+  border-color: rgba(244,119,33,.65);
+  color: #fff;
+  background: rgba(244,119,33,.14);
+}
+@keyframes adminModeIn {
+  from { opacity: 0; transform: translateY(7px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.modo-administracao #admin-workspace { animation: none; }
+}

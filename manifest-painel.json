@@ -2,7 +2,7 @@
   "id": "./painel.html",
   "name": "Painel Administrativo - Radiação.Net",
   "short_name": "Painel Admin",
-  "description": "Gestão da programação, equipe, parceiros e operação da Radiação.Net",
+  "description": "Gestão da programação, equipe e operação da Radiação.Net",
   "lang": "pt-BR",
   "start_url": "./painel.html",
   "scope": "./",
