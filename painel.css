@@ -1035,3 +1035,25 @@ body.modo-administracao #admin-workspace{
   .admin-record-copy small{font-size:.55rem}
   .admin-record-actions button{width:26px;height:26px}
 }
+
+
+/* SIGNAL NOIR v15.0 — Visão Geral Administrativa */
+.admin-overview-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0 18px}
+.admin-overview-card{position:relative;min-width:0;padding:16px 17px 13px;border:1px solid rgba(255,255,255,.075);border-radius:14px;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.018));box-shadow:inset 0 1px rgba(255,255,255,.035);overflow:hidden}
+.admin-overview-card:before{content:"";position:absolute;inset:0 auto 0 0;width:2px;background:linear-gradient(180deg,#ff9b45,rgba(255,155,69,.08))}
+.admin-overview-icon{width:32px;height:32px;display:grid;place-items:center;border-radius:9px;background:rgba(244,116,31,.13);color:#ff9a42;font-size:14px;margin-bottom:10px}
+.admin-overview-label{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted,#a5a5a5);font-weight:700}
+.admin-overview-card>strong{display:block;font-size:30px;line-height:1.15;letter-spacing:-.04em;color:#fff;margin:3px 0 7px;font-variant-numeric:tabular-nums}
+.admin-overview-detail{display:flex;flex-wrap:wrap;gap:5px 12px;font-size:10px;color:var(--muted,#a5a5a5)}
+.admin-overview-detail span:first-child{color:#8fc9a0}
+.admin-overview-detail span:last-child{color:#d4a16f}
+.admin-overview-card>button{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;margin-top:13px;padding:9px 0 0;border:0;border-top:1px solid rgba(255,255,255,.07);background:none;color:#ffad69;font:inherit;font-size:11px;font-weight:700;text-align:left;cursor:pointer}
+.admin-overview-card>button:hover{color:#ffd0a6}
+.admin-overview-bottom{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 17px;border:1px solid rgba(255,255,255,.07);border-radius:13px;background:rgba(255,255,255,.025)}
+.admin-overview-bottom h4{margin:3px 0 2px;color:#f4f4f4;font-size:14px}
+.admin-overview-bottom p{margin:0;color:var(--muted,#a5a5a5);font-size:11px}
+.admin-overview-actions{display:flex;flex-wrap:wrap;gap:7px}
+.admin-overview-actions button{display:inline-flex;align-items:center;gap:7px;padding:9px 11px;border:1px solid rgba(255,155,69,.2);border-radius:8px;background:rgba(244,116,31,.07);color:#ffc18e;font:inherit;font-size:11px;font-weight:700;cursor:pointer}
+.admin-overview-actions button:hover{background:rgba(244,116,31,.15);border-color:rgba(255,155,69,.4)}
+@media(max-width:700px){.admin-overview-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.admin-overview-card{padding:13px}.admin-overview-card>strong{font-size:26px}.admin-overview-bottom{align-items:flex-start;flex-direction:column}.admin-overview-actions{width:100%}}
+@media(max-width:420px){.admin-overview-grid{grid-template-columns:1fr}.admin-overview-card{display:grid;grid-template-columns:36px 1fr auto;align-items:center;column-gap:10px}.admin-overview-icon{grid-row:1/3;margin:0}.admin-overview-label{align-self:end}.admin-overview-card>strong{grid-column:3;grid-row:1/3;margin:0;font-size:25px}.admin-overview-detail{grid-column:2;grid-row:2}.admin-overview-card>button{grid-column:1/-1;margin-top:10px}}

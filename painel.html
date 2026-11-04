@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="./style.css?v=3.0">
-  <link rel="stylesheet" href="./painel.css?v=14.2">
+  <link rel="stylesheet" href="./painel.css?v=15.0">
 </head>
 <body>
   <div id="tela-login">
@@ -54,11 +54,21 @@
         <div class="admin-welcome-actions"><span class="admin-live-tag"><i class="fa-solid fa-shield-halved"></i> ACESSO ADMINISTRADOR</span><button type="button" class="admin-close-panel" id="btn-fechar-admin" aria-label="Fechar administração"><i class="fa-solid fa-xmark"></i></button></div>
       </div>
       <div class="admin-tabs" role="tablist" aria-label="Módulos administrativos">
-        <button type="button" class="admin-tab active" data-admin-tab="programacao"><i class="fa-regular fa-calendar-days"></i> Programação</button>
+        <button type="button" class="admin-tab active" data-admin-tab="visao-geral"><i class="fa-solid fa-gauge-high"></i> Visão geral</button>
+        <button type="button" class="admin-tab" data-admin-tab="programacao"><i class="fa-regular fa-calendar-days"></i> Programação</button>
         <button type="button" class="admin-tab" data-admin-tab="equipe"><i class="fa-solid fa-users"></i> Equipe</button>
         <button type="button" class="admin-tab" data-admin-tab="parceiros"><i class="fa-solid fa-handshake"></i> Parceiros</button>
       </div>
-      <section class="admin-module active" id="admin-module-programacao">
+      <section class="admin-module active" id="admin-module-visao-geral">
+        <div class="admin-module-heading"><div><span class="admin-kicker">CENTRAL DE GESTÃO</span><h3>Visão geral</h3><p>Acompanhe os cadastros da emissora e acesse rapidamente cada área administrativa.</p></div><span class="admin-live-tag"><i class="fa-solid fa-arrows-rotate"></i> DADOS EM TEMPO REAL</span></div>
+        <div class="admin-overview-grid">
+          <article class="admin-overview-card"><div class="admin-overview-icon"><i class="fa-regular fa-calendar-days"></i></div><div class="admin-overview-label">Programação</div><strong id="overview-programas-total">—</strong><div class="admin-overview-detail"><span id="overview-programas-ativos">— ativos</span><span id="overview-programas-inativos">— inativos</span></div><button type="button" data-overview-open="programacao">Gerenciar programação <i class="fa-solid fa-arrow-right"></i></button></article>
+          <article class="admin-overview-card"><div class="admin-overview-icon"><i class="fa-solid fa-users"></i></div><div class="admin-overview-label">Equipe</div><strong id="overview-equipe-total">—</strong><div class="admin-overview-detail"><span id="overview-equipe-ativos">— ativos</span><span id="overview-equipe-inativos">— inativos</span></div><button type="button" data-overview-open="equipe">Gerenciar equipe <i class="fa-solid fa-arrow-right"></i></button></article>
+          <article class="admin-overview-card"><div class="admin-overview-icon"><i class="fa-solid fa-handshake"></i></div><div class="admin-overview-label">Parceiros</div><strong id="overview-parceiros-total">—</strong><div class="admin-overview-detail"><span id="overview-parceiros-ativos">— ativos</span><span id="overview-parceiros-inativos">— inativos</span></div><button type="button" data-overview-open="parceiros">Gerenciar parceiros <i class="fa-solid fa-arrow-right"></i></button></article>
+        </div>
+        <div class="admin-overview-bottom"><div><span class="admin-kicker">ATALHOS</span><h4>Ações rápidas</h4><p>Comece uma tarefa sem precisar navegar primeiro pelo módulo.</p></div><div class="admin-overview-actions"><button type="button" data-overview-new="programa"><i class="fa-solid fa-plus"></i> Novo programa</button><button type="button" data-overview-new="integrante"><i class="fa-solid fa-user-plus"></i> Novo integrante</button><button type="button" data-overview-new="parceiro"><i class="fa-solid fa-handshake"></i> Novo parceiro</button></div></div>
+      </section>
+      <section class="admin-module" id="admin-module-programacao" hidden>
         <div class="admin-module-heading"><div><span class="admin-kicker">GRADE DA RÁDIO</span><h3>Gerenciar programação</h3><p>Cadastre, edite, ative ou remova programas sem alterar o HTML do site.</p></div><button class="admin-action" id="btn-novo-programa"><i class="fa-solid fa-plus"></i> Novo programa</button></div>
         <div class="admin-form-card" id="form-programa-card" hidden>
           <div class="admin-form-title"><strong id="programa-form-title">Novo programa</strong><button type="button" class="admin-close" data-close-form="programa" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button></div>

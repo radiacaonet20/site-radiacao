@@ -425,6 +425,37 @@ let perfilAtualPainel = null;
 const adminWorkspace = $("admin-workspace");
 const adminFeedback = $("admin-feedback");
 
+function atualizarVisaoGeral() {
+  const grupos = [
+    ["programas", adminProgramacao],
+    ["equipe", adminEquipe],
+    ["parceiros", adminParceiros]
+  ];
+  grupos.forEach(([chave, dados]) => {
+    const itens = Object.values(dados || {});
+    const total = itens.length;
+    const ativos = itens.filter(item => item?.ativo !== false).length;
+    const inativos = total - ativos;
+    const totalEl = $(`overview-${chave}-total`);
+    const ativosEl = $(`overview-${chave}-ativos`);
+    const inativosEl = $(`overview-${chave}-inativos`);
+    if (totalEl) totalEl.textContent = String(total).padStart(2, "0");
+    if (ativosEl) ativosEl.textContent = `${ativos} ativo(s)`;
+    if (inativosEl) inativosEl.textContent = `${inativos} inativo(s)`;
+  });
+}
+function selecionarModuloAdmin(nome) {
+  document.querySelectorAll("[data-admin-tab]").forEach(btn => {
+    const ativa = btn.dataset.adminTab === nome;
+    btn.classList.toggle("active", ativa);
+    btn.setAttribute("aria-selected", String(ativa));
+  });
+  document.querySelectorAll(".admin-module").forEach(modulo => {
+    const ativa = modulo.id === `admin-module-${nome}`;
+    modulo.hidden = !ativa;
+    modulo.classList.toggle("active", ativa);
+  });
+}
 function avisoAdmin(mensagem, erro = false) {
   if (!adminFeedback) return;
   adminFeedback.textContent = mensagem;
@@ -549,17 +580,21 @@ function iniciarModulosAdmin(perfil) {
   alternarModoPainel("locutor");
   if (!isAdmin || adminBindingsIniciados) return;
   adminBindingsIniciados = true;
-  onValue(adminProgramacaoRef,s=>{adminProgramacao=s.val()||{};renderAdminLista("programa",adminProgramacao);},e=>avisoAdmin("Falha ao carregar programação: "+e.message,true));
-  onValue(adminEquipeRef,s=>{adminEquipe=s.val()||{};renderAdminLista("equipe",adminEquipe);},e=>avisoAdmin("Falha ao carregar equipe: "+e.message,true));
-  onValue(adminParceirosRef,s=>{adminParceiros=s.val()||{};renderAdminLista("parceiro",adminParceiros);},e=>avisoAdmin("Falha ao carregar parceiros: "+e.message,true));
+  onValue(adminProgramacaoRef,s=>{adminProgramacao=s.val()||{};renderAdminLista("programa",adminProgramacao);atualizarVisaoGeral();},e=>avisoAdmin("Falha ao carregar programação: "+e.message,true));
+  onValue(adminEquipeRef,s=>{adminEquipe=s.val()||{};renderAdminLista("equipe",adminEquipe);atualizarVisaoGeral();},e=>avisoAdmin("Falha ao carregar equipe: "+e.message,true));
+  onValue(adminParceirosRef,s=>{adminParceiros=s.val()||{};renderAdminLista("parceiro",adminParceiros);atualizarVisaoGeral();},e=>avisoAdmin("Falha ao carregar parceiros: "+e.message,true));
   $("btn-admin-menu")?.addEventListener("click",()=>alternarModoPainel(
     document.body.classList.contains("modo-administracao") ? "locutor" : "administracao"
   ));
   $("btn-fechar-admin")?.addEventListener("click",()=>alternarModoPainel("locutor"));
-  document.querySelectorAll("[data-admin-tab]").forEach(btn=>btn.addEventListener("click",()=>{
-    document.querySelectorAll("[data-admin-tab]").forEach(b=>b.classList.toggle("active",b===btn));
-    document.querySelectorAll(".admin-module").forEach(m=>{const active=m.id===`admin-module-${btn.dataset.adminTab}`;m.hidden=!active;m.classList.toggle("active",active);});
+  document.querySelectorAll("[data-admin-tab]").forEach(btn=>btn.addEventListener("click",()=>selecionarModuloAdmin(btn.dataset.adminTab)));
+  document.querySelectorAll("[data-overview-open]").forEach(btn=>btn.addEventListener("click",()=>selecionarModuloAdmin(btn.dataset.overviewOpen)));
+  document.querySelectorAll("[data-overview-new]").forEach(btn=>btn.addEventListener("click",()=>{
+    const tipo = btn.dataset.overviewNew;
+    selecionarModuloAdmin(tipo === "programa" ? "programacao" : tipo === "integrante" ? "equipe" : "parceiros");
+    abrirFormAdmin(tipo);
   }));
+  atualizarVisaoGeral();
   $("btn-novo-programa")?.addEventListener("click",()=>abrirFormAdmin("programa"));
   $("btn-novo-integrante")?.addEventListener("click",()=>abrirFormAdmin("equipe"));
   $("btn-novo-parceiro")?.addEventListener("click",()=>abrirFormAdmin("parceiro"));
