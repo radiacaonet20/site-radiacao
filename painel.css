@@ -1057,3 +1057,442 @@ body.modo-administracao #admin-workspace{
 .admin-overview-actions button:hover{background:rgba(244,116,31,.15);border-color:rgba(255,155,69,.4)}
 @media(max-width:700px){.admin-overview-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.admin-overview-card{padding:13px}.admin-overview-card>strong{font-size:26px}.admin-overview-bottom{align-items:flex-start;flex-direction:column}.admin-overview-actions{width:100%}}
 @media(max-width:420px){.admin-overview-grid{grid-template-columns:1fr}.admin-overview-card{display:grid;grid-template-columns:36px 1fr auto;align-items:center;column-gap:10px}.admin-overview-icon{grid-row:1/3;margin:0}.admin-overview-label{align-self:end}.admin-overview-card>strong{grid-column:3;grid-row:1/3;margin:0;font-size:25px}.admin-overview-detail{grid-column:2;grid-row:2}.admin-overview-card>button{grid-column:1/-1;margin-top:10px}}
+
+
+/* ======================================================================
+   RADIAÇÃO.NET · DESIGN SYSTEM / v16.0
+   Camada consolidada de responsividade e densidade.
+   Bootstrap fornece grid/utilitários; este bloco define a identidade visual.
+   ====================================================================== */
+:root{--rn-space-1:4px;--rn-space-2:8px;--rn-space-3:12px;--rn-space-4:16px;--rn-radius-sm:8px;--rn-radius-md:12px;--rn-radius-lg:16px;--rn-border:rgba(255,255,255,.085);--rn-surface:#111821}
+html{min-width:320px;overflow-x:hidden}body{overflow-x:hidden}
+#tela-dashboard,.admin-workspace,.admin-module,.broadcast-panel,.work-grid{min-width:0;max-width:100%}
+.broadcast-main .broadcast-stats{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px;min-width:0;width:100%}
+.broadcast-main .broadcast-stats .audience-block{grid-column:auto!important;min-width:0;min-height:58px!important;padding:8px 9px!important;gap:8px!important;align-items:center}
+.broadcast-main .audience-icon{width:29px;height:29px;flex:0 0 29px;border-radius:8px;font-size:.78rem}
+.broadcast-main .audience-number{font-size:1.28rem;line-height:1}
+.broadcast-main .audience-caption{font-size:.46rem;letter-spacing:.055em;line-height:1.25;margin-top:3px;overflow-wrap:anywhere}
+.broadcast-main .audience-caption br{display:none}
+.admin-welcome{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0}
+.admin-welcome>div:first-child{flex:1 1 auto;min-width:0}
+.admin-welcome-actions{flex:0 0 auto;width:auto!important;display:flex;align-items:center;justify-content:flex-end;gap:7px}
+.admin-welcome h2{font-size:clamp(1.15rem,2.2vw,1.65rem);overflow-wrap:anywhere}
+.admin-live-tag{white-space:nowrap}.admin-close-panel{flex:0 0 29px}
+.admin-overview-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0}
+.admin-overview-card{min-width:0}.admin-overview-card>button{margin-top:9px;padding-top:7px}
+.admin-overview-bottom{gap:10px;padding:11px 12px}.admin-overview-actions{gap:6px}
+.admin-overview-actions button{padding:7px 9px;font-size:.66rem}
+.admin-tabs{display:flex;flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-inline:contain;scrollbar-width:thin}
+.admin-tab{flex:1 0 auto;min-width:max-content}
+.admin-module-heading,.admin-module-heading>div,.admin-form-grid>*,.admin-record{min-width:0}
+.admin-record-copy{min-width:0;overflow-wrap:anywhere}
+@media(max-width:900px){
+ .broadcast-main{grid-template-columns:76px minmax(0,1fr);gap:10px;padding:12px 0}.broadcast-art-wrap{width:76px;height:76px}.broadcast-main .broadcast-stats{grid-column:1/-1}
+ .admin-overview-grid{grid-template-columns:1fr}
+ .admin-overview-card{display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:center;column-gap:9px;row-gap:2px;padding:9px 11px}
+ .admin-overview-icon{grid-column:1;grid-row:1/3;width:30px;height:30px;margin:0}
+ .admin-overview-label{grid-column:2;grid-row:1;align-self:end;font-size:.62rem}
+ .admin-overview-card>strong{grid-column:3;grid-row:1/3;margin:0;font-size:1.35rem;line-height:1}
+ .admin-overview-detail{grid-column:2;grid-row:2;gap:4px 9px;font-size:.58rem}
+ .admin-overview-card>button{grid-column:1/-1;margin-top:6px;padding-top:6px;font-size:.65rem}
+ .admin-overview-bottom{align-items:center;flex-direction:row;flex-wrap:wrap}.admin-overview-actions{width:auto;flex:1 1 100%}
+}
+@media(max-width:620px){
+ body{padding-inline:9px;padding-bottom:14px}.app-header{align-items:center;flex-direction:row;flex-wrap:wrap;gap:8px;padding:8px 0;min-height:0}
+ .brand-lockup{gap:8px;min-width:0}.brand-logo{width:38px;height:38px;flex:0 0 38px}.brand-overline{font-size:.49rem;letter-spacing:.11em}.brand-lockup h1{font-size:.91rem}.brand-lockup p{font-size:.61rem}
+ .header-right{width:100%;align-items:center;flex-direction:row;justify-content:space-between;gap:7px}.status-badge{padding:6px 8px;font-size:.55rem}
+ .header-actions{width:auto;display:flex;flex:1 1 auto;justify-content:flex-end;gap:5px}.header-actions .btn-flat{width:auto;min-width:0;min-height:32px;height:32px;flex:0 1 auto;padding:0 7px;font-size:.59rem;gap:5px}
+ .broadcast-panel{padding:11px 10px 8px;border-radius:13px}.broadcast-topline{padding-bottom:8px}.broadcast-main{grid-template-columns:58px minmax(0,1fr);gap:8px;padding:10px 0}.broadcast-art-wrap{width:58px;height:58px;padding:3px;border-radius:9px}
+ .art-corner{width:22px;height:22px;right:-5px;bottom:-5px}.now-label{font-size:.5rem;margin-bottom:4px;gap:5px}.broadcast-copy .info-value{font-size:.91rem;white-space:normal;overflow-wrap:anywhere}.broadcast-copy .info-label{font-size:.65rem;white-space:normal}
+ .broadcast-meta{margin-top:6px;gap:5px;font-size:.52rem}.live-chip{padding:4px 6px;font-size:.49rem}.broadcast-main .broadcast-stats{gap:6px}
+ .broadcast-main .broadcast-stats .audience-block{min-height:52px!important;padding:6px 7px!important;gap:6px!important}.broadcast-main .audience-icon{width:25px;height:25px;flex-basis:25px;font-size:.68rem}.broadcast-main .audience-number{font-size:1.12rem}.broadcast-main .audience-caption{font-size:.40rem;letter-spacing:.025em}.broadcast-bottom{padding-top:7px;font-size:.49rem}
+ body.modo-administracao #admin-workspace{padding:10px 9px;margin:8px 0 10px;border-radius:12px}
+ .admin-welcome{flex-direction:row!important;align-items:center!important;gap:7px;padding-bottom:8px}.admin-welcome>div:first-child{padding-left:10px}.admin-welcome h2{font-size:1.05rem;line-height:1.1;margin:3px 0 1px}.admin-welcome p{font-size:.55rem;line-height:1.25;margin:2px 0 0}
+ .admin-kicker{font-size:.45rem;letter-spacing:.13em}.admin-welcome-actions{width:auto!important;gap:5px}.admin-live-tag{padding:4px 5px;font-size:0;letter-spacing:0;border-radius:6px}.admin-live-tag .bi{font-size:.72rem}.admin-close-panel{width:26px;height:26px;flex-basis:26px}
+ .admin-tabs{margin:8px 0 9px;padding:3px;gap:3px}.admin-tab{min-height:30px;padding:5px 7px;font-size:.57rem;gap:5px}.admin-tab i{font-size:.65rem}
+ .admin-module{padding:9px 8px 8px;border-radius:9px}.admin-module-heading{flex-direction:row!important;align-items:center!important;gap:7px;margin-bottom:7px;padding-bottom:7px}.admin-module-heading h3{font-size:.91rem}.admin-module-heading p{font-size:.54rem;line-height:1.3}.admin-module-heading>.admin-action{width:auto!important;flex:0 0 auto;min-height:29px;padding:0 7px;font-size:.55rem}
+ .admin-overview-grid{gap:6px;margin:8px 0}.admin-overview-card{padding:7px 8px;border-radius:9px;column-gap:7px}.admin-overview-icon{width:27px;height:27px;font-size:.75rem}.admin-overview-label{font-size:.56rem}.admin-overview-card>strong{font-size:1.15rem}.admin-overview-detail{font-size:.52rem;gap:3px 7px}.admin-overview-card>button{font-size:.57rem;margin-top:4px;padding-top:4px}
+ .admin-overview-bottom{padding:8px;gap:7px}.admin-overview-bottom h4{font-size:.78rem}.admin-overview-bottom p{font-size:.55rem}.admin-overview-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}.admin-overview-actions button{justify-content:center;min-width:0;padding:7px 5px;font-size:.54rem;gap:4px}.admin-overview-actions button:last-child{grid-column:1/-1}
+}
+@media(max-width:360px){.brand-overline{font-size:.43rem}.brand-lockup h1{font-size:.83rem}.header-actions .btn-flat{padding:0 5px;font-size:.54rem}.monitoring{font-size:.43rem;letter-spacing:.04em}.section-label{font-size:.5rem;letter-spacing:.06em}.admin-welcome h2{font-size:.94rem}.admin-live-tag{display:none}.admin-tab{font-size:.53rem;padding-inline:5px}.admin-module-heading>.admin-action{font-size:.51rem;padding-inline:5px}.admin-overview-actions button{font-size:.51rem}}
+@media(prefers-reduced-motion:reduce){.monitoring span{animation:none!important}}
+
+
+/* ======================================================================
+   RADIAÇÃO.NET · AJUSTES DE INTERFACE v16.1
+   Correções pontuais: navegação mobile, ícone de parceiros e atalhos.
+   ====================================================================== */
+/* Os quatro módulos devem caber na largura disponível sem corte lateral. */
+.admin-tabs{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:5px;
+  overflow:visible;
+  min-width:0;
+}
+.admin-tab{
+  min-width:0;
+  width:100%;
+  flex:initial;
+  white-space:normal;
+  padding-inline:8px;
+  overflow-wrap:anywhere;
+}
+.admin-tab i{flex:0 0 auto}
+
+/* Atalhos como pequenas ações em formato de cartão horizontal. */
+.admin-overview-bottom{
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:10px;
+}
+.admin-overview-bottom>div:first-child{min-width:0}
+.admin-overview-actions{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:7px;
+  width:100%;
+}
+.admin-overview-actions button{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:9px;
+  min-width:0;
+  min-height:42px;
+  padding:8px 10px;
+  border:1px solid rgba(255,155,69,.19);
+  border-radius:9px;
+  background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.018));
+  color:#ffc18e;
+  text-align:left;
+  line-height:1.2;
+}
+.admin-overview-actions button i:first-child{
+  display:grid;
+  place-items:center;
+  width:27px;
+  height:27px;
+  flex:0 0 27px;
+  border-radius:7px;
+  background:rgba(244,116,31,.14);
+  color:#ff9a42;
+}
+.admin-overview-actions button:hover{
+  background:rgba(244,116,31,.12);
+  border-color:rgba(255,155,69,.38);
+}
+@media(max-width:620px){
+  .admin-tabs{grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;padding:3px}
+  .admin-tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:42px;padding:5px 2px;font-size:.58rem;line-height:1.1;text-align:center}
+  .admin-tab i{font-size:.75rem}
+  .admin-overview-bottom{display:grid;grid-template-columns:minmax(0,1fr);align-items:stretch;gap:7px;padding:8px}
+  .admin-overview-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  .admin-overview-actions button{min-height:38px;padding:6px 7px;font-size:.62rem;gap:6px}
+  .admin-overview-actions button:last-child{grid-column:auto}
+  .admin-overview-actions button i:first-child{width:25px;height:25px;flex-basis:25px}
+}
+@media(max-width:360px){
+  .admin-tab{font-size:.53rem;padding-inline:1px}
+  .admin-tab i{font-size:.68rem}
+  .admin-overview-actions{grid-template-columns:1fr}
+  .admin-overview-actions button{min-height:36px;font-size:.61rem}
+}
+
+
+/* ======================================================================
+   RADIAÇÃO.NET · v16.3 — CABEÇALHO MOBILE
+   Marca à esquerda; ações em duas linhas à direita.
+   ====================================================================== */
+@media (max-width: 620px) {
+  .app-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    align-items: center;
+    column-gap: 8px;
+    row-gap: 5px;
+    flex-direction: initial;
+    flex-wrap: initial;
+    padding: 8px 0;
+  }
+
+  .brand-lockup {
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+    align-self: center;
+    gap: 7px;
+  }
+
+  .brand-logo {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+  }
+
+  .brand-overline {
+    font-size: .43rem;
+    letter-spacing: .09em;
+    white-space: nowrap;
+  }
+
+  .brand-lockup h1 {
+    font-size: .82rem;
+    line-height: 1.12;
+    white-space: nowrap;
+  }
+
+  .brand-lockup p {
+    font-size: .55rem;
+    margin-top: 2px;
+    white-space: nowrap;
+  }
+
+  .header-right {
+    display: contents;
+  }
+
+  .status-badge {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
+    align-self: center;
+    min-height: 25px;
+    padding: 4px 7px;
+    font-size: .52rem;
+  }
+
+  .header-actions {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, 30px);
+    align-content: center;
+    gap: 5px;
+    width: 150px;
+    min-width: 0;
+    flex: initial;
+  }
+
+  .header-actions .btn-flat {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-width: 0;
+    min-height: 30px;
+    height: 30px;
+    padding: 0 5px;
+    gap: 4px;
+    font-size: .52rem;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  /* Ordem visual solicitada:
+     linha 1: Instalar | Sair
+     linha 2: Voltar ao Locutor/Administração | Alertas */
+  #btn-instalar-painel { grid-column: 1; grid-row: 1; }
+  #btn-logout { grid-column: 2; grid-row: 1; }
+  #btn-admin-menu { grid-column: 1; grid-row: 2; }
+  #btn-alertas { grid-column: 2; grid-row: 2; }
+
+  .header-actions .btn-exit,
+  .header-actions #btn-logout {
+    color: #fff;
+    background: linear-gradient(145deg, #a92f38, #7f202b);
+    border-color: rgba(255, 112, 122, .48);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+  }
+
+  .header-actions .btn-exit:hover,
+  .header-actions #btn-logout:hover {
+    background: linear-gradient(145deg, #c43b45, #982631);
+    border-color: rgba(255, 135, 143, .7);
+  }
+
+  .header-actions .btn-flat i {
+    font-size: .62rem;
+    flex: 0 0 auto;
+  }
+}
+
+@media (max-width: 360px) {
+  .app-header {
+    column-gap: 5px;
+  }
+  .brand-logo {
+    width: 30px;
+    height: 30px;
+    flex-basis: 30px;
+  }
+  .brand-lockup h1 { font-size: .75rem; }
+  .brand-overline { font-size: .39rem; }
+  .brand-lockup p { font-size: .51rem; }
+  .header-actions { width: 140px; gap: 4px; }
+  .header-actions .btn-flat { font-size: .48rem; padding-inline: 3px; }
+}
+
+
+/* ======================================================================
+   RADIAÇÃO.NET · v16.5 — CABEÇALHO MOBILE EQUILIBRADO
+   Mantém a composição lateral da v16.3, com mais respiro e legibilidade.
+   ====================================================================== */
+@media (max-width: 620px) {
+  .app-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 184px;
+    grid-template-rows: auto auto;
+    align-items: center;
+    column-gap: 9px;
+    row-gap: 6px;
+    padding: 9px 0 10px;
+    flex-direction: initial;
+    flex-wrap: initial;
+  }
+
+  .brand-lockup {
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .brand-logo {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+  }
+
+  .brand-overline {
+    font-size: .45rem;
+    letter-spacing: .09em;
+    white-space: nowrap;
+  }
+
+  .brand-lockup h1 {
+    font-size: .82rem;
+    line-height: 1.15;
+    white-space: normal;
+  }
+
+  .brand-lockup p {
+    font-size: .56rem;
+    line-height: 1.2;
+    margin-top: 2px;
+  }
+
+  .header-right {
+    display: contents;
+  }
+
+  .status-badge {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
+    align-self: center;
+    min-height: 26px;
+    padding: 5px 8px;
+    font-size: .54rem;
+  }
+
+  .header-actions {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, 34px);
+    align-content: center;
+    gap: 6px;
+    width: 184px;
+    min-width: 0;
+    flex: initial;
+  }
+
+  .header-actions .btn-flat {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-width: 0;
+    min-height: 34px;
+    height: 34px;
+    padding: 0 5px;
+    gap: 4px;
+    font-size: .52rem;
+    line-height: 1.05;
+    white-space: nowrap;
+  }
+
+  #btn-instalar-painel { grid-column: 1; grid-row: 1; }
+  #btn-logout { grid-column: 2; grid-row: 1; }
+  #btn-admin-menu { grid-column: 1; grid-row: 2; }
+  #btn-alertas { grid-column: 2; grid-row: 2; }
+
+  .header-actions .btn-exit,
+  .header-actions #btn-logout {
+    color: #fff;
+    background: linear-gradient(145deg, #a92f38, #7f202b);
+    border-color: rgba(255, 112, 122, .48);
+  }
+
+  .header-actions .btn-flat i {
+    font-size: .61rem;
+    flex: 0 0 auto;
+  }
+}
+
+/* Em aparelhos muito estreitos, prioriza largura e leitura:
+   identificação acima e grade de ações ocupando toda a linha. */
+@media (max-width: 390px) {
+  .app-header {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    row-gap: 7px;
+  }
+
+  .brand-lockup {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .header-right {
+    display: grid;
+    grid-column: 1;
+    grid-row: 2 / span 2;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+    width: 100%;
+  }
+
+  .status-badge {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .header-actions {
+    grid-column: 1;
+    grid-row: 2;
+    width: 100%;
+    grid-template-rows: repeat(2, 36px);
+  }
+
+  .header-actions .btn-flat {
+    min-height: 36px;
+    height: 36px;
+    font-size: .61rem;
+  }
+
+  .brand-logo {
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
+  }
+
+  .brand-lockup h1 { font-size: .91rem; }
+  .brand-overline { font-size: .48rem; }
+  .brand-lockup p { font-size: .60rem; }
+}

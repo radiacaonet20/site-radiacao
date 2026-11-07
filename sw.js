@@ -1,4 +1,4 @@
-const CACHE_NAME = 'radiacaonet-v9.2';
+const CACHE_NAME = 'radiacaonet-v9.3';
 const APP_SHELL = [
   './',
   './index.html',
@@ -42,11 +42,16 @@ function isSameOrigin(url) {
 
 self.addEventListener('fetch', (event) => {
   const request = event.request;
-  const url = new URL(request.url);
-  const urlString = request.url;
+  let url;
+  try { url = new URL(request.url); } catch (_) { return; }
 
-  if (isLiveDataRequest(urlString)) return;
+  // Controla somente recursos HTTP(S) da própria origem.
+  // Extensões, esquemas internos e CDNs seguem diretamente pelo navegador.
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
+  if (url.origin !== self.location.origin) return;
+  if (isLiveDataRequest(request.url)) return;
   if (request.method !== 'GET') return;
+  const urlString = request.url;
 
   if (request.mode === 'navigate') {
     event.respondWith(
@@ -82,16 +87,5 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  event.respondWith(
-    caches.match(request).then((cached) => {
-      if (cached) return cached;
-      return fetch(request).then((response) => {
-        if (response && (response.ok || response.type === 'opaque')) {
-          const copy = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
-        }
-        return response;
-      });
-    })
-  );
+  // Requisições externas não são interceptadas nem armazenadas por este worker.
 });
