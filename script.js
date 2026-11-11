@@ -141,10 +141,9 @@ function toggleMobileMenu(forceState) {
   const button = document.querySelector('.mobile-menu-btn');
   if (!menu || !backdrop) return;
 
-  const isMobile = window.matchMedia('(max-width: 950px)').matches;
-  const shouldOpen = isMobile && (typeof forceState === 'boolean'
+  const shouldOpen = typeof forceState === 'boolean'
     ? forceState
-    : !menu.classList.contains('active'));
+    : !menu.classList.contains('active');
 
   if (shouldOpen) {
     menu.classList.add('active');
@@ -154,65 +153,20 @@ function toggleMobileMenu(forceState) {
     document.body.classList.add('nav-drawer-open');
     menu.querySelector('.nav-drawer-close')?.focus();
   } else {
-    const focusWasInside = menu.contains(document.activeElement);
+    // Remove o foco do menu antes de aplicar aria-hidden.
+    if (menu.contains(document.activeElement)) button?.focus();
     menu.classList.remove('active');
     backdrop.classList.remove('active');
-    menu.setAttribute('aria-hidden', isMobile ? 'true' : 'false');
-    if (button) button.setAttribute('aria-expanded', 'false');
-    document.body.classList.remove('nav-drawer-open');
-    if (focusWasInside && isMobile) button?.focus();
-  }
-}
-
-// Mantém o menu acessível no desktop e controla o foco como um drawer no mobile.
-function sincronizarEstadoMenuPorViewport() {
-  const menu = el('navMenu');
-  const button = document.querySelector('.mobile-menu-btn');
-  if (!menu) return;
-  const isMobile = window.matchMedia('(max-width: 950px)').matches;
-  if (!isMobile) {
-    menu.classList.remove('active');
-    el('navDrawerBackdrop')?.classList.remove('active');
-    document.body.classList.remove('nav-drawer-open');
-    menu.setAttribute('aria-hidden', 'false');
-    if (button) button.setAttribute('aria-expanded', 'false');
-  } else if (!menu.classList.contains('active')) {
     menu.setAttribute('aria-hidden', 'true');
     if (button) button.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('nav-drawer-open');
   }
 }
 
-window.addEventListener('resize', sincronizarEstadoMenuPorViewport);
-sincronizarEstadoMenuPorViewport();
-
 document.addEventListener('keydown', function(event) {
-  const menu = el('navMenu');
-  if (!menu?.classList.contains('active')) return;
-
-  if (event.key === 'Escape') {
-    event.preventDefault();
-    toggleMobileMenu(false);
-    return;
-  }
-
-  if (event.key === 'Tab') {
-    const focusable = Array.from(menu.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'))
-      .filter(item => item.getClientRects().length > 0);
-    if (!focusable.length) {
-      event.preventDefault();
-      return;
-    }
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-    if (event.shiftKey && (document.activeElement === first || !menu.contains(document.activeElement))) {
-      event.preventDefault();
-      last.focus();
-    } else if (!event.shiftKey && (document.activeElement === last || !menu.contains(document.activeElement))) {
-      event.preventDefault();
-      first.focus();
-    }
-  }
+  if (event.key === 'Escape') toggleMobileMenu(false);
 });
+
 /* Navegação principal: rolagem suave e identificação confiável da seção ativa. */
 function inicializarNavegacaoAtiva() {
   const menu = document.getElementById('navMenu');
@@ -456,6 +410,8 @@ async function atualizarNowPlaying() {
 // ============================================================================
 // LÓGICA DO PWA (GARANTIDA NO MOBILE E NO SIMULADOR F12)
 // ============================================================================
+const btnInstallNav = el('btnInstallNav');
+const menuInstallApp = el('menuInstallApp');
 const pwaBanner = el('pwaBanner');
 const btnInstallBanner = el('btnInstallBanner');
 const communityInstallApp = el('communityInstallApp');
@@ -477,6 +433,8 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
 window.addEventListener('appinstalled', () => { 
   eventoInstalacao = null; 
+  if(btnInstallNav) btnInstallNav.classList.remove('visible-install');
+  if(menuInstallApp) menuInstallApp.style.display = 'none';
   if(pwaBanner) pwaBanner.classList.remove('show');
 });
 
@@ -486,6 +444,7 @@ function verificarExibicaoPwaMobile() {
   const isTelaMobile = window.innerWidth <= 950;
 
   if (!isStandalone && isTelaMobile) {
+    if(menuInstallApp) menuInstallApp.style.display = 'flex';
     if (!fechadoNaSessao && pwaBanner) {
       pwaBanner.classList.add('show');
     }
@@ -509,6 +468,8 @@ const acionarInstalacaoPwa = async (event) => {
   }
 };
 
+if(btnInstallNav) btnInstallNav.addEventListener('click', acionarInstalacaoPwa);
+if(menuInstallApp) menuInstallApp.addEventListener('click', acionarInstalacaoPwa);
 if(btnInstallBanner) btnInstallBanner.addEventListener('click', acionarInstalacaoPwa);
 if(communityInstallApp) communityInstallApp.addEventListener('click', acionarInstalacaoPwa);
 window.addEventListener('resize', verificarExibicaoPwaMobile);
