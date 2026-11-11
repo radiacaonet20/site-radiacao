@@ -11,7 +11,7 @@
   --bg-imagem: url('https://painel.radiacao.net.br/static/uploads/background.1791564225.webp');
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; scroll-behavior: smooth;}
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent;}
 
 body {
   font-family: var(--fonte-principal); background-color: var(--cor-fundo); color: var(--cor-texto);
@@ -25,6 +25,7 @@ body {
 .nav-menu { display: flex; gap: 30px; align-items: center; }
 .nav-menu a { color: var(--cor-texto-mutado); text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: 0.2s; display: flex; align-items: center; gap: 6px;}
 .nav-menu a:hover { color: var(--cor-primaria); }
+.portal-navbar .nav-menu a:focus-visible, .mobile-menu-btn:focus-visible, .nav-drawer-close:focus-visible { outline: 2px solid var(--cor-primaria); outline-offset: 4px; border-radius: 6px; }
 .nav-actions { display: flex; gap: 15px; align-items: center; }
 .nav-btn-zap { color: #25D366; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 6px; }
 .nav-btn-app { background: rgba(255,255,255,0.1); color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s;}
@@ -721,7 +722,8 @@ html { scroll-behavior: smooth; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .portal-navbar .nav-menu a.active::after { animation: none; }
+  .portal-navbar .nav-menu, .portal-navbar .nav-menu a, .nav-drawer-backdrop { transition: none !important; }
+  .portal-navbar .nav-menu a.active::after { animation: none !important; }
 }
 
 
@@ -1588,122 +1590,5 @@ html { scroll-behavior: smooth; }
 @media (max-width: 950px) {
   #parceiros .section-header h2 {
     font-size: 1.5rem;
-  }
-}
-
-
-/* ==========================================================
-   RADIAÇÃO.NET — AJUSTE DE GRADE DA PROGRAMAÇÃO
-   Somente apresentação: HTML e JavaScript permanecem intactos.
-   Desktop: 3 colunas | telas menores: 2 colunas.
-   ========================================================== */
-
-/* Dia selecionado: organiza os programas em uma grade compacta. */
-#programacao .prog-content.active {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  align-items: stretch;
-  gap: 16px;
-}
-
-/* Semana completa: mantém cada dia como um bloco e organiza
-   os cards daquele dia em duas ou três colunas. */
-#programacao .modern-schedule.week-expanded .prog-content {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  align-items: stretch;
-  gap: 12px;
-}
-
-#programacao .modern-schedule.week-expanded .prog-content::before {
-  grid-column: 1 / -1;
-}
-
-#programacao .prog-card {
-  min-width: 0;
-  height: 100%;
-  padding: 16px;
-  gap: 13px;
-  border-radius: 15px;
-}
-
-#programacao .prog-card img {
-  width: 68px;
-  height: 68px;
-  flex: 0 0 68px;
-  border-radius: 12px;
-}
-
-#programacao .prog-details {
-  min-width: 0;
-}
-
-#programacao .prog-details h4 {
-  font-size: 1.08rem;
-  overflow-wrap: anywhere;
-}
-
-#programacao .prog-details p {
-  font-size: .82rem;
-}
-
-/* Em telas médias e celulares, dois cards por linha. */
-@media (max-width: 900px) {
-  #programacao .prog-content.active,
-  #programacao .modern-schedule.week-expanded .prog-content {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-/* Ajuste interno para caber bem em duas colunas no celular. */
-@media (max-width: 600px) {
-  #programacao .prog-content.active,
-  #programacao .modern-schedule.week-expanded .prog-content {
-    gap: 10px;
-  }
-
-  #programacao .prog-card {
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    padding: 12px;
-    gap: 9px;
-    border-radius: 13px;
-  }
-
-  #programacao .prog-card img {
-    width: 54px;
-    height: 54px;
-    flex-basis: 54px;
-    border-radius: 10px;
-  }
-
-  #programacao .prog-time {
-    flex-wrap: wrap;
-    gap: 5px;
-    font-size: .7rem;
-    letter-spacing: .3px;
-  }
-
-  #programacao .prog-details {
-    gap: 5px;
-  }
-
-  #programacao .prog-details h4 {
-    font-size: .95rem;
-    line-height: 1.2;
-  }
-
-  #programacao .prog-details p {
-    font-size: .75rem;
-    line-height: 1.35;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-  }
-
-  #programacao .prog-details > * {
-    overflow-wrap: anywhere;
   }
 }

@@ -11,7 +11,7 @@
     <link rel="apple-touch-icon" href="https://i.postimg.cc/jd7JYYbX/Logo-Nova-Cor-200.png">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="./style.css?v=13.2">
+    <link rel="stylesheet" href="./style.css?v=13.3">
   </head>
   <body>
     
@@ -22,7 +22,7 @@
         <span>Radiação.Net</span>
       </div>
 
-      <div class="nav-menu" id="navMenu" aria-label="Menu do site" aria-hidden="true">
+      <div class="nav-menu" id="navMenu" aria-label="Menu do site" aria-hidden="false">
         <div class="nav-drawer-header">
           <div class="nav-drawer-brand">
             <img src="https://i.postimg.cc/YSV5B7jW/Logo-Nova-Cor-200.png" alt="">
@@ -39,12 +39,9 @@
         <a href="#equipe" onclick="toggleMobileMenu(false)"><i class="fas fa-users" aria-hidden="true"></i> Equipe</a>
         <a href="#parceiros" onclick="toggleMobileMenu(false)"><i class="fas fa-handshake" aria-hidden="true"></i> Parceiros</a>
 
-        <!-- Instalação PWA: mantida para o fluxo já existente -->
-        <a href="#" id="menuInstallApp" class="nav-install-app" style="display:none;"><i class="fas fa-download" aria-hidden="true"></i> Instalar App</a>
       </div>
 
       <div class="nav-actions">
-        <button class="nav-btn-app" id="btnInstallNav" style="display:none;"><i class="fas fa-download"></i> App</button>
         <button class="mobile-menu-btn" type="button" aria-label="Abrir menu" aria-controls="navMenu" aria-expanded="false" onclick="toggleMobileMenu()"><i class="fas fa-bars" aria-hidden="true"></i></button>
       </div>
     </nav>
@@ -351,7 +348,7 @@
     <!-- Modal iOS antigo (agora integrado no fluxo) -->
     <div id="modal-ios" class="modal-overlay" onclick="fecharModalFora(event, 'modal-ios')"><div class="modal-content" style="text-align: center;"><span class="close-btn" onclick="fecharModal('modal-ios')">&times;</span><h2 class="modal-title">Instalar App 🍏</h2><p style="margin-bottom: 20px; color: #ccc; font-size: 0.9rem;">No Safari:</p><ul style="text-align: left; margin: 0 auto; max-width: 280px; color: #fff; line-height: 1.8; list-style: none; padding: 0;"><li style="margin-bottom: 10px;"><span style="color: #f4741f; font-weight: bold; margin-right: 5px;">1.</span> Toque em <b>Compartilhar</b> <i class="fas fa-share-square" style="color: #007aff;"></i>.</li><li style="margin-bottom: 10px;"><span style="color: #f4741f; font-weight: bold; margin-right: 5px;">2.</span> <b>"Adicionar à Tela de Início"</b> <i class="fas fa-plus-square" style="color: #fff;"></i>.</li><li><span style="color: #f4741f; font-weight: bold; margin-right: 5px;">3.</span> Toque em <b>Adicionar</b>.</li></ul><button class="btn-enviar" onclick="fecharModal('modal-ios')" style="margin-top: 25px;">Entendi!</button></div></div>
 
-    <script src="./script.js?v=community-3.3"></script>
+    <script src="./script.js?v=community-3.4"></script>
     <script type="module" src="./firebase-public.js?v=5.5"></script>
     <script type="module" src="./site-dynamic.js?v=1.3"></script>
   </body>
