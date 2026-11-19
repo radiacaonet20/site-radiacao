@@ -105,14 +105,55 @@ function atualizarIconeVolume(vol, icone) {
 if (volumeControl) { volumeControl.addEventListener('input', (e) => { const vol = e.target.value / 100; audio.volume = vol; atualizarIconeVolume(vol, el('muteIcon')); }); }
 
 function updateMediaSession(title, artist, artworkUrl) {
-  if ('mediaSession' in navigator) {
+  if (!('mediaSession' in navigator) || typeof MediaMetadata === 'undefined') return;
+
+  try {
     navigator.mediaSession.metadata = new MediaMetadata({
-      title: title,
-      artist: artist,
+      title: title || 'Radiação.Net',
+      artist: artist || 'A Rádio de todas as tribos!',
       album: 'Radiação.Net',
-      artwork: [{ src: artworkUrl, sizes: '512x512', type: 'image/png' }]
+      artwork: artworkUrl ? [{ src: artworkUrl, sizes: '512x512' }] : []
     });
+  } catch (error) {
+    console.warn('Não foi possível atualizar os metadados do Media Session:', error);
   }
+}
+
+
+function sincronizarEstadoMediaSession() {
+  if (!('mediaSession' in navigator)) return;
+  try {
+    navigator.mediaSession.playbackState = audio && !audio.paused ? 'playing' : 'paused';
+  } catch (error) {
+    console.warn('Não foi possível sincronizar o estado do Media Session:', error);
+  }
+}
+
+
+function configurarMediaSession() {
+  if (!('mediaSession' in navigator)) return;
+
+  // Os comandos externos são explícitos: Play nunca pausa e Pause nunca inicia.
+  try {
+    navigator.mediaSession.setActionHandler('play', () => {
+      if (audio && audio.paused) togglePlay();
+    });
+    navigator.mediaSession.setActionHandler('pause', () => {
+      if (audio && !audio.paused) togglePlay();
+    });
+  } catch (error) {
+    console.warn('Não foi possível configurar os controles do Media Session:', error);
+  }
+
+  sincronizarEstadoMediaSession();
+}
+
+
+if (audio) {
+  audio.addEventListener('play', sincronizarEstadoMediaSession);
+  audio.addEventListener('playing', sincronizarEstadoMediaSession);
+  audio.addEventListener('pause', sincronizarEstadoMediaSession);
+  audio.addEventListener('ended', sincronizarEstadoMediaSession);
 }
 
 function abrirModal(idModal) { const m = el(idModal); if(m) { m.classList.add('active'); document.body.style.overflow = 'hidden'; } }
@@ -358,6 +399,7 @@ async function atualizarNowPlaying() {
     if(el('playerLine1')) el('playerLine1').innerText = displayTitle;
     if(el('playerLine2')) el('playerLine2').innerText = displayArtist;
     if(el('playerCover')) el('playerCover').src = coverUrl;
+    updateMediaSession(displayTitle, displayArtist, coverUrl);
     if(el('heroShowName')) { el('heroShowName').innerText = displayTitle; ajustarTituloHero(displayTitle); }
     if(el('heroLocutor')) el('heroLocutor').innerText = displayArtist;
 
@@ -742,5 +784,5 @@ document.addEventListener('DOMContentLoaded', () => {
   inicializarVisaoSemanal();
   carregarNoticiasRSS(); 
   setTimeout(verificarExibicaoPwaMobile, 1500); // Exibe o card PWA no mobile após 1.5s
-  if ('mediaSession' in navigator) { navigator.mediaSession.setActionHandler('play', togglePlay); navigator.mediaSession.setActionHandler('pause', togglePlay); }
+  configurarMediaSession();
 });

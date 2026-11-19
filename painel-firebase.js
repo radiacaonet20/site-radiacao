@@ -86,7 +86,30 @@ window.addEventListener("focus", () => {
   }
 });
 
+function limparAssinaturasSessao() {
+  assinaturasSessao.forEach((cancelar) => {
+    try { cancelar(); } catch (error) { console.warn("Falha ao encerrar listener:", error); }
+  });
+  assinaturasSessao = [];
+  pedidosAtuais = {};
+  historicoAtual = {};
+  adminProgramacao = {};
+  adminEquipe = {};
+  adminParceiros = {};
+  cargaInicial = true;
+  idsNovosParaAnimar.clear();
+  atualizarContadores();
+}
+
+function observarSessao(alvo, sucesso, falha) {
+  const cancelar = onValue(alvo, sucesso, falha);
+  assinaturasSessao.push(cancelar);
+  return cancelar;
+}
+
 onAuthStateChanged(auth, async (user) => {
+  const tokenAtual = ++tokenValidacaoAuth;
+  limparAssinaturasSessao();
   if (!user) {
     document.body.classList.remove("modo-administracao");
     if (adminWorkspace) adminWorkspace.hidden = true;
@@ -97,6 +120,7 @@ onAuthStateChanged(auth, async (user) => {
 
   try {
     const perfilSnapshot = await get(ref(db, `usuarios/${user.uid}`));
+    if (tokenAtual !== tokenValidacaoAuth || auth.currentUser?.uid !== user.uid) return;
     const perfil = perfilSnapshot.val();
     const autorizado = perfil && perfil.ativo === true && ["admin", "locutor"].includes(perfil.perfil);
 
@@ -116,6 +140,7 @@ onAuthStateChanged(auth, async (user) => {
     iniciarControleEnquete();
     iniciarModulosAdmin(perfil);
   } catch (error) {
+    if (tokenAtual !== tokenValidacaoAuth) return;
     console.error("Não foi possível validar o acesso:", error);
     if (msgErro) {
       msgErro.textContent = "Não foi possível validar sua autorização. Tente novamente.";
@@ -283,11 +308,13 @@ async function marcarComoTocado(id, botao) {
 
   // Preserva o recado independentemente da música por pelo menos 24 horas.
   if (pedido.recado && String(pedido.recado).trim()) {
+    const dataOriginal = Number(pedido.timestamp ?? pedido.criado_em);
+    const dataEnvio = Number.isFinite(dataOriginal) && dataOriginal > 0 ? dataOriginal : agora;
     alteracoes[`recados_player/${id}`] = {
-      nome: pedido.nome || "Ouvinte",
-      recado: String(pedido.recado),
-      data_envio: pedido.timestamp || pedido.criado_em || agora,
-      expira_em: (pedido.timestamp || pedido.criado_em || agora) + 86400000
+      nome: String(pedido.nome || "Ouvinte").slice(0, 80),
+      recado: String(pedido.recado).trim().slice(0, 500),
+      data_envio: dataEnvio,
+      expira_em: dataEnvio + 86400000
     };
   }
 
@@ -302,7 +329,7 @@ async function marcarComoTocado(id, botao) {
 }
 
 function iniciarLeituraPedidos() {
-  onValue(pedidosRef, (snapshot) => {
+  observarSessao(pedidosRef, (snapshot) => {
     const dados = snapshot.val() || {};
     const chaves = Object.keys(dados);
     const quantidadeAtual = chaves.length;
@@ -344,7 +371,7 @@ function iniciarLeituraPedidos() {
 }
 
 function iniciarLeituraHistorico() {
-  onValue(historicoRef, (snapshot) => {
+  observarSessao(historicoRef, (snapshot) => {
     historicoAtual = snapshot.val() || {};
     renderizarPedidos();
   }, (error) => {
@@ -381,7 +408,8 @@ window.encerrarEnquete = function () {
 };
 
 function iniciarControleEnquete() {
-  onValue(enqueteRef, (snapshot) => {
+  if (!containerEnquete) return;
+  observarSessao(enqueteRef, (snapshot) => {
     const data = snapshot.val();
     if (data?.ativa && data.opcoes?.op1 && data.opcoes?.op2) {
       const votos1 = Number(data.opcoes.op1.votos || 0);
@@ -408,6 +436,9 @@ function iniciarControleEnquete() {
           <button class="btn-primary" type="button" onclick="criarEnquete()">Colocar no Ar</button>
         </div>`;
     }
+  }, (error) => {
+    console.error("Erro ao ler enquete:", error);
+    containerEnquete.textContent = "Não foi possível carregar a enquete. Verifique a conexão e as permissões.";
   });
 }
 
@@ -422,6 +453,8 @@ let adminEquipe = {};
 let adminParceiros = {};
 let adminBindingsIniciados = false;
 let perfilAtualPainel = null;
+let assinaturasSessao = [];
+let tokenValidacaoAuth = 0;
 const adminWorkspace = $("admin-workspace");
 const adminFeedback = $("admin-feedback");
 
@@ -578,11 +611,12 @@ function iniciarModulosAdmin(perfil) {
   const adminTrigger = $("btn-admin-menu");
   if (adminTrigger) adminTrigger.hidden = !isAdmin;
   alternarModoPainel("locutor");
-  if (!isAdmin || adminBindingsIniciados) return;
+  if (!isAdmin) return;
+  observarSessao(adminProgramacaoRef,s=>{adminProgramacao=s.val()||{};renderAdminLista("programa",adminProgramacao);atualizarVisaoGeral();},e=>avisoAdmin("Falha ao carregar programação: "+e.message,true));
+  observarSessao(adminEquipeRef,s=>{adminEquipe=s.val()||{};renderAdminLista("equipe",adminEquipe);atualizarVisaoGeral();},e=>avisoAdmin("Falha ao carregar equipe: "+e.message,true));
+  observarSessao(adminParceirosRef,s=>{adminParceiros=s.val()||{};renderAdminLista("parceiro",adminParceiros);atualizarVisaoGeral();},e=>avisoAdmin("Falha ao carregar parceiros: "+e.message,true));
+  if (adminBindingsIniciados) return;
   adminBindingsIniciados = true;
-  onValue(adminProgramacaoRef,s=>{adminProgramacao=s.val()||{};renderAdminLista("programa",adminProgramacao);atualizarVisaoGeral();},e=>avisoAdmin("Falha ao carregar programação: "+e.message,true));
-  onValue(adminEquipeRef,s=>{adminEquipe=s.val()||{};renderAdminLista("equipe",adminEquipe);atualizarVisaoGeral();},e=>avisoAdmin("Falha ao carregar equipe: "+e.message,true));
-  onValue(adminParceirosRef,s=>{adminParceiros=s.val()||{};renderAdminLista("parceiro",adminParceiros);atualizarVisaoGeral();},e=>avisoAdmin("Falha ao carregar parceiros: "+e.message,true));
   $("btn-admin-menu")?.addEventListener("click",()=>alternarModoPainel(
     document.body.classList.contains("modo-administracao") ? "locutor" : "administracao"
   ));
@@ -600,14 +634,20 @@ function iniciarModulosAdmin(perfil) {
   $("btn-novo-parceiro")?.addEventListener("click",()=>abrirFormAdmin("parceiro"));
   document.querySelectorAll("[data-close-form]").forEach(b=>b.addEventListener("click",()=>{const t=b.dataset.closeForm; $(`form-${t}-card`).hidden=true;}));
   $("form-programa")?.addEventListener("submit",async e=>{
-    e.preventDefault(); const id=$("programa-id").value||await proximoIdentificador("programacao");
+    e.preventDefault();
+    try {
+    const id=$("programa-id").value||await proximoIdentificador("programacao");
     const item={titulo:$("programa-nome").value.trim(),dia:$("programa-dia").value,inicio:$("programa-inicio").value,fim:$("programa-fim").value,locutor:$("programa-locutor").value.trim(),imagem:$("programa-imagem").value.trim(),descricao:$("programa-descricao").value.trim(),ordem:Number($("programa-ordem").value||0),ativo:$("programa-ativo").checked,atualizado_em:Date.now()};
-    try{await set(ref(db,`programacao/${id}`),item);await set(ref(db,"programacao_config/gerenciada"),true);$("form-programa-card").hidden=true;avisoAdmin("Programa salvo. O site será atualizado automaticamente.");}catch(err){console.error(err);avisoAdmin("Falha ao salvar programa. Confira as regras do Firebase.",true);}
+    await set(ref(db,`programacao/${id}`),item);await set(ref(db,"programacao_config/gerenciada"),true);$("form-programa-card").hidden=true;avisoAdmin("Programa salvo. O site será atualizado automaticamente.");
+    } catch(err){console.error(err);avisoAdmin("Falha ao salvar programa ou reservar identificador. Confira a conexão e as permissões do Firebase.",true);}
   });
   $("form-equipe")?.addEventListener("submit",async e=>{
-    e.preventDefault(); const id=$("equipe-id").value||await proximoIdentificador("equipe");
+    e.preventDefault();
+    try {
+    const id=$("equipe-id").value||await proximoIdentificador("equipe");
     const item={nome:$("equipe-nome").value.trim(),funcao:$("equipe-funcao").value.trim(),foto:$("equipe-foto").value.trim(),ordem:Number($("equipe-ordem").value||0),ativo:$("equipe-ativo").checked,atualizado_em:Date.now()};
-    try{await set(ref(db,`equipe/${id}`),item);await set(ref(db,"equipe_config/gerenciada"),true);$("form-equipe-card").hidden=true;avisoAdmin("Integrante salvo. O site será atualizado automaticamente.");}catch(err){console.error(err);avisoAdmin("Falha ao salvar integrante. Confira as regras do Firebase.",true);}
+    await set(ref(db,`equipe/${id}`),item);await set(ref(db,"equipe_config/gerenciada"),true);$("form-equipe-card").hidden=true;avisoAdmin("Integrante salvo. O site será atualizado automaticamente.");
+    } catch(err){console.error(err);avisoAdmin("Falha ao salvar integrante ou reservar identificador. Confira a conexão e as permissões do Firebase.",true);}
   });
   $("form-parceiro")?.addEventListener("submit",async e=>{
     e.preventDefault();
