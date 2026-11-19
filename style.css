@@ -338,7 +338,7 @@ body {
   .nav-btn-zap { display: none; }
   .nav-btn-app { display: none; } 
 
-  .hero-section { min-height: 70vh; padding: 100px 15px 40px 15px; }
+  .hero-section { min-height: 70vh; padding: 100px 15px 40px 15px; background-attachment: scroll; }
   .hero-title { font-size: 3.2rem; }
   .hero-subtitle { font-size: 1.2rem; }
   
