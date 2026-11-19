@@ -1707,3 +1707,76 @@ html { scroll-behavior: smooth; }
     overflow-wrap: anywhere;
   }
 }
+
+/* IMPLEMENTAÇÃO 04 — REFINO VISUAL HERO + PLAYER MOBILE */
+@media (max-width: 950px) {
+  .hero-cinematic {
+    min-height: clamp(570px, 78svh, 720px);
+    padding: 108px 18px 105px;
+    overflow: hidden;
+  }
+  .hero-content-cinematic {
+    width: 100%;
+    max-width: 540px;
+    gap: 0;
+  }
+  .hero-kicker {
+    margin-bottom: 14px;
+    opacity: .9;
+  }
+  .hero-brand-title {
+    line-height: .94;
+    letter-spacing: -.07em;
+    text-shadow: 0 5px 28px rgba(0,0,0,.75);
+  }
+  .hero-tagline {
+    margin: 12px 0 20px;
+    font-size: 1.05rem;
+  }
+  .hero-now-playing {
+    width: 100%;
+    min-width: 0;
+    margin-bottom: 20px;
+    padding: 15px 18px;
+    border-color: rgba(244,116,31,.28);
+    background: linear-gradient(145deg, rgba(17,17,19,.82), rgba(5,5,7,.66));
+    box-shadow: 0 12px 34px rgba(0,0,0,.3), inset 0 1px rgba(255,255,255,.06);
+  }
+  .hero-cinematic .btn-hero-play {
+    width: min(100%, 310px);
+    min-height: 58px;
+    padding: 16px 26px;
+    border-radius: 18px;
+    font-size: 1.12rem;
+    box-shadow: 0 12px 32px rgba(244,116,31,.36), 0 0 0 5px rgba(244,116,31,.07);
+  }
+  .hero-supporting-text {
+    margin-top: 14px;
+    text-align: center;
+  }
+  .hero-equalizer { bottom: 8%; opacity: .32; }
+  .hero-soundwave { opacity: .48; }
+  .sticky-player-wrapper {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .sticky-player-main {
+    min-height: 76px;
+    height: auto;
+  }
+  .sp-info { min-width: 0; }
+  .sp-title, .sp-artist { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}
+@media (max-width: 480px) {
+  .hero-cinematic {
+    min-height: clamp(560px, 76svh, 680px);
+    padding: 104px 16px 98px;
+  }
+  .hero-kicker { margin-bottom: 12px; }
+  .hero-brand-title { font-size: clamp(2.85rem, 14vw, 3.9rem); }
+  .hero-tagline { margin: 10px 0 18px; font-size: 1rem; }
+  .hero-now-playing { padding: 13px 15px; margin-bottom: 18px; border-radius: 14px; }
+  .hero-cinematic .btn-hero-play { min-height: 56px; border-radius: 16px; }
+  .hero-supporting-text { font-size: .7rem; }
+  .sticky-player-main { padding-left: 12px; padding-right: 12px; }
+  .sp-controls { gap: 11px; }
+}
