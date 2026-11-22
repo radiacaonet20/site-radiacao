@@ -347,14 +347,46 @@ function inicializarVisaoSemanal() {
   });
 }
 
-const imagensFundo = {
-  "default": "url('https://painel.radiacao.net.br/static/uploads/background.1791564225.webp')",
-  "fred": "url('https://i.postimg.cc/pLR9yzgz/Cool-Reggae-Wallpaper.jpg')",
-  "alessandro": "url('https://i.postimg.cc/1XmTfWrs/futuristic-city-5120x2880-15887.jpg')",
-  "rafa": "url('https://i.postimg.cc/nVST4cHB/photo-1540747913346-19e32dc3e97e.jpg')",
-  "bigt": "url('https://i.postimg.cc/0N1VzW9Z/Anime-Boy-Gamer-Wallpaper.jpg')",
-  "alex": "url('https://i.postimg.cc/Kvg7tPpv/Electronic-Music-Wallpaper-Sf.jpg')"
-};
+const IMAGEM_FUNDO_PADRAO = "https://painel.radiacao.net.br/static/uploads/background.1791564225.webp";
+let programacaoFirebaseCache = [];
+let programacaoFirebaseAtualizadaEm = 0;
+let programacaoFirebaseEmConsulta = null;
+
+function normalizarTextoRadio(valor) {
+  return String(valor || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+}
+
+async function obterProgramacaoFirebase() {
+  if (programacaoFirebaseEmConsulta) return programacaoFirebaseEmConsulta;
+  if (Date.now() - programacaoFirebaseAtualizadaEm < 30000) return programacaoFirebaseCache;
+  programacaoFirebaseEmConsulta = fetch("https://radiacaonet-default-rtdb.firebaseio.com/programacao.json", { cache: "no-store" })
+    .then(response => {
+      if (!response.ok) throw new Error(`Firebase HTTP ${response.status}`);
+      return response.json();
+    })
+    .then(dados => {
+      programacaoFirebaseCache = Object.values(dados || {}).filter(item => item && item.ativo !== false);
+      programacaoFirebaseAtualizadaEm = Date.now();
+      return programacaoFirebaseCache;
+    })
+    .catch(error => {
+      console.warn("Não foi possível atualizar a programação dinâmica; usando último cache disponível.", error);
+      return programacaoFirebaseCache;
+    })
+    .finally(() => { programacaoFirebaseEmConsulta = null; });
+  return programacaoFirebaseEmConsulta;
+}
+function localizarProgramaAoVivo(programaApi, locutorApi, textoApi, registros) {
+  const programa = normalizarTextoRadio(programaApi || String(textoApi || "").split(" - ")[0]);
+  const locutor = normalizarTextoRadio(locutorApi);
+  if (!programa && !locutor) return null;
+  // Prioriza o nome do programa (song.artist); locutor é critério auxiliar/fallback.
+  const porPrograma = registros.find(item => normalizarTextoRadio(item.titulo) === programa);
+  if (porPrograma) return porPrograma;
+  const porProgramaParcial = registros.find(item => programa && (programa.includes(normalizarTextoRadio(item.titulo)) || normalizarTextoRadio(item.titulo).includes(programa)));
+  if (porProgramaParcial) return porProgramaParcial;
+  return registros.find(item => locutor && normalizarTextoRadio(item.locutor) === locutor) || null;
+}
 
 const parceirosOficiais = {
   "fred": "https://github.com/radiacaonet20/site-radiacao/blob/main/imagens/parceiro_tspowersuplementos.jpg?raw=true",
@@ -413,6 +445,7 @@ async function atualizarNowPlaying() {
       });
     }
 
+    let imagemFundoAtiva = IMAGEM_FUNDO_PADRAO;
     let bgChaveAtiva = "default";
     const btnPedidos = el('btnRequestLive');
     if (btnPedidos) {
@@ -429,22 +462,27 @@ async function atualizarNowPlaying() {
 
     if (isLive) {
       ['playerLiveBadge', 'heroLiveBadge', 'btnRequestLive'].forEach(id => { if(el(id)) el(id).style.display = 'flex'; });
-      const locutorBuscaLower = streamer.toLowerCase();
-      for (const chave in imagensFundo) {
+      const locutorBuscaLower = normalizarTextoRadio(streamer);
+      // Mantém os parceiros atuais intactos enquanto a gestão de patrocinadores é migrada.
+      for (const chave in parceirosOficiais) {
         if (locutorBuscaLower.includes(chave)) {
-          bgChaveAtiva = chave;
-          if (parceirosOficiais[chave]) {
-            if(el('sponsorImg')) { el('sponsorImg').src = parceirosOficiais[chave]; el('sponsorBadge').style.display = 'flex'; }
-            if(el('heroSponsorImg')) { el('heroSponsorImg').src = parceirosOficiais[chave]; el('heroSponsorBadge').style.display = 'flex'; }
-          }
+          if(el('sponsorImg')) { el('sponsorImg').src = parceirosOficiais[chave]; el('sponsorBadge').style.display = 'flex'; }
+          if(el('heroSponsorImg')) { el('heroSponsorImg').src = parceirosOficiais[chave]; el('heroSponsorBadge').style.display = 'flex'; }
           break;
         }
+      }
+      const registrosPrograma = await obterProgramacaoFirebase();
+      const programaAoVivo = localizarProgramaAoVivo(data.now_playing?.song?.artist, streamer, data.now_playing?.song?.text, registrosPrograma);
+      const urlFundoPrograma = programaAoVivo?.imagemFundo || "";
+      if (urlFundoPrograma && /^https?:\/\//i.test(urlFundoPrograma)) {
+        imagemFundoAtiva = urlFundoPrograma;
+        bgChaveAtiva = programaAoVivo?.titulo || "programa-dinamico";
       }
     }
 
     if (document.body.dataset.bg !== bgChaveAtiva) {
       document.body.dataset.bg = bgChaveAtiva;
-      document.documentElement.style.setProperty('--bg-imagem', imagensFundo[bgChaveAtiva]);
+      document.documentElement.style.setProperty('--bg-imagem', `url(\"${imagemFundoAtiva.replace(/[\'\\()]/g, "")}\")`);
     }
   } catch (error) { console.error("Erro na rádio:", error); }
 }

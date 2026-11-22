@@ -2971,3 +2971,6 @@ button:disabled, .admin-action:disabled {
     justify-content: center !important;
   }
 }
+
+/* Ajuda contextual do campo de background do programa */
+.admin-form-grid label small{font-size:.62rem;font-weight:500;line-height:1.45;color:#8290a1}

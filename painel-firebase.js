@@ -511,6 +511,7 @@ function abrirFormAdmin(tipo, registro = null, id = "") {
     $("programa-fim").value = registro?.fim || "21:00";
     $("programa-locutor").value = registro?.locutor || "";
     $("programa-imagem").value = registro?.imagem || "";
+    $("programa-imagem-fundo").value = registro?.imagemFundo || "";
     $("programa-descricao").value = registro?.descricao || "";
     $("programa-ordem").value = Number(registro?.ordem || 0);
     $("programa-ativo").checked = registro?.ativo !== false;
@@ -637,7 +638,7 @@ function iniciarModulosAdmin(perfil) {
     e.preventDefault();
     try {
     const id=$("programa-id").value||await proximoIdentificador("programacao");
-    const item={titulo:$("programa-nome").value.trim(),dia:$("programa-dia").value,inicio:$("programa-inicio").value,fim:$("programa-fim").value,locutor:$("programa-locutor").value.trim(),imagem:$("programa-imagem").value.trim(),descricao:$("programa-descricao").value.trim(),ordem:Number($("programa-ordem").value||0),ativo:$("programa-ativo").checked,atualizado_em:Date.now()};
+    const item={titulo:$("programa-nome").value.trim(),dia:$("programa-dia").value,inicio:$("programa-inicio").value,fim:$("programa-fim").value,locutor:$("programa-locutor").value.trim(),imagem:$("programa-imagem").value.trim(),imagemFundo:$("programa-imagem-fundo").value.trim(),descricao:$("programa-descricao").value.trim(),ordem:Number($("programa-ordem").value||0),ativo:$("programa-ativo").checked,atualizado_em:Date.now()};
     await set(ref(db,`programacao/${id}`),item);await set(ref(db,"programacao_config/gerenciada"),true);$("form-programa-card").hidden=true;avisoAdmin("Programa salvo. O site será atualizado automaticamente.");
     } catch(err){console.error(err);avisoAdmin("Falha ao salvar programa ou reservar identificador. Confira a conexão e as permissões do Firebase.",true);}
   });
