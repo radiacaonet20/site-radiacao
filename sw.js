@@ -1,9 +1,9 @@
-const CACHE_NAME = 'radiacaonet-v9.5';
+const CACHE_NAME = 'radiacaonet-v10.5';
 const APP_SHELL = [
   './',
   './index.html',
   './manifest.json',
-  './style.css?v=13.2',
+  './style.css?v=mobile-foundation-1',
   './script.js?v=community-3.5',
   './firebase-public.js?v=5.5',
   './site-dynamic.js?v=1.3'

@@ -1788,3 +1788,59 @@ html { scroll-behavior: smooth; }
   .sticky-player-main { padding-left: 12px; padding-right: 12px; }
   .sp-controls { gap: 11px; }
 }
+
+/* ========================================================================
+   FUNDAÇÃO MOBILE — ETAPA 1 (22/11/2026)
+   Ajustes estruturais de viewport, safe areas e áreas de toque.
+   Mantém as regras existentes; este bloco consolida tokens e corrige a base.
+   ======================================================================== */
+:root {
+  --mobile-safe-top: env(safe-area-inset-top, 0px);
+  --mobile-safe-right: env(safe-area-inset-right, 0px);
+  --mobile-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --mobile-safe-left: env(safe-area-inset-left, 0px);
+  --mobile-touch-target: 44px;
+}
+
+html, body {
+  max-width: 100%;
+  overflow-x: clip;
+  overscroll-behavior-x: none;
+}
+
+@media (max-width: 950px) {
+  /* O cabeçalho mantém 64px úteis e adiciona a área segura superior. */
+  .portal-navbar {
+    height: calc(64px + var(--mobile-safe-top));
+    padding-top: var(--mobile-safe-top);
+    padding-left: max(5%, var(--mobile-safe-left));
+    padding-right: max(5%, var(--mobile-safe-right));
+  }
+
+  /* Alvos principais de toque não ficam menores que o recomendado. */
+  .mobile-menu-btn,
+  .nav-drawer-close {
+    min-width: var(--mobile-touch-target);
+    min-height: var(--mobile-touch-target);
+  }
+
+  .nav-menu a {
+    min-height: max(50px, var(--mobile-touch-target));
+  }
+
+  /* Evita que elementos largos causem deslocamento horizontal da página. */
+  .portal-layout,
+  main,
+  .page-section,
+  .section-container {
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
+@media (display-mode: standalone) and (max-width: 950px) {
+  /* Ajuste específico para o PWA instalado, respeitando recortes do dispositivo. */
+  .sticky-player-wrapper {
+    padding-bottom: var(--mobile-safe-bottom);
+  }
+}
