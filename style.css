@@ -977,7 +977,15 @@ html { scroll-behavior: smooth; }
  .community-section { margin:20px auto 55px; padding:0 16px; }
  .community-heading { margin-bottom:22px; }
  .community-grid { grid-template-columns:1fr 1fr; gap:11px; }
+ /* Mobile: o card Aplicativos ocupa toda a largura, como o Discord. */
+ .community-apps { grid-column:1/-1; }
  .community-card { min-height:250px; padding:18px 15px; border-radius:17px; }
+ /* Mobile: card Aplicativos mais compacto, sem espaço artificial entre badges e instalação. */
+ .community-apps { min-height:0; gap:9px; }
+ .community-apps .community-store-links { width:100%; gap:8px; margin-top:0; }
+ .community-apps .community-store-links a { flex:1 1 calc(50% - 4px); max-width:none; min-width:0; }
+ .community-apps .community-store-links img { width:100%; max-width:none; height:auto; max-height:48px; object-fit:contain; }
+ .community-apps .community-install { margin-top:8px; }
  .community-card-heading strong { font-size:.94rem; }
  .community-card-heading > span { font-size:.73rem; }
  .community-card-header { gap:10px; }
