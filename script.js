@@ -208,83 +208,106 @@ document.addEventListener('keydown', function(event) {
   if (event.key === 'Escape') toggleMobileMenu(false);
 });
 
-/* Navegação principal: rolagem suave e identificação confiável da seção ativa. */
+/* Navegação principal: estado ativo sincronizado com clique, hash e rolagem. */
 function inicializarNavegacaoAtiva() {
   const menu = document.getElementById('navMenu');
-  if (!menu) return;
+  const bottomNav = document.querySelector('.mobile-app-nav');
+  const menuLinks = menu ? Array.from(menu.querySelectorAll('a[href^="#"]')) : [];
+  const bottomLinks = bottomNav ? Array.from(bottomNav.querySelectorAll('a[href^="#"]')) : [];
+  const allLinks = [...menuLinks, ...bottomLinks];
+  const sectionsById = new Map();
 
-  // Ignora âncoras vazias (como href="#" do botão de instalação do app)
-  // e considera somente links que apontam para seções realmente existentes.
-  const navigation = Array.from(menu.querySelectorAll('a[href^="#"]'))
-    .map(link => ({ link, id: link.getAttribute('href').slice(1) }))
-    .filter(item => item.id && document.getElementById(item.id));
+  allLinks.forEach(link => {
+    const id = (link.getAttribute('href') || '').slice(1);
+    const section = id && document.getElementById(id);
+    if (section) sectionsById.set(id, section);
+  });
+  if (!sectionsById.size) return;
 
-  const links = navigation.map(item => item.link);
-  const sections = navigation.map(item => document.getElementById(item.id));
-  if (!links.length || !sections.length) return;
+  const sections = Array.from(sectionsById.values()).sort((a, b) =>
+    a.getBoundingClientRect().top - b.getBoundingClientRect().top ||
+    (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1)
+  );
+  const bottomSectionIds = new Set(bottomLinks.map(link => (link.getAttribute('href') || '').slice(1)));
+  let destinoPendente = null;
 
-  function atualizarLinkAtivo() {
-    const navbarHeight = document.querySelector('.portal-navbar')?.offsetHeight || 0;
-    const referencia = navbarHeight + 35;
-    let secaoAtual = sections[0];
-
-    sections.forEach(section => {
-      if (section.getBoundingClientRect().top <= referencia) {
-        secaoAtual = section;
-      }
-    });
-
-    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
-      secaoAtual = sections[sections.length - 1];
-    }
-
-    links.forEach(link => {
-      const ativo = link.getAttribute('href') === `#${secaoAtual.id}`;
+  function aplicarAtivo(id) {
+    allLinks.forEach(link => {
+      const ativo = link.getAttribute('href') === `#${id}`;
       link.classList.toggle('active', ativo);
+      if (bottomNav && bottomNav.contains(link)) link.classList.toggle('is-active', ativo);
       if (ativo) link.setAttribute('aria-current', 'location');
       else link.removeAttribute('aria-current');
     });
   }
 
-  let agendado = false;
-  function solicitarAtualizacao() {
-    if (agendado) return;
-    agendado = true;
-    window.requestAnimationFrame(() => {
-      atualizarLinkAtivo();
-      agendado = false;
+  function idDeSecaoAtual() {
+    const navbarHeight = document.querySelector('.portal-navbar')?.offsetHeight || 0;
+    const linhaAtivacao = navbarHeight + 14;
+    let atual = sections[0];
+    sections.forEach(section => {
+      if (section.getBoundingClientRect().top <= linhaAtivacao) atual = section;
     });
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 3) {
+      atual = sections[sections.length - 1];
+    }
+    let id = atual.id;
+    if (!bottomSectionIds.has(id)) {
+      const index = sections.indexOf(atual);
+      for (let i = index; i >= 0; i--) {
+        if (bottomSectionIds.has(sections[i].id)) { id = sections[i].id; break; }
+      }
+    }
+    return id;
   }
 
-  links.forEach(link => {
+  function atualizarLinkAtivo() {
+    if (destinoPendente) {
+      const alvo = sectionsById.get(destinoPendente);
+      const limite = (document.querySelector('.portal-navbar')?.offsetHeight || 0) + 14;
+      if (alvo && alvo.getBoundingClientRect().top > limite + 3) {
+        aplicarAtivo(destinoPendente);
+        return;
+      }
+      destinoPendente = null;
+    }
+    aplicarAtivo(idDeSecaoAtual());
+  }
+
+  allLinks.forEach(link => {
     link.addEventListener('click', event => {
-      const destino = document.querySelector(link.getAttribute('href'));
+      const id = (link.getAttribute('href') || '').slice(1);
+      const destino = sectionsById.get(id);
       if (!destino) return;
-
       event.preventDefault();
-      toggleMobileMenu(false);
-
+      if (typeof toggleMobileMenu === 'function') toggleMobileMenu(false);
+      destinoPendente = id;
+      aplicarAtivo(id);
       const navbarHeight = document.querySelector('.portal-navbar')?.offsetHeight || 0;
-      const destinoY = destino.getBoundingClientRect().top + window.pageYOffset - navbarHeight - 12;
-
+      const destinoY = destino.getBoundingClientRect().top + window.scrollY - navbarHeight - 8;
       window.scrollTo({
         top: Math.max(0, destinoY),
         behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
       });
-
-      links.forEach(item => {
-        const ativo = item === link;
-        item.classList.toggle('active', ativo);
-        if (ativo) item.setAttribute('aria-current', 'location');
-        else item.removeAttribute('aria-current');
-      });
+      if (history.replaceState) history.replaceState(null, '', `#${id}`);
+      window.setTimeout(atualizarLinkAtivo, 650);
     });
   });
 
+  let agendado = false;
+  function solicitarAtualizacao() {
+    if (agendado) return;
+    agendado = true;
+    window.requestAnimationFrame(() => { atualizarLinkAtivo(); agendado = false; });
+  }
   window.addEventListener('scroll', solicitarAtualizacao, { passive: true });
   window.addEventListener('resize', solicitarAtualizacao);
+  window.addEventListener('hashchange', solicitarAtualizacao);
   window.addEventListener('load', atualizarLinkAtivo, { once: true });
-  atualizarLinkAtivo();
+  window.addEventListener('wheel', () => { destinoPendente = null; }, { passive: true });
+  window.addEventListener('touchstart', () => { destinoPendente = null; }, { passive: true });
+  if (location.hash && sectionsById.has(location.hash.slice(1))) aplicarAtivo(location.hash.slice(1));
+  else atualizarLinkAtivo();
 }
 
 if (document.readyState === 'loading') {
