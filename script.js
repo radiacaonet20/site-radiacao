@@ -156,9 +156,33 @@ if (audio) {
   audio.addEventListener('ended', sincronizarEstadoMediaSession);
 }
 
-function abrirModal(idModal) { const m = el(idModal); if(m) { m.classList.add('active'); document.body.style.overflow = 'hidden'; } }
-function fecharModal(idModal) { const m = el(idModal); if(m) { m.classList.add('closing'); setTimeout(() => { m.classList.remove('active'); m.classList.remove('closing'); document.body.style.overflow = 'auto'; }, 350); } }
-function fecharModalFora(event, idModal) { if (event.target.id === idModal) fecharModal(idModal); }
+const modaisAbertos = new Set();
+let overflowBodyAntesDoModal = '';
+
+function abrirModal(idModal) {
+  const modal = el(idModal);
+  if (!modal) return;
+  if (!modaisAbertos.size) overflowBodyAntesDoModal = document.body.style.overflow;
+  modaisAbertos.add(idModal);
+  modal.classList.remove('closing');
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function fecharModal(idModal) {
+  const modal = el(idModal);
+  if (!modal || !modaisAbertos.has(idModal) || modal.classList.contains('closing')) return;
+  modal.classList.add('closing');
+  window.setTimeout(() => {
+    modal.classList.remove('active', 'closing');
+    modaisAbertos.delete(idModal);
+    if (!modaisAbertos.size) document.body.style.overflow = overflowBodyAntesDoModal;
+  }, 350);
+}
+
+function fecharModalFora(event, idModal) {
+  if (event.target.id === idModal) fecharModal(idModal);
+}
 
 function compartilharSite() {
   const line1 = el('playerLine1');
